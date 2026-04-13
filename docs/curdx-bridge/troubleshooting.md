@@ -1,83 +1,134 @@
 # Troubleshooting
 
+When CurdX Bridge fails, the issue is usually one of four things: shell path setup, provider authentication, stale session state, or a broken provider process.
+
 ## Common Issues
 
-| Problem | Solution |
-|---------|----------|
-| `curdx: command not found` | Add `~/.local/bin` to your `$PATH` |
-| No panes appear | Install tmux: `brew install tmux` or `apt install tmux` |
-| Provider unreachable | Run the provider CLI standalone first (e.g., `codex`) to verify it works |
-| `Another instance running` | Run `curdx kill` then retry |
-| Provider not responding | Check with `cxb-ping <provider>` to test connectivity |
-| Session won't resume | Delete `.curdx/` in your project directory and start fresh |
+| Problem | Likely cause | Fix |
+|---------|--------------|-----|
+| `curdx: command not found` | `~/.local/bin` is not on `PATH` | Add it to your shell profile |
+| No panes appear | `tmux` is missing or not starting correctly | Install `tmux`, then retry |
+| Provider unreachable | Provider CLI is not authenticated or its daemon is unhealthy | Run the provider directly, then `cxb-ping <provider>` |
+| `Another instance running` | Stale session or orphaned process | Run `curdx kill`, then `curdx-cleanup` |
+| Session will not resume | `.curdx/` state is inconsistent with the current workspace | Clean up state or start a fresh session |
+| Replies never come back | Async request sent, but provider never completed or reply retrieval failed | Inspect provider pane and use `cxb-pend <provider>` |
+
+## Fast Triage Checklist
+
+Run these in order:
+
+```bash
+which curdx
+curdx-mounted
+cxb-ping codex
+cxb-ping gemini
+```
+
+Then verify the provider CLIs themselves:
+
+```bash
+claude
+codex
+gemini
+opencode
+```
+
+If the standalone CLI does not work, CurdX Bridge cannot fix that for you.
 
 ## Debug Mode
 
-Enable verbose logging to diagnose issues:
+Enable verbose logging:
 
 ```bash
 CURDX_DEBUG=1 curdx
 ```
 
-This prints detailed logs for:
-- Provider startup and shutdown
-- Message routing between panes
-- Async request/response cycles
-- Session state changes
+Debug output is most useful for:
 
-## Checking Provider Status
+- provider startup and shutdown failures
+- message routing problems between panes
+- async request and pending-reply failures
+- session state corruption or bad resume behavior
 
-Verify which providers are mounted and responsive:
+## Check Mounted Providers
 
 ```bash
-# Check all providers
 curdx-mounted
-
-# Ping a specific provider
-cxb-ping codex
-cxb-ping gemini
 ```
 
-A provider is considered "mounted" when it has both an active session and an online daemon.
+A provider is only truly "mounted" when:
 
-## Resetting State
+- its session exists
+- its daemon is online
+- it can answer pings or replies
 
-If things get into a bad state:
+If the pane exists but the daemon is dead, restart only that provider instead of resetting everything.
+
+## Resetting State Safely
+
+Start with the least destructive step:
 
 ```bash
-# Kill all sessions
-curdx kill
-
-# Force kill a specific provider
 curdx kill codex -f
+cxb-autonew codex
+```
 
-# Clean up stale files
+If the whole session is bad:
+
+```bash
+curdx kill
 curdx-cleanup
-
-# Start fresh
 curdx
 ```
 
-## Platform-Specific Notes
+If resume still keeps restoring a broken state, delete the repo-local `.curdx/` directory and start fresh. Do this only after you are sure you do not need the saved task state.
+
+## Provider-Specific Advice
+
+### Claude pane is fine, side provider is broken
+
+- Run `cxb-ping <provider>`
+- Inspect that pane directly
+- Restart only that provider
+
+### Provider answers, but answer quality is poor
+
+- Start a fresh provider session with `cxb-autonew`
+- Reduce request size and make the task more specific
+- Ask Claude to repackage the request with better constraints
+
+### `cxb-ask` succeeds, but nothing useful returns
+
+- Use `cxb-pend <provider>` to inspect the raw reply
+- Check whether the provider drifted into an unrelated task
+- Reissue the request with a tighter prompt and explicit expected output
+
+## Platform Notes
 
 ### macOS
 
-- Requires tmux or WezTerm as the terminal multiplexer
-- Apple Silicon and Intel are both supported
-- If using Homebrew: `brew install tmux`
+- `tmux` via Homebrew is the simplest path: `brew install tmux`
+- Both Intel and Apple Silicon are supported
 
 ### Linux
 
-- Supports x86-64 and ARM64
-- Install tmux via your package manager: `apt install tmux` or `yum install tmux`
+- Confirm your package manager installed a recent enough `tmux`
+- Keep provider CLIs on the same shell `PATH` seen by `tmux`
 
 ### Windows
 
-- Requires WSL (Windows Subsystem for Linux)
-- Install tmux inside WSL: `apt install tmux`
-- Run `curdx` from within WSL
+- Run through WSL
+- Install `tmux` inside the Linux environment, not in PowerShell
+- Launch `curdx` from WSL so the providers share the same environment
+
+## Best Practices To Avoid Problems
+
+- Test each provider CLI once after upgrading it.
+- Prefer restarting one provider over deleting all state.
+- Use `--no-auto` when experimenting in unfamiliar or production-like repos.
+- Keep `.curdx/` project-local so resume behavior is predictable.
 
 ## Getting Help
 
-- [GitHub Issues](https://github.com/curdx/curdx-bridge/issues) — Report bugs or request features
-- [Releases](https://github.com/curdx/curdx-bridge/releases) — Check for updates
+- [GitHub Issues](https://github.com/curdx/curdx-bridge/issues) for reproducible bugs and feature requests
+- [Releases](https://github.com/curdx/curdx-bridge/releases) to confirm whether you are on an old build

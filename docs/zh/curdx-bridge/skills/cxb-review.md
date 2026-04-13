@@ -1,95 +1,112 @@
 # cxb-review
 
-步骤级和任务级的双重评估。
+用于步骤级和任务级的双重评估。
 
-## 概述
+## 它做什么
 
-`cxb-review` 通过两个独立评估提供质量验证 — 一个来自 Claude，一个来自交叉审查 Provider（通常是 Codex）。双重评估减少盲点，提高审查结果的可信度。
+`cxb-review` 通过 Claude 的本地评估和另一个 Provider（通常是 Codex）的交叉评估，提供第二层质量控制。
 
-## 模式
+这样做的意义在于，单个模型很容易遗漏：
 
-| 模式 | 触发时机 | 评估对象 |
+- 隐蔽回归
+- 需求漂移
+- 测试不足
+- 验收标准覆盖不完整
+
+## 审查模式
+
+| 模式 | 运行时机 | 检查对象 |
 |------|---------|---------|
-| `step` | 每步执行后 | 单个步骤是否满足完成条件 |
-| `task` | 所有步骤完成后 | 整个任务是否满足验收标准 |
+| `step` | 单个步骤执行后 | 该步骤的完成条件 |
+| `task` | 所有步骤完成后 | 整体验收标准与全局质量 |
 
-## 工作流
+## 决策流程
 
-### 步骤 1：Claude 评估
+### 1. Claude 评估
 
-Claude 根据完成条件（step 模式）或验收标准（task 模式）评估工作，给出判定：
+Claude 会先给出一个本地判定：
 
-- **PASS** — 所有条件满足
-- **FIX** — 发现问题，附具体修复项
-- **UNCERTAIN** — 需要第二意见
+- `PASS`
+- `FIX`
+- `UNCERTAIN`
 
-### 步骤 2：交叉审查
+### 2. 交叉评估
 
-工作发送给交叉审查 Provider（默认 Codex）做独立评估：
+交叉审查 Provider 需要回答：
 
-1. 是否同意 Claude 的判定？
-2. 有没有 Claude 遗漏的问题？
-3. 最终建议：PASS 还是 FIX？
+1. 是否同意 Claude 的结论？
+2. Claude 漏掉了什么？
+3. 最终应判定通过还是修复？
 
-### 步骤 3：最终决定
+### 3. 最终决定
 
-| Claude | 交叉审查 | 结果 |
+| Claude | 交叉评审 | 结果 |
 |--------|---------|------|
 | PASS | PASS | **PASS** |
-| PASS | FIX | **FIX**（Claude 决定修复项） |
-| FIX | PASS | **FIX**（合并修复项） |
-| FIX | FIX | **FIX**（合并修复项） |
-| UNCERTAIN | 任意 | Claude 做最终判定 |
+| PASS | FIX | **FIX** |
+| FIX | PASS | **FIX** |
+| FIX | FIX | **FIX** |
+| UNCERTAIN | 任意 | 由 Claude 最终裁决 |
 
-## step 模式检查项
+该系统有意偏向“先修复再通过”，而不是在分歧中放行。
 
-审查单个步骤时：
+## Step 模式检查项
 
-- 所有完成条件是否满足？
-- 代码改动是否正确？
-- 是否引入回归？
+针对单一步骤，审查需要回答：
 
-## task 模式检查项
+- 完成条件是否被准确满足？
+- 代码改动是否仍在范围内？
+- 是否引入了明显回归？
+- 如果该步骤需要测试，测试是否已执行？
 
-审查整个任务时：
+## Task 模式检查项
 
-- 所有验收标准是否满足？
-- 是否有遗漏或缺失？
-- 代码质量问题？
-- 文档是否完整？
-- 测试是否通过？
+针对整项任务，审查需要回答：
 
-## 审查输出
+- 是否满足全部验收标准？
+- 是否缺少文档或配置更新？
+- 是否仍存在正确性或可维护性问题？
+- 是否应该显式拆出后续任务，而不是默默妥协？
 
-审查产出结构化 JSON 结果：
+## 审查输出示例
 
 ```json
 {
   "mode": "step",
-  "target": "实现用户认证",
-  "verdict": "PASS",
+  "target": "Add audit logging to admin mutations",
+  "verdict": "FIX",
   "claudeAssessment": {
     "verdict": "PASS",
-    "reason": "所有完成条件已验证"
+    "reason": "Done conditions appear satisfied"
   },
   "crossAssessment": {
-    "verdict": "PASS",
-    "agreedWithClaude": true,
-    "missedIssues": [],
-    "fixItems": []
+    "verdict": "FIX",
+    "agreedWithClaude": false,
+    "missedIssues": [
+      "DELETE mutations are not logged",
+      "No test covers actor attribution"
+    ],
+    "fixItems": [
+      "Log destructive admin actions",
+      "Add regression test for actor_id capture"
+    ]
   },
   "finalDecision": {
-    "verdict": "PASS",
-    "reason": "双方评估一致"
+    "verdict": "FIX",
+    "reason": "Cross-review found requirement gaps"
   }
 }
 ```
 
-## 集成
+## 最佳实践
 
-`cxb-review` 由 [`cxb-task-run`](/zh/curdx-bridge/skills/cxb-task-run) 自动调用：
+- 审查要保持二值化：通过或修复，不要停留在“差不多可以”。
+- 修复项必须具体，不能只给空泛建议。
+- 只要任务涉及用户可见行为或高风险改动，就应用 task 模式做最终审查。
+- 如果 Claude 和 Codex 结论不一致，重点看分歧点，真正的问题通常就藏在那里。
 
-- **步骤 8** — 每步执行后（step 模式）
-- **步骤 10** — 任务完成后（task 模式）
+## 适合触发 `cxb-review` 的请求
 
-也可以手动调用，对任何工作进行结构化审查。
+- “按完成条件跑一步 step-level review。”
+- “按最初验收标准审查这个已完成任务。”
+- “让 Codex 挑战这个实现，只有测试和文档完整才允许通过。”

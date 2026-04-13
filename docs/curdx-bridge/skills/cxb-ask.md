@@ -2,49 +2,74 @@
 
 Send an async request to any AI provider.
 
-## Overview
+## What It Does
 
-`cxb-ask` is the core communication skill. It sends a message to a specified AI provider and returns control immediately — the provider processes the request asynchronously in its own pane.
+`cxb-ask` is the transport skill behind nearly every cross-provider action in CurdX Bridge. Claude uses it to submit work to another pane, then returns control immediately instead of blocking the main conversation.
 
-This is the foundation that other skills build on. When Claude needs to send a review request to Codex or ask Gemini for ideas, it uses `cxb-ask` under the hood.
+This is why the system feels like collaboration rather than a serialized chain of prompts.
 
-## Usage
+## Syntax
 
-```
+```text
 /cxb-ask <provider> "<message>"
 ```
 
-### Providers
+Supported providers:
 
-| Provider | Description |
-|----------|-------------|
-| `codex` | OpenAI Codex CLI |
-| `gemini` | Google Gemini CLI |
-| `opencode` | OpenCode CLI |
-| `claude` | Claude Code (for cross-pane communication) |
+| Provider | Typical role |
+|----------|--------------|
+| `codex` | Review, implementation, deeper code analysis |
+| `gemini` | Brainstorming, naming, design alternatives |
+| `opencode` | Additional implementation perspective |
+| `claude` | Cross-pane communication or explicit self-routing |
 
-### Examples
+## How The Async Handoff Works
 
+1. Claude submits the message to the target provider pane.
+2. A successful submission returns an async acknowledgement such as `CURDX_ASYNC_SUBMITTED`.
+3. Claude stops speaking instead of adding filler.
+4. The provider works independently in its pane.
+5. Claude later retrieves the reply through the pending-reply path.
+
+The important behavior is not the command itself. It is the guardrail: submit, stop, wait, retrieve.
+
+## Examples
+
+### Ask Codex for a scored review
+
+```text
+/cxb-ask codex "Review this plan using the plan rubric. Return scores, top risks, and pass/fail."
 ```
-/cxb-ask codex "Review the following diff for correctness and security"
-/cxb-ask gemini "Suggest three alternative API designs for user authentication"
-/cxb-ask opencode "What's your assessment of this architecture?"
+
+### Ask Gemini for alternatives
+
+```text
+/cxb-ask gemini "Give me 4 API shapes for bulk export jobs. Emphasize simplicity and rollback safety."
 ```
 
-## How It Works
+### Ask OpenCode to challenge an implementation
 
-1. Claude calls `cxb-ask` with the provider name and message
-2. The message is delivered to the provider's tmux pane
-3. If the submission succeeds (output contains `CURDX_ASYNC_SUBMITTED`), Claude ends its turn and waits
-4. The provider processes the request in its own pane — you can watch in real time
-5. Claude retrieves the response later using `/cxb-reply`
+```text
+/cxb-ask opencode "Find the weakest assumptions in this caching refactor and suggest a safer path."
+```
 
-## Async Guardrail
+## Writing Better Requests
 
-When `cxb-ask` submits successfully, Claude follows a strict protocol:
+Good async requests usually include:
 
-1. Reply with one line: `<Provider> processing...`
-2. End the turn immediately
-3. Do not poll, sleep, or add follow-up text
+- the job: review, brainstorm, compare, implement, summarize
+- the scope: file, feature, diff, plan, migration
+- the rubric or constraints: security, tests, rollback, performance
+- the expected output: bullets, scores, pass/fail, recommendation
 
-This prevents duplicate requests and ensures clean async handoffs.
+Compare:
+
+- Weak: "Take a look at this"
+- Strong: "Review this diff for auth correctness, missing tests, and rollback risk. Return pass/fail plus fix items."
+
+## Best Practices
+
+- Use `cxb-ask` when a provider has a clear specialist job.
+- Keep the message tight enough that the provider does not wander.
+- Let Claude merge the results instead of manually stitching together raw provider replies.
+- If the provider drifted, reissue a narrower request rather than asking more follow-up questions on a bad thread.

@@ -2,94 +2,111 @@
 
 Dual assessment for step-level and task-level review.
 
-## Overview
+## What It Does
 
-`cxb-review` provides quality verification using two independent assessments — one from Claude and one from a cross-review provider (typically Codex). This dual approach reduces blind spots and provides higher confidence in review outcomes.
+`cxb-review` provides a second layer of quality control by combining Claude's local assessment with a cross-review from another provider, usually Codex.
 
-## Modes
+This matters because a single model can miss:
 
-| Mode | When used | What it evaluates |
-|------|-----------|------------------|
-| `step` | After each step execution | Single step against its done conditions |
-| `task` | After all steps complete | Entire task against acceptance criteria |
+- hidden regressions
+- requirement drift
+- weak tests
+- incomplete acceptance criteria coverage
 
-## Workflow
+## Review Modes
 
-### Step 1: Claude Assessment
+| Mode | When it runs | What it checks |
+|------|--------------|----------------|
+| `step` | After one execution step | Done conditions for that step |
+| `task` | After all steps are complete | Full acceptance criteria and overall quality |
 
-Claude evaluates the work against done conditions (step mode) or acceptance criteria (task mode) and produces a verdict:
+## Decision Flow
 
-- **PASS** — All conditions met
-- **FIX** — Issues found, with specific items to fix
-- **UNCERTAIN** — Needs second opinion
+### 1. Claude Assessment
 
-### Step 2: Cross-Review
+Claude evaluates the work first and assigns one of:
 
-The work is sent to the cross-review provider (default: Codex) for an independent assessment:
+- `PASS`
+- `FIX`
+- `UNCERTAIN`
+
+### 2. Cross-Review Assessment
+
+The cross-review provider answers:
 
 1. Does it agree with Claude's verdict?
-2. Any issues Claude missed?
-3. Final recommendation: PASS or FIX?
+2. What did Claude miss?
+3. Should the work pass or be fixed?
 
-### Step 3: Final Decision
+### 3. Final Decision
 
-| Claude | Cross-Review | Result |
-|--------|-------------|--------|
+| Claude | Cross-review | Result |
+|--------|--------------|--------|
 | PASS | PASS | **PASS** |
-| PASS | FIX | **FIX** (Claude decides on items) |
-| FIX | PASS | **FIX** (merge items) |
-| FIX | FIX | **FIX** (merge items) |
-| UNCERTAIN | any | Claude makes final call |
+| PASS | FIX | **FIX** |
+| FIX | PASS | **FIX** |
+| FIX | FIX | **FIX** |
+| UNCERTAIN | any | Claude makes the final call |
+
+The system intentionally biases toward fixing when there is disagreement.
 
 ## Step Mode Checklist
 
-When reviewing a single step:
+For a single execution step, review should answer:
 
-- Are all done conditions satisfied?
-- Are code changes correct?
-- No regressions introduced?
+- Were the done conditions met exactly?
+- Did the code change stay within scope?
+- Was any obvious regression introduced?
+- Were tests run if this step required them?
 
 ## Task Mode Checklist
 
-When reviewing the entire task:
+For the whole task, review should answer:
 
-- All acceptance criteria met?
-- Any gaps or missing pieces?
-- Code quality issues?
-- Documentation complete?
-- Tests passing?
+- Are all acceptance criteria satisfied?
+- Are docs or config updates missing?
+- Are there remaining correctness or maintainability problems?
+- Are follow-up tasks needed rather than silent compromises?
 
-## Review Output
-
-The review produces a structured JSON result:
+## Example Review Output
 
 ```json
 {
   "mode": "step",
-  "target": "Implement user authentication",
-  "verdict": "PASS",
+  "target": "Add audit logging to admin mutations",
+  "verdict": "FIX",
   "claudeAssessment": {
     "verdict": "PASS",
-    "reason": "All done conditions verified"
+    "reason": "Done conditions appear satisfied"
   },
   "crossAssessment": {
-    "verdict": "PASS",
-    "agreedWithClaude": true,
-    "missedIssues": [],
-    "fixItems": []
+    "verdict": "FIX",
+    "agreedWithClaude": false,
+    "missedIssues": [
+      "DELETE mutations are not logged",
+      "No test covers actor attribution"
+    ],
+    "fixItems": [
+      "Log destructive admin actions",
+      "Add regression test for actor_id capture"
+    ]
   },
   "finalDecision": {
-    "verdict": "PASS",
-    "reason": "Both assessments agree"
+    "verdict": "FIX",
+    "reason": "Cross-review found requirement gaps"
   }
 }
 ```
 
-## Integration
+## Best Practices
 
-`cxb-review` is called automatically by [`cxb-task-run`](/curdx-bridge/skills/cxb-task-run):
+- Keep review binary: pass or fix. Avoid soft "mostly good" conclusions.
+- Require specific fix items, not vague advice.
+- Use task-mode review before reporting completion on anything user-visible or risky.
+- If Claude and Codex disagree, inspect the disagreement. That is often where the real issue is.
 
-- **Step 8** — After each step execution (step mode)
-- **Step 10** — After task completion (task mode)
+## Good Requests To Trigger `cxb-review`
 
-It can also be invoked manually when you want a structured review of any work.
+- "Run a step-level review against the done conditions."
+- "Review this completed task against the original acceptance criteria."
+- "Have Codex challenge the implementation and only pass if tests and docs are complete."

@@ -1,117 +1,184 @@
 # How It Works
 
-## Architecture Overview
+CurdX Bridge is built around one principle: keep one accountable primary agent while still using specialist models in parallel.
 
-CurdX Bridge uses tmux (or WezTerm) to create a split-pane terminal layout. Each AI provider runs in its own pane, and a lightweight daemon manages communication between them.
+## Split-Pane Architecture
 
-![CurdX Bridge layout](/images/curdx-bridge/layout.svg)
+Each provider runs in its own terminal pane. Claude is the operator-facing pane, while the other panes are specialist workers that can be observed directly.
 
-```
-┌──────────────────────┬──────────────┐
-│                      │    Codex     │
-│       Claude         ├──────────────┤
-│    (main pane)       │   Gemini     │
-│                      ├──────────────┤
-│                      │  OpenCode    │
-└──────────────────────┴──────────────┘
-```
+- **Claude** owns the conversation, plans the next move, and integrates replies.
+- **Codex** is usually the reviewer or execution peer.
+- **Gemini** is usually the inspiration source.
+- **OpenCode** adds another implementation perspective when needed.
 
-- **Left pane** — Claude, your primary interface. You type here.
-- **Right panes** — Codex, Gemini, OpenCode. You can watch them work in real time.
+Unlike a hidden background integration, this layout makes the system legible. You can see whether a provider is thinking, stuck, or responding off-target.
 
-## Communication Model
+## Communication Flow
 
-When you say "let Codex review this", here's what happens:
+<div style="margin: 1rem 0 1.5rem;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 280" role="img" aria-label="Async request and response flow in CurdX Bridge" style="max-width: 100%; height: auto;">
+    <defs>
+      <marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
+      </marker>
+    </defs>
+    <rect x="10" y="10" width="960" height="260" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
+    <rect x="34" y="88" width="140" height="96" rx="18" style="fill: var(--vp-c-default-soft); stroke: var(--vp-c-divider); stroke-width: 1.5;" />
+    <rect x="224" y="62" width="188" height="148" rx="18" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+    <rect x="470" y="62" width="188" height="148" rx="18" style="fill: color-mix(in srgb, var(--vp-c-green-1) 14%, transparent); stroke: var(--vp-c-green-1); stroke-width: 2;" />
+    <rect x="714" y="88" width="220" height="96" rx="18" style="fill: var(--vp-c-default-soft); stroke: var(--vp-c-divider); stroke-width: 1.5;" />
 
-1. Claude invokes the `/cxb-ask` skill with your request
-2. The skill sends the message to Codex's pane via the async protocol
-3. Codex processes the request — you can see it working in its pane
-4. Claude polls for the response using `/cxb-reply`
-5. The result appears in your conversation with Claude
+    <text x="71" y="126" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">You</text>
+    <text x="51" y="154" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Natural-language</text>
+    <text x="72" y="174" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">request</text>
 
-Each provider runs independently. They don't share context directly — Claude acts as the coordinator, deciding what information to send and how to integrate responses.
+    <text x="283" y="104" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Claude</text>
+    <text x="251" y="136" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Packages context, chooses</text>
+    <text x="256" y="156" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">provider, sends `cxb-ask`</text>
+    <text x="270" y="184" style="fill: var(--vp-c-brand-1); font: 600 13px ui-sans-serif, system-ui, sans-serif;">Main pane stays responsive</text>
+
+    <text x="524" y="104" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Provider Pane</text>
+    <text x="507" y="136" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Codex, Gemini, or OpenCode</text>
+    <text x="505" y="156" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">processes request asynchronously</text>
+    <text x="520" y="184" style="fill: var(--vp-c-green-1); font: 600 13px ui-sans-serif, system-ui, sans-serif;">You can watch the pane work</text>
+
+    <text x="748" y="126" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Merged Reply</text>
+    <text x="740" y="154" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Claude retrieves result</text>
+    <text x="737" y="174" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">via `cxb-pend` reply path</text>
+
+    <path d="M174 136 L214 136" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#flow-arrow)" />
+    <path d="M412 136 L460 136" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#flow-arrow)" />
+    <path d="M714 192 C648 238, 528 240, 414 204" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3; stroke-dasharray: 8 7;" marker-end="url(#flow-arrow)" />
+    <path d="M412 92 C516 26, 676 28, 814 82" style="fill: none; stroke: var(--vp-c-divider); stroke-width: 2; stroke-dasharray: 5 6;" />
+    <text x="486" y="40" style="fill: var(--vp-c-text-2); font: 500 13px ui-sans-serif, system-ui, sans-serif;">Async request</text>
+    <text x="500" y="246" style="fill: var(--vp-c-text-2); font: 500 13px ui-sans-serif, system-ui, sans-serif;">Async response</text>
+  </svg>
+</div>
+
+When you say "let Codex review this", the flow is:
+
+1. Claude interprets your intent and selects the appropriate provider.
+2. Claude sends a structured request through the async ask path.
+3. The provider works in its own pane without blocking your main conversation.
+4. Claude later retrieves the reply through the pending-reply path and integrates it.
+5. You continue talking to Claude, not to the transport layer.
+
+## Why The Async Model Matters
+
+- Providers do not block one another.
+- Claude can keep the high-level thread coherent while side work continues.
+- You can issue sequential or overlapping requests without losing observability.
+- Each provider retains its own conversational context over time.
+
+This is the difference between "I asked another model for help" and "I am running a visible multi-agent session."
 
 ## Role System
 
-CurdX Bridge assigns each AI a role that defines its responsibilities:
+CurdX Bridge is easier to operate when you treat providers as roles, not interchangeable models.
 
-| Role | Default Provider | Responsibilities |
-|------|-----------------|------------------|
-| **Designer** | Claude | Plans architecture, writes code, orchestrates other agents |
-| **Reviewer** | Codex | Evaluates code and plans using scored rubrics (1-10 per dimension) |
-| **Inspiration** | Gemini | Generates creative alternatives and brainstorming ideas (reference only) |
-| **Collaborator** | OpenCode | Provides additional AI perspective on demand |
+<div style="margin: 1rem 0 1.5rem;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" role="img" aria-label="CurdX Bridge role system visualization" style="max-width: 100%; height: auto;">
+    <defs>
+      <marker id="role-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
+      </marker>
+    </defs>
+    <rect x="10" y="10" width="960" height="380" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
+    <circle cx="490" cy="196" r="74" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+    <text x="452" y="186" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Claude</text>
+    <text x="438" y="214" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Coordinator</text>
 
-### Role Assignment
+    <rect x="84" y="54" width="230" height="94" rx="18" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+    <text x="112" y="92" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Designer</text>
+    <text x="112" y="118" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Defines approach, owns the final answer</text>
 
-Roles are configured in your project's `CLAUDE.md` file:
+    <rect x="662" y="54" width="238" height="94" rx="18" style="fill: color-mix(in srgb, var(--vp-c-green-1) 14%, transparent); stroke: var(--vp-c-green-1); stroke-width: 2;" />
+    <text x="692" y="92" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Reviewer</text>
+    <text x="692" y="118" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Usually Codex, scores plans and code</text>
+
+    <rect x="78" y="250" width="248" height="94" rx="18" style="fill: color-mix(in srgb, var(--vp-c-yellow-1) 18%, transparent); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
+    <text x="108" y="288" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Inspiration</text>
+    <text x="108" y="314" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Usually Gemini, generates options not authority</text>
+
+    <rect x="654" y="250" width="256" height="94" rx="18" style="fill: color-mix(in srgb, var(--vp-c-red-1) 12%, transparent); stroke: var(--vp-c-red-1); stroke-width: 2;" />
+    <text x="684" y="288" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Collaborator</text>
+    <text x="684" y="314" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">OpenCode or another execution-side partner</text>
+
+    <path d="M314 120 L405 164" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#role-arrow)" />
+    <path d="M662 120 L575 164" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#role-arrow)" />
+    <path d="M326 278 L411 232" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#role-arrow)" />
+    <path d="M654 278 L569 232" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#role-arrow)" />
+  </svg>
+</div>
+
+| Role | Default provider | Responsibility |
+|------|------------------|----------------|
+| **Designer** | Claude | Interprets the user request, creates plans, owns decisions |
+| **Reviewer** | Codex | Runs scored review gates and surfaces concrete defects |
+| **Inspiration** | Gemini | Produces alternatives, naming, and architecture options |
+| **Collaborator** | OpenCode | Adds an extra implementation or reasoning perspective |
+| **Executor** | Claude or Codex | Performs concrete file or testing actions in AutoFlow |
+
+### Role Assignment In `CLAUDE.md`
+
+Roles are typically declared in your project-level `CLAUDE.md`:
 
 ```markdown
 | Role | Provider | Description |
 |------|----------|-------------|
-| designer | claude | Primary planner and architect |
-| inspiration | gemini | Creative brainstorming |
-| reviewer | codex | Scored quality gate |
-| executor | claude | Code implementation |
+| designer | claude | Primary planner and orchestrator |
+| inspiration | gemini | Brainstorming and alternatives |
+| reviewer | codex | Scored review gate |
+| executor | codex | File operations and test execution |
 ```
 
-You can reassign roles by editing the Provider column. For example, you could make Gemini the reviewer instead of Codex.
+Changing the provider in that table changes how the orchestration behaves. The role name is the contract; the provider is the implementation choice.
 
 ## Review Framework
 
-The review system uses two rubrics for quality gates:
+CurdX Bridge uses explicit rubrics so "looks good" is not the only gate.
 
-### Rubric A — Plan Review
-
-5 dimensions, each scored 1-10:
+### Rubric A: Plan Review
 
 | Dimension | Weight | What it measures |
-|-----------|--------|-----------------|
-| Clarity | 20% | Can another developer follow the plan without questions? |
-| Completeness | 25% | Are all requirements, edge cases, and deliverables covered? |
-| Feasibility | 25% | Are the steps achievable with the current codebase? |
-| Risk Assessment | 15% | Are risks identified with concrete mitigations? |
-| Requirement Alignment | 15% | Does every step trace back to stated requirements? |
+|-----------|--------|------------------|
+| Clarity | 20% | Another developer can follow the plan without back-and-forth |
+| Completeness | 25% | Requirements, edge cases, and deliverables are covered |
+| Feasibility | 25% | The plan can be executed in the current repo and tooling |
+| Risk Assessment | 15% | Risks are named with concrete mitigation ideas |
+| Requirement Alignment | 15% | The plan maps back to the user request |
 
-### Rubric B — Code Review
-
-6 dimensions, each scored 1-10:
+### Rubric B: Code Review
 
 | Dimension | Weight | What it measures |
-|-----------|--------|-----------------|
-| Correctness | 25% | Does the code do what the plan specified? |
-| Security | 15% | No injection, hardcoded secrets, or missing validation? |
-| Maintainability | 20% | Clean code, good naming, follows project conventions? |
-| Performance | 10% | No unnecessary complexity or blocking calls? |
-| Test Coverage | 15% | Are changed paths covered by passing tests? |
-| Plan Adherence | 15% | Does the implementation match the approved plan? |
+|-----------|--------|------------------|
+| Correctness | 25% | Behavior matches the approved plan |
+| Security | 15% | Validation, secrets, and unsafe patterns are handled well |
+| Maintainability | 20% | Naming, structure, and conventions remain healthy |
+| Performance | 10% | No obvious avoidable regressions |
+| Test Coverage | 15% | Changed paths are verified by tests where needed |
+| Plan Adherence | 15% | Implementation still matches the agreed design |
 
-### Pass/Fail Criteria
+### Pass Criteria
 
-- **Pass**: Overall weighted score ≥ 7.0 AND no single dimension ≤ 3
-- **Fail**: Fix the flagged issues and resubmit (max 3 rounds)
-- **Escalation**: After 3 failed rounds, the results are presented to you for a decision
-
-## Async Protocol
-
-Provider communication uses an async request/response pattern:
-
-1. **Request** — Claude sends a message via `cxb-ask` to a provider pane
-2. **Processing** — The provider works in its own pane (visible to you)
-3. **Response** — Claude retrieves the result via `cxb-reply`
-
-This design means:
-- Providers never block each other
-- You can observe each provider's work in real time
-- Claude stays responsive while waiting for responses
-- Session context is preserved per-provider
+- Weighted score must be at least `7.0`
+- No single dimension may be `3` or lower
+- Failed reviews can be revised and resubmitted, up to the configured limit
 
 ## Session Management
 
-Each CurdX session creates tmux panes for the selected providers. Sessions can be:
+Every session keeps project-local state in `.curdx/`, including things like current execution state and resumable context.
 
-- **Created** — `curdx [providers...]` starts a new session
-- **Resumed** — `curdx -r` restores the previous session with full context
-- **Killed** — `curdx kill` terminates all panes, `curdx kill <provider> -f` force-kills a specific one
+Typical lifecycle:
 
-Session state is stored in `.curdx/` in your project directory.
+- `curdx [providers...]` starts a fresh split-pane session
+- `curdx -r` resumes the last session
+- `curdx kill` stops all panes
+- `curdx kill codex -f` force-restarts only the noisy or stuck provider
+
+## Practical Operating Advice
+
+- Keep Claude responsible for the final recommendation even when another provider produced the best raw answer.
+- Use review requests with constraints. "Check for migration safety and rollback risk" gives better results than "review this".
+- Reassign roles only when you have a reason. Random provider swaps usually reduce consistency.
+- Watch the side panes. The best debugging signal is often seeing where a provider got confused.

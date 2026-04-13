@@ -1,118 +1,203 @@
 # 命令参考
 
-CurdX Bridge 提供一套 CLI 命令。大多数时候 Claude 会自动使用它们，但你也可以直接调用。
+大多数用户会通过 Claude 面板里的自然语言来操作 CurdX Bridge，但 CLI 仍然非常重要，尤其适用于排障、自动化和进阶工作流。
 
-## 核心命令
+## 核心会话命令
 
-### curdx
+### `curdx`
 
-主入口。启动分屏终端会话。
-
-```bash
-curdx                                  # 默认 Provider
-curdx claude codex gemini opencode     # 指定 Provider
-curdx -r                               # 恢复上次会话
-curdx -r claude codex gemini           # 恢复指定 Provider 的会话
-```
-
-| 参数 | 说明 |
-|------|------|
-| `-r` | 恢复上次会话 |
-| `--no-auto` | 关闭自动审批模式 |
-
-### curdx kill
-
-终止运行中的会话。
+启动分屏会话。
 
 ```bash
-curdx kill                # 终止所有会话
-curdx kill codex -f       # 强制终止指定 Provider
+curdx
+curdx claude codex
+curdx claude codex gemini opencode
+curdx -r
+curdx -r claude codex gemini
+curdx --no-auto
 ```
 
-## Provider 通信
+| 参数 | 说明 | 备注 |
+|------|------|------|
+| `-r` | 恢复上次会话 | 适合持续性任务 |
+| `--no-auto` | 关闭自动审批行为 | 陌生仓库里更稳妥 |
 
-### cxb-ask
-
-向 Provider 发送异步请求。这是 Agent 间通信的基础。
+实际例子：
 
 ```bash
-cxb-ask codex "审查这个 diff 的安全性"
-cxb-ask gemini "建议几个替代的 API 设计方案"
-cxb-ask opencode "你怎么看这个架构？"
-cxb-ask claude "总结一下当前状态"
+# 用精简组合做实现 + 审查
+curdx claude codex
+
+# 恢复昨天的三 Provider 会话
+curdx -r claude codex gemini
+
+# 在高风险迁移里启用全量可观察面板
+curdx claude codex gemini opencode --no-auto
 ```
+
+### `curdx kill`
+
+终止活动面板。
+
+```bash
+curdx kill
+curdx kill codex -f
+curdx kill gemini -f
+```
+
+当某个 Provider 卡住、认证失效或输出明显跑偏时，优先只重启该 Provider，而不是重置整个会话。
+
+## Provider 通信命令
+
+### `cxb-ask`
+
+向某个 Provider 发送异步请求。
+
+```bash
+cxb-ask codex "Review the current diff for correctness, security, and missing tests"
+cxb-ask gemini "Suggest three alternative API shapes for a webhook retry queue"
+cxb-ask opencode "Challenge this refactor plan and look for rollback risk"
+```
+
+更贴近真实场景的用法：
+
+```bash
+# 写代码前先要一个评分审查
+cxb-ask codex "Review this implementation plan using the standard plan rubric"
+
+# 让 Gemini 负责发散，而不是接管决策
+cxb-ask gemini "Give me 5 naming directions for a feature flag cleanup command"
+
+# 当 Claude 和 Codex 观点不一致时，用 OpenCode 做第三视角
+cxb-ask opencode "Compare these two migration strategies and highlight hidden costs"
+```
+
+最佳实践：明确说明它的工作类型。把审查维度、约束条件、输出格式一并写清。
+
+### `cxb-pend`
+
+读取某个 Provider 最近的回复。
+
+```bash
+cxb-pend codex
+cxb-pend gemini 3
+cxb-pend opencode 5
+```
+
+当你想跳过 Claude 面板，直接查看原始 Provider 输出，或排查异步请求是否真的完成时，这个命令很有用。
 
 ### Provider 专用快捷命令
 
-每个 Provider 有独立的 ask、reply、ping 命令：
-
-| Provider | 发送 | 回复 | 连通性测试 |
-|----------|------|------|-----------|
+| Provider | 发送 | 查看回复 | Ping |
+|----------|------|----------|------|
 | Claude | `cxb-claude-ask` | `cxb-claude-pend` | `cxb-claude-ping` |
 | Codex | `cxb-codex-ask` | `cxb-codex-pend` | `cxb-codex-ping` |
 | Gemini | `cxb-gemini-ask` | `cxb-gemini-pend` | `cxb-gemini-ping` |
 | OpenCode | `cxb-opencode-ask` | `cxb-opencode-pend` | `cxb-opencode-ping` |
 
-### cxb-pend
+这些命令在脚本场景里更方便，因为不需要反复传 provider 名称。
 
-查看 Provider 的最新回复。
+### `cxb-ping`
 
-```bash
-cxb-pend codex           # Codex 最新回复
-cxb-pend gemini 3        # Gemini 最近 3 条对话
-```
-
-### cxb-ping
-
-测试与 Provider 的连通性。
+验证某个 Provider 是否可连通。
 
 ```bash
-cxb-ping codex           # 检查 Codex 是否可达
+cxb-ping codex
+cxb-ping gemini
 ```
 
-## 会话管理
+如果面板还在，但你怀疑守护进程已经不可用，先跑这个命令。
 
-### curdx-mounted
+## 会话与状态命令
 
-报告当前已挂载的 Provider（会话存在且守护进程在线）。
+### `curdx-mounted`
+
+显示哪些 Provider 已挂载且可响应。
 
 ```bash
-curdx-mounted            # JSON 格式输出 Provider 状态
+curdx-mounted
 ```
 
-### cxb-autonew
+该命令返回 JSON，适合用于 shell 脚本或编辑器集成。
 
-为 Provider 启动新会话，不注入上下文。
+### `cxb-autonew`
+
+为某个 Provider 启动全新会话，不注入旧上下文。
 
 ```bash
-cxb-autonew codex        # 全新的 Codex 会话
+cxb-autonew codex
+cxb-autonew gemini
 ```
+
+当某个 Provider 上下文漂移过重，但你不想丢掉整个工作区时，这个命令特别有用。
+
+### `cxb-ctx-transfer`
+
+在会话之间传递上下文。
+
+```bash
+cxb-ctx-transfer
+```
+
+主要用于 AutoFlow 或 Provider 重启后仍需保留任务连续性的场景。
 
 ## AutoFlow 命令
 
-### cxb-autoloop
+### `cxb-autoloop`
 
-驱动自动任务执行流水线的守护进程。
+驱动自动执行流水线。
 
 ```bash
-cxb-autoloop start       # 启动执行循环
-cxb-autoloop stop        # 停止循环
+cxb-autoloop start
+cxb-autoloop stop
 ```
 
-### cxb-ctx-transfer
-
-在会话之间传递上下文以保持连续性。
+典型用法：
 
 ```bash
-cxb-ctx-transfer         # 传递当前上下文
+# 先创建任务制品，再让自动循环推进步骤
+cxb-autoloop start
+
+# 需要人工检查或重定向时，先暂停自动循环
+cxb-autoloop stop
 ```
 
 ## 工具命令
 
-| 命令 | 用途 |
-|------|------|
-| `curdx-arch` | 显示架构信息 |
-| `curdx-cleanup` | 清理过期会话和临时文件 |
-| `curdx-completion-hook` | Shell 补全钩子 |
-| `curdx-installer-helper` | 安装辅助工具 |
-| `curdx-mcp-delegation` | MCP 服务器委派 |
+| 命令 | 用途 | 何时使用 |
+|------|------|---------|
+| `curdx-arch` | 显示当前架构信息 | 快速确认活动环境 |
+| `curdx-cleanup` | 清理过期会话和临时文件 | 崩溃或残留状态后 |
+| `curdx-completion-hook` | Shell 补全集成 | 提升 CLI 手感 |
+| `curdx-installer-helper` | 安装辅助工具 | 打包或环境初始化 |
+| `curdx-mcp-delegation` | MCP 委派助手 | 高级集成场景 |
+
+## 命令配方
+
+### 在合并前审查高风险改动
+
+```bash
+cxb-ask codex "Review the staged diff for correctness, rollback risk, and missing tests"
+cxb-pend codex
+```
+
+### 重启单个 Provider，不影响其他面板
+
+```bash
+curdx kill gemini -f
+cxb-autonew gemini
+```
+
+### 恢复前先确认 Provider 状态
+
+```bash
+curdx-mounted
+cxb-ping codex
+```
+
+## 进阶建议
+
+- 日常编码优先使用 `curdx claude codex`，只有在明确需要时再加更多 Provider。
+- 遇到异步传输问题时，先用 `cxb-pend` 排查，不要立即认定是模型能力问题。
+- 某个 Provider 低信号持续出现时，用 `cxb-autonew` 清理它的上下文，而不是污染整个会话。
+- 如果你在做编辑器集成，可以围绕 `curdx-mounted` 和 `cxb-ping` 写轻量脚本。

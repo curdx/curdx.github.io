@@ -2,49 +2,81 @@
 
 Create executable task artifacts from a confirmed plan.
 
-## Overview
+## What It Does
 
-`cxb-task-plan` bridges the gap between a high-level plan and executable steps. It runs the full collaborative planning flow ([`cxb-plan`](/curdx-bridge/skills/cxb-plan)), then converts the approved plan into structured task artifacts that [`cxb-task-run`](/curdx-bridge/skills/cxb-task-run) can execute.
+`cxb-task-plan` converts design intent into execution state. It is the bridge between a reviewed plan and a resumable, automatable task pipeline.
+
+In practice it does three things:
+
+1. ensures the plan is good enough
+2. breaks the work into execution-sized steps
+3. writes state files that `cxb-task-run` can advance safely
 
 ## Workflow
 
-### 1. Initialize
+### 1. Initialize Context
 
-- Receives your requirement
-- Analyzes the project's tech stack and structure
-- Researches unfamiliar technologies if needed
+Before generating artifacts, Claude inspects the repository:
 
-### 2. Collaborative Planning
+- project structure
+- main languages and frameworks
+- testing approach
+- unfamiliar dependencies that may require research
 
-Invokes [`cxb-plan`](/curdx-bridge/skills/cxb-plan) to run the full design flow:
-- Requirement clarification (5-Dimension readiness model)
-- Inspiration brainstorming
-- Plan creation
-- Scored review
+This prevents a generic plan from being turned into unrealistic tasks.
 
-### 3. User Confirmation
+### 2. Run Collaborative Planning
 
-Presents the plan summary for your approval:
-- Goal statement
-- Implementation steps
-- Acceptance criteria
+`cxb-task-plan` typically invokes [`cxb-plan`](/curdx-bridge/skills/cxb-plan) first so the task starts from an approved plan rather than a vague prompt.
 
-### 4. Generate Task Artifacts
+### 3. Confirm With The User
 
-Creates three files in `.curdx/`:
+Claude summarizes:
+
+- the goal
+- the major steps
+- the acceptance criteria
+
+This is the right moment to tighten scope before execution artifacts are generated.
+
+### 4. Generate `.curdx/` Artifacts
 
 | File | Purpose |
 |------|---------|
-| `state.json` | Execution state — current step, attempt count, status |
-| `todo.md` | Task list with status markers for progress tracking |
-| `plan_log.md` | Execution log for decisions and history |
+| `.curdx/state.json` | Machine-readable execution state and retry tracking |
+| `.curdx/todo.md` | Human-readable step list with status markers |
+| `.curdx/plan_log.md` | Running log of decisions, changes, and review outcomes |
 
-### 5. Start Execution
+Typical `todo.md` characteristics:
 
-Optionally starts the auto-loop daemon to begin executing steps immediately via [`cxb-task-run`](/curdx-bridge/skills/cxb-task-run).
+- coarse-grained steps
+- clear sequencing
+- steps that can be reviewed independently
 
-## Design Principles
+### 5. Optionally Start Execution
 
-- **Collaborative design** — Uses all three roles (designer, inspiration, reviewer)
-- **Coarse-grained steps** — Step titles only, detailed design happens at execution time
-- **Research-driven** — Investigates unfamiliar technologies before planning
+After artifact generation, the task can be handed to [`cxb-task-run`](/curdx-bridge/skills/cxb-task-run) immediately or resumed later.
+
+## Example
+
+If the approved plan is "introduce audit logging for admin actions", `cxb-task-plan` might generate steps like:
+
+1. add an audit event model and storage contract
+2. wire logging into admin write paths
+3. expose query tooling for support staff
+4. add tests and docs
+
+These are execution-sized. They are not implementation micro-steps like "add field" or "rename function".
+
+## Best Practices
+
+- Keep steps large enough to matter, small enough to review.
+- Prefer 3 to 7 steps for a medium feature.
+- Put testing or validation in explicit steps when the task is risky.
+- If user approval is still fuzzy, do not generate execution artifacts yet.
+
+## Good Requests To Trigger `cxb-task-plan`
+
+- "Turn this reviewed plan into a resumable task list."
+- "Break this feature into executable steps and prepare AutoFlow state."
+- "Create the `.curdx` task artifacts, but wait for my approval before running them."
