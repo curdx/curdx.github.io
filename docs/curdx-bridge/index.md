@@ -18,43 +18,43 @@ That means:
 ## Architecture At A Glance
 
 <div style="margin: 1rem 0 1.5rem;">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" role="img" aria-label="CurdX Bridge architecture overview" style="max-width: 100%; height: auto;">
-    <defs>
-      <marker id="arch-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-        <path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
-      </marker>
-    </defs>
-    <rect x="8" y="8" width="904" height="414" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
-    <text x="40" y="48" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">CurdX Bridge session</text>
-    <text x="40" y="76" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">One terminal, one conversation surface, multiple live provider panes.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" role="img" aria-label="CurdX Bridge architecture overview" style="max-width: 100%; height: auto;">
+<defs>
+<marker id="arch-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+<path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
+</marker>
+</defs>
+<rect x="8" y="8" width="904" height="414" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
+<text x="40" y="48" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">CurdX Bridge session</text>
+<text x="40" y="76" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">One terminal, one conversation surface, multiple live provider panes.</text>
 
-    <rect x="42" y="106" width="390" height="268" rx="20" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
-    <text x="68" y="148" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Claude</text>
-    <text x="68" y="176" style="fill: var(--vp-c-text-2); font: 500 14px ui-sans-serif, system-ui, sans-serif;">Main pane</text>
-    <text x="68" y="214" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">You type here.</text>
-    <text x="68" y="240" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">Claude orchestrates roles, packages context,</text>
-    <text x="68" y="264" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">sends async requests, and merges responses.</text>
+<rect x="42" y="106" width="390" height="268" rx="20" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<text x="68" y="148" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Claude</text>
+<text x="68" y="176" style="fill: var(--vp-c-text-2); font: 500 14px ui-sans-serif, system-ui, sans-serif;">Main pane</text>
+<text x="68" y="214" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">You type here.</text>
+<text x="68" y="240" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">Claude orchestrates roles, packages context,</text>
+<text x="68" y="264" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">sends async requests, and merges responses.</text>
 
-    <rect x="494" y="106" width="384" height="78" rx="16" style="fill: color-mix(in srgb, var(--vp-c-green-1) 14%, transparent); stroke: var(--vp-c-green-1); stroke-width: 2;" />
-    <rect x="494" y="201" width="384" height="78" rx="16" style="fill: color-mix(in srgb, var(--vp-c-yellow-1) 18%, transparent); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
-    <rect x="494" y="296" width="384" height="78" rx="16" style="fill: color-mix(in srgb, var(--vp-c-red-1) 12%, transparent); stroke: var(--vp-c-red-1); stroke-width: 2;" />
+<rect x="494" y="106" width="384" height="78" rx="16" style="fill: var(--vp-c-green-soft); stroke: var(--vp-c-green-1); stroke-width: 2;" />
+<rect x="494" y="201" width="384" height="78" rx="16" style="fill: var(--vp-c-yellow-soft); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
+<rect x="494" y="296" width="384" height="78" rx="16" style="fill: var(--vp-c-red-soft); stroke: var(--vp-c-red-1); stroke-width: 2;" />
 
-    <text x="520" y="137" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Codex</text>
-    <text x="520" y="162" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Scored review, implementation, deeper code reasoning</text>
+<text x="520" y="137" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Codex</text>
+<text x="520" y="162" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Scored review, implementation, deeper code reasoning</text>
 
-    <text x="520" y="232" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Gemini</text>
-    <text x="520" y="257" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Alternative designs, naming ideas, option generation</text>
+<text x="520" y="232" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Gemini</text>
+<text x="520" y="257" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Alternative designs, naming ideas, option generation</text>
 
-    <text x="520" y="327" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">OpenCode</text>
-    <text x="520" y="352" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Additional implementation perspective on demand</text>
+<text x="520" y="327" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">OpenCode</text>
+<text x="520" y="352" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">Additional implementation perspective on demand</text>
 
-    <rect x="294" y="28" width="336" height="46" rx="12" style="fill: var(--vp-c-default-soft); stroke: var(--vp-c-divider); stroke-width: 1.5;" />
-    <text x="318" y="57" style="fill: var(--vp-c-text-1); font: 600 16px ui-sans-serif, system-ui, sans-serif;">Async router, session state, role policy, AutoFlow</text>
+<rect x="294" y="28" width="336" height="46" rx="12" style="fill: var(--vp-c-default-soft); stroke: var(--vp-c-divider); stroke-width: 1.5;" />
+<text x="318" y="57" style="fill: var(--vp-c-text-1); font: 600 16px ui-sans-serif, system-ui, sans-serif;">Async router, session state, role policy, AutoFlow</text>
 
-    <path d="M432 155 L484 145" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow)" />
-    <path d="M432 240 L484 240" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow)" />
-    <path d="M432 326 L484 336" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow)" />
-  </svg>
+<path d="M432 155 L484 145" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow)" />
+<path d="M432 240 L484 240" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow)" />
+<path d="M432 326 L484 336" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow)" />
+</svg>
 </div>
 
 ## When It Works Best

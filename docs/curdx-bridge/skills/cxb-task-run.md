@@ -11,68 +11,68 @@ This keeps long tasks from dissolving into an untracked stream of edits.
 ## AutoFlow 10-Step Pipeline
 
 <div style="margin: 1rem 0 1.5rem;">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 440" role="img" aria-label="AutoFlow 10-step execution pipeline" style="max-width: 100%; height: auto;">
-    <defs>
-      <marker id="auto-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-        <path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
-      </marker>
-    </defs>
-    <rect x="10" y="10" width="960" height="420" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 440" role="img" aria-label="AutoFlow 10-step execution pipeline" style="max-width: 100%; height: auto;">
+<defs>
+<marker id="auto-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+<path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
+</marker>
+</defs>
+<rect x="10" y="10" width="960" height="420" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
 
-    <g style="font: 600 15px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-1);">
-      <rect x="36" y="64" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
-      <rect x="220" y="64" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
-      <rect x="404" y="64" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
-      <rect x="588" y="64" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
-      <rect x="772" y="64" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<g style="font: 600 15px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-1);">
+<rect x="36" y="64" width="158" height="86" rx="16" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<rect x="220" y="64" width="158" height="86" rx="16" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<rect x="404" y="64" width="158" height="86" rx="16" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<rect x="588" y="64" width="158" height="86" rx="16" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<rect x="772" y="64" width="158" height="86" rx="16" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
 
-      <rect x="772" y="254" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-green-1) 14%, transparent); stroke: var(--vp-c-green-1); stroke-width: 2;" />
-      <rect x="588" y="254" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-green-1) 14%, transparent); stroke: var(--vp-c-green-1); stroke-width: 2;" />
-      <rect x="404" y="254" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-yellow-1) 18%, transparent); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
-      <rect x="220" y="254" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-red-1) 12%, transparent); stroke: var(--vp-c-red-1); stroke-width: 2;" />
-      <rect x="36" y="254" width="158" height="86" rx="16" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<rect x="772" y="254" width="158" height="86" rx="16" style="fill: var(--vp-c-green-soft); stroke: var(--vp-c-green-1); stroke-width: 2;" />
+<rect x="588" y="254" width="158" height="86" rx="16" style="fill: var(--vp-c-green-soft); stroke: var(--vp-c-green-1); stroke-width: 2;" />
+<rect x="404" y="254" width="158" height="86" rx="16" style="fill: var(--vp-c-yellow-soft); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
+<rect x="220" y="254" width="158" height="86" rx="16" style="fill: var(--vp-c-red-soft); stroke: var(--vp-c-red-1); stroke-width: 2;" />
+<rect x="36" y="254" width="158" height="86" rx="16" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
 
-      <text x="56" y="94">1. Sync State</text>
-      <text x="56" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Read `.curdx/state.json`</text>
+<text x="56" y="94">1. Sync State</text>
+<text x="56" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Read `.curdx/state.json`</text>
 
-      <text x="240" y="94">2. Design Step</text>
-      <text x="240" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Claude + Codex draft</text>
+<text x="240" y="94">2. Design Step</text>
+<text x="240" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Claude + Codex draft</text>
 
-      <text x="424" y="94">3. Split Check</text>
-      <text x="424" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Break oversized work</text>
+<text x="424" y="94">3. Split Check</text>
+<text x="424" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Break oversized work</text>
 
-      <text x="608" y="94">4. Build Request</text>
-      <text x="608" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Prepare FileOpsREQ</text>
+<text x="608" y="94">4. Build Request</text>
+<text x="608" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Prepare FileOpsREQ</text>
 
-      <text x="792" y="94">5. Send Request</text>
-      <text x="792" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Dispatch to executor</text>
+<text x="792" y="94">5. Send Request</text>
+<text x="792" y="118" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Dispatch to executor</text>
 
-      <text x="792" y="284">6. Execute</text>
-      <text x="792" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Code, files, tests</text>
+<text x="792" y="284">6. Execute</text>
+<text x="792" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Code, files, tests</text>
 
-      <text x="608" y="284">7. Handle Reply</text>
-      <text x="608" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">`ok`, `ask`, or `fail`</text>
+<text x="608" y="284">7. Handle Reply</text>
+<text x="608" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">`ok`, `ask`, or `fail`</text>
 
-      <text x="424" y="284">8. Review</text>
-      <text x="424" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Dual assessment</text>
+<text x="424" y="284">8. Review</text>
+<text x="424" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Dual assessment</text>
 
-      <text x="240" y="284">8.5 Test</text>
-      <text x="240" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Run when needed</text>
+<text x="240" y="284">8.5 Test</text>
+<text x="240" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Run when needed</text>
 
-      <text x="56" y="284">9-10 Finalize</text>
-      <text x="56" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Advance and final review</text>
-    </g>
+<text x="56" y="284">9-10 Finalize</text>
+<text x="56" y="308" style="font: 400 13px ui-sans-serif, system-ui, sans-serif; fill: var(--vp-c-text-2);">Advance and final review</text>
+</g>
 
-    <path d="M194 107 L210 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M378 107 L394 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M562 107 L578 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M746 107 L762 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M852 150 C940 176, 940 230, 852 254" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M772 297 L756 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M588 297 L572 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M404 297 L388 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-    <path d="M220 297 L204 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
-  </svg>
+<path d="M194 107 L210 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M378 107 L394 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M562 107 L578 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M746 107 L762 107" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M852 150 C940 176, 940 230, 852 254" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M772 297 L756 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M588 297 L572 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M404 297 L388 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+<path d="M220 297 L204 297" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#auto-arrow)" />
+</svg>
 </div>
 
 ## Step-By-Step Detail

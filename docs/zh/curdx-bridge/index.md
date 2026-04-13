@@ -18,43 +18,43 @@ CurdX Bridge 把一个终端窗口变成可协作的多 Agent 工作台。你始
 ## 架构一图看懂
 
 <div style="margin: 1rem 0 1.5rem;">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" role="img" aria-label="CurdX Bridge 架构概览" style="max-width: 100%; height: auto;">
-    <defs>
-      <marker id="arch-arrow-zh" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-        <path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
-      </marker>
-    </defs>
-    <rect x="8" y="8" width="904" height="414" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
-    <text x="40" y="48" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">CurdX Bridge 会话</text>
-    <text x="40" y="76" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">一个终端，一个主对话面，多路 Provider 实时协作。</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" role="img" aria-label="CurdX Bridge 架构概览" style="max-width: 100%; height: auto;">
+<defs>
+<marker id="arch-arrow-zh" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+<path d="M0,0 L10,5 L0,10 z" style="fill: var(--vp-c-brand-1);" />
+</marker>
+</defs>
+<rect x="8" y="8" width="904" height="414" rx="24" style="fill: var(--vp-c-bg-soft); stroke: var(--vp-c-divider); stroke-width: 2;" />
+<text x="40" y="48" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">CurdX Bridge 会话</text>
+<text x="40" y="76" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">一个终端，一个主对话面，多路 Provider 实时协作。</text>
 
-    <rect x="42" y="106" width="390" height="268" rx="20" style="fill: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
-    <text x="68" y="148" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Claude</text>
-    <text x="68" y="176" style="fill: var(--vp-c-text-2); font: 500 14px ui-sans-serif, system-ui, sans-serif;">主面板</text>
-    <text x="68" y="214" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">你在这里输入需求。</text>
-    <text x="68" y="240" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">Claude 负责角色调度、上下文打包、</text>
-    <text x="68" y="264" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">异步请求发送与结果整合。</text>
+<rect x="42" y="106" width="390" height="268" rx="20" style="fill: var(--vp-c-brand-soft); stroke: var(--vp-c-brand-1); stroke-width: 2;" />
+<text x="68" y="148" style="fill: var(--vp-c-text-1); font: 700 24px ui-sans-serif, system-ui, sans-serif;">Claude</text>
+<text x="68" y="176" style="fill: var(--vp-c-text-2); font: 500 14px ui-sans-serif, system-ui, sans-serif;">主面板</text>
+<text x="68" y="214" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">你在这里输入需求。</text>
+<text x="68" y="240" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">Claude 负责角色调度、上下文打包、</text>
+<text x="68" y="264" style="fill: var(--vp-c-text-1); font: 400 15px ui-sans-serif, system-ui, sans-serif;">异步请求发送与结果整合。</text>
 
-    <rect x="494" y="106" width="384" height="78" rx="16" style="fill: color-mix(in srgb, var(--vp-c-green-1) 14%, transparent); stroke: var(--vp-c-green-1); stroke-width: 2;" />
-    <rect x="494" y="201" width="384" height="78" rx="16" style="fill: color-mix(in srgb, var(--vp-c-yellow-1) 18%, transparent); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
-    <rect x="494" y="296" width="384" height="78" rx="16" style="fill: color-mix(in srgb, var(--vp-c-red-1) 12%, transparent); stroke: var(--vp-c-red-1); stroke-width: 2;" />
+<rect x="494" y="106" width="384" height="78" rx="16" style="fill: var(--vp-c-green-soft); stroke: var(--vp-c-green-1); stroke-width: 2;" />
+<rect x="494" y="201" width="384" height="78" rx="16" style="fill: var(--vp-c-yellow-soft); stroke: var(--vp-c-yellow-1); stroke-width: 2;" />
+<rect x="494" y="296" width="384" height="78" rx="16" style="fill: var(--vp-c-red-soft); stroke: var(--vp-c-red-1); stroke-width: 2;" />
 
-    <text x="520" y="137" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Codex</text>
-    <text x="520" y="162" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">评分审查、实现协同、深度代码分析</text>
+<text x="520" y="137" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Codex</text>
+<text x="520" y="162" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">评分审查、实现协同、深度代码分析</text>
 
-    <text x="520" y="232" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Gemini</text>
-    <text x="520" y="257" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">替代方案、命名方向、思路发散</text>
+<text x="520" y="232" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">Gemini</text>
+<text x="520" y="257" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">替代方案、命名方向、思路发散</text>
 
-    <text x="520" y="327" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">OpenCode</text>
-    <text x="520" y="352" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">按需补充实现视角</text>
+<text x="520" y="327" style="fill: var(--vp-c-text-1); font: 700 22px ui-sans-serif, system-ui, sans-serif;">OpenCode</text>
+<text x="520" y="352" style="fill: var(--vp-c-text-2); font: 400 14px ui-sans-serif, system-ui, sans-serif;">按需补充实现视角</text>
 
-    <rect x="294" y="28" width="336" height="46" rx="12" style="fill: var(--vp-c-default-soft); stroke: var(--vp-c-divider); stroke-width: 1.5;" />
-    <text x="330" y="57" style="fill: var(--vp-c-text-1); font: 600 16px ui-sans-serif, system-ui, sans-serif;">异步路由、会话状态、角色策略、AutoFlow</text>
+<rect x="294" y="28" width="336" height="46" rx="12" style="fill: var(--vp-c-default-soft); stroke: var(--vp-c-divider); stroke-width: 1.5;" />
+<text x="330" y="57" style="fill: var(--vp-c-text-1); font: 600 16px ui-sans-serif, system-ui, sans-serif;">异步路由、会话状态、角色策略、AutoFlow</text>
 
-    <path d="M432 155 L484 145" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow-zh)" />
-    <path d="M432 240 L484 240" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow-zh)" />
-    <path d="M432 326 L484 336" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow-zh)" />
-  </svg>
+<path d="M432 155 L484 145" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow-zh)" />
+<path d="M432 240 L484 240" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow-zh)" />
+<path d="M432 326 L484 336" style="fill: none; stroke: var(--vp-c-brand-1); stroke-width: 3;" marker-end="url(#arch-arrow-zh)" />
+</svg>
 </div>
 
 ## 适合哪些场景
