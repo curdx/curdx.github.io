@@ -149,18 +149,81 @@ flow 的承诺：
 
 设为 `false` 关闭 hook 错误日志。默认开启（写入 `~/.claude/curdx-flow/errors.jsonl`）。
 
-## 迭代上限
+## 迭代上限与恢复状态
 
-自治循环的两个计数器在 `.curdx-state.json` 里：
+自治循环在 `.curdx-state.json` 中有多个计数器和映射。典型执行中状态：
 
-| 计数 | 默认 | 作用 |
+```json
+{
+  "source": "spec",
+  "name": "oauth-login",
+  "basePath": "./specs/oauth-login",
+  "phase": "execution",
+  "taskIndex": 7,
+  "totalTasks": 12,
+  "taskIteration": 1,
+  "maxTaskIterations": 5,
+  "globalIteration": 23,
+  "maxGlobalIterations": 100,
+  "commitSpec": true,
+  "quickMode": false,
+  "granularity": "fine",
+  "discoveredSkills": [
+    {"name": "claude-mem:make-plan", "matchedAt": "start", "invoked": true}
+  ],
+  "fixTaskMap": {
+    "1.4": {
+      "attempts": 1,
+      "fixTaskIds": ["1.4.1"],
+      "lastError": "TypeError: cannot read property 'sub' of undefined"
+    }
+  },
+  "modificationMap": {},
+  "nativeTaskMap": {"0": "task-7f3a9c2", "1": "task-8e1b4d5"},
+  "recoveryMode": false,
+  "maxFixTasksPerOriginal": 3,
+  "maxFixTaskDepth": 2,
+  "nativeSyncEnabled": true,
+  "awaitingApproval": false,
+  "completed": false
+}
+```
+
+### 计数器
+
+| 字段 | 默认 | 用途 |
 | --- | --- | --- |
-| `maxTaskIterations` | 5 | `[VERIFY]` 失败时单任务重试预算 |
-| `maxGlobalIterations` | 100 | 整份规约的硬上限 |
+| `taskIteration` | 1 | 当前任务的重试次数（成功时重置） |
+| `maxTaskIterations` | 5 | 验证失败时的单任务重试预算 |
+| `globalIteration` | 1 | 整 spec 已执行的任务总数（含重试） |
+| `maxGlobalIterations` | 100 | 整 spec 的硬上限 |
+| `maxFixTasksPerOriginal` | 3 | 每原任务的最大修复任务数（如 1.3.1, 1.3.2, 1.3.3） |
+| `maxFixTaskDepth` | 2 | 修复的修复嵌套深度上限（`1.3.1.1` 允许，`1.3.1.1.1` 拒绝） |
 
-`maxTaskIterations` 触顶则停下并暴露失败给人工。`maxGlobalIterations` 触顶则即使每个任务都没满，也会强制停止。
+`maxTaskIterations` 触顶则停下暴露失败。`maxGlobalIterations` 触顶则即使每任务都没满也强制停止。
 
-需要时可直接编辑 `.curdx-state.json` 调整。但计数失控通常是规约本身需要修订的信号，不是预算问题。
+### 映射
+
+| 字段 | 用途 |
+| --- | --- |
+| `discoveredSkills` | 由 skill discovery 自动加载的 skills（Pass 1 + Pass 2） |
+| `fixTaskMap` | `recoveryMode: true` 时每任务的修复尝试历史 |
+| `modificationMap` | 每任务的 `TASK_MODIFICATION_REQUEST` 历史（每任务最多 3 次） |
+| `nativeTaskMap` | 把 `taskIndex` 映射到 Claude Code 原生任务 ID 用于 UI 镜像 |
+
+`taskIndex` 和计数器都可直接编辑。但计数失控通常是规约需要修订的信号，不是预算问题。
+
+### 始终保留现有字段
+
+协调器用 deep-merge helper 更新状态——永不从头写新对象。手动调整：
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/lib/merge-state.mjs" \
+     "$SPEC_PATH/.curdx-state.json" \
+     '{"maxTaskIterations": 8}'
+```
+
+保留 `source`, `name`, `basePath`, `commitSpec`, `relatedSpecs` 和所有其它字段。
 
 ## 推荐范式
 

@@ -149,18 +149,81 @@ Project-specific Claude Code settings live in `.claude/settings.json`. Flow does
 
 Set `errorLogEnabled: false` to disable hook error logging entirely. Default is on (writes to `~/.claude/curdx-flow/errors.jsonl`).
 
-## Iteration Limits
+## Iteration Limits And Recovery State
 
-The autonomous loop has two iteration counters in `.curdx-state.json`:
+The autonomous loop has multiple counters and maps in `.curdx-state.json`. A typical mid-execution state:
 
-| Counter | Default | Purpose |
+```json
+{
+  "source": "spec",
+  "name": "oauth-login",
+  "basePath": "./specs/oauth-login",
+  "phase": "execution",
+  "taskIndex": 7,
+  "totalTasks": 12,
+  "taskIteration": 1,
+  "maxTaskIterations": 5,
+  "globalIteration": 23,
+  "maxGlobalIterations": 100,
+  "commitSpec": true,
+  "quickMode": false,
+  "granularity": "fine",
+  "discoveredSkills": [
+    {"name": "claude-mem:make-plan", "matchedAt": "start", "invoked": true}
+  ],
+  "fixTaskMap": {
+    "1.4": {
+      "attempts": 1,
+      "fixTaskIds": ["1.4.1"],
+      "lastError": "TypeError: cannot read property 'sub' of undefined"
+    }
+  },
+  "modificationMap": {},
+  "nativeTaskMap": {"0": "task-7f3a9c2", "1": "task-8e1b4d5"},
+  "recoveryMode": false,
+  "maxFixTasksPerOriginal": 3,
+  "maxFixTaskDepth": 2,
+  "nativeSyncEnabled": true,
+  "awaitingApproval": false,
+  "completed": false
+}
+```
+
+### Counter reference
+
+| Field | Default | Purpose |
 | --- | --- | --- |
-| `maxTaskIterations` | 5 | Per-task retry budget when `[VERIFY]` fails |
-| `maxGlobalIterations` | 100 | Hard ceiling across the whole spec |
+| `taskIteration` | 1 | Current task's retry attempt (resets on success) |
+| `maxTaskIterations` | 5 | Per-task retry budget when verification fails |
+| `globalIteration` | 1 | Total tasks executed across the spec (incl. retries) |
+| `maxGlobalIterations` | 100 | Hard ceiling for the whole spec |
+| `maxFixTasksPerOriginal` | 3 | Max recovery fix tasks per original task (e.g., 1.3.1, 1.3.2, 1.3.3) |
+| `maxFixTaskDepth` | 2 | Max nesting depth for fix-of-fix (`1.3.1.1` allowed, `1.3.1.1.1` rejected) |
 
-If `maxTaskIterations` is reached on a single task, the loop halts and surfaces the failure for human intervention. If `maxGlobalIterations` is reached for the whole spec, the loop halts even if no individual task hit its retry budget.
+If `maxTaskIterations` is reached on a single task, the loop halts and surfaces the failure. If `maxGlobalIterations` is reached, the loop halts even if no individual task hit its retry budget.
 
-Both can be edited directly in `.curdx-state.json` if a long spec needs more headroom — but a runaway counter is usually a sign the spec needs revision, not more retries.
+### Map reference
+
+| Field | Purpose |
+| --- | --- |
+| `discoveredSkills` | Skills auto-loaded by skill discovery (Pass 1 + Pass 2) |
+| `fixTaskMap` | Per-task fix attempt history when `recoveryMode: true` |
+| `modificationMap` | Per-task `TASK_MODIFICATION_REQUEST` history (max 3 per task) |
+| `nativeTaskMap` | Maps `taskIndex` → Claude Code native task ID for UI mirroring |
+
+Both `taskIndex` and counters can be edited directly if a long spec needs more headroom — but a runaway counter is usually a sign the spec needs revision, not more retries.
+
+### Always preserve existing fields
+
+The coordinator uses a deep-merge helper to update state — never write a new object from scratch. To manually adjust:
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/lib/merge-state.mjs" \
+     "$SPEC_PATH/.curdx-state.json" \
+     '{"maxTaskIterations": 8}'
+```
+
+This preserves `source`, `name`, `basePath`, `commitSpec`, `relatedSpecs`, and all other fields.
 
 ## Recommended Patterns
 
