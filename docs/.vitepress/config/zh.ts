@@ -8,6 +8,7 @@ export const zh: LocaleSpecificConfig<DefaultTheme.Config> = {
         text: '项目',
         items: [
           { text: 'CurdX Bridge', link: '/zh/curdx-bridge/' },
+          { text: 'CurdX Flow', link: '/zh/curdx-flow/' },
         ],
       },
     ],
@@ -39,6 +40,36 @@ export const zh: LocaleSpecificConfig<DefaultTheme.Config> = {
           text: '帮助',
           items: [
             { text: '故障排除', link: '/zh/curdx-bridge/troubleshooting' },
+          ],
+        },
+      ],
+
+      '/zh/curdx-flow/': [
+        {
+          text: 'CurdX Flow',
+          items: [
+            { text: '概览', link: '/zh/curdx-flow/' },
+            { text: '快速开始', link: '/zh/curdx-flow/getting-started' },
+            { text: '工作原理', link: '/zh/curdx-flow/how-it-works' },
+            { text: '配置', link: '/zh/curdx-flow/configuration' },
+            { text: '命令参考', link: '/zh/curdx-flow/commands' },
+          ],
+        },
+        {
+          text: '子 Agent',
+          items: [
+            { text: '总览', link: '/zh/curdx-flow/agents/' },
+            { text: 'research-analyst', link: '/zh/curdx-flow/agents/research-analyst' },
+            { text: 'product-manager', link: '/zh/curdx-flow/agents/product-manager' },
+            { text: 'architect-reviewer', link: '/zh/curdx-flow/agents/architect-reviewer' },
+            { text: 'task-planner', link: '/zh/curdx-flow/agents/task-planner' },
+            { text: 'spec-executor', link: '/zh/curdx-flow/agents/spec-executor' },
+          ],
+        },
+        {
+          text: '帮助',
+          items: [
+            { text: '故障排除', link: '/zh/curdx-flow/troubleshooting' },
           ],
         },
       ],

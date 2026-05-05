@@ -19,4 +19,9 @@ features:
     details: Multi-AI split-pane terminal. Claude, Codex, Gemini, and OpenCode collaborate in one terminal session.
     link: /curdx-bridge/
     linkText: Documentation
+  - icon: 🧭
+    title: CurdX Flow
+    details: Spec-driven development for Claude Code, with autonomous task execution. Research, requirements, design, tasks, and an autonomous implement loop.
+    link: /curdx-flow/
+    linkText: Documentation
 ---

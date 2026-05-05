@@ -8,6 +8,7 @@ export const en: LocaleSpecificConfig<DefaultTheme.Config> = {
         text: 'Projects',
         items: [
           { text: 'CurdX Bridge', link: '/curdx-bridge/' },
+          { text: 'CurdX Flow', link: '/curdx-flow/' },
         ],
       },
     ],
@@ -39,6 +40,36 @@ export const en: LocaleSpecificConfig<DefaultTheme.Config> = {
           text: 'Help',
           items: [
             { text: 'Troubleshooting', link: '/curdx-bridge/troubleshooting' },
+          ],
+        },
+      ],
+
+      '/curdx-flow/': [
+        {
+          text: 'CurdX Flow',
+          items: [
+            { text: 'Overview', link: '/curdx-flow/' },
+            { text: 'Getting Started', link: '/curdx-flow/getting-started' },
+            { text: 'How It Works', link: '/curdx-flow/how-it-works' },
+            { text: 'Configuration', link: '/curdx-flow/configuration' },
+            { text: 'Commands', link: '/curdx-flow/commands' },
+          ],
+        },
+        {
+          text: 'Subagents',
+          items: [
+            { text: 'Overview', link: '/curdx-flow/agents/' },
+            { text: 'research-analyst', link: '/curdx-flow/agents/research-analyst' },
+            { text: 'product-manager', link: '/curdx-flow/agents/product-manager' },
+            { text: 'architect-reviewer', link: '/curdx-flow/agents/architect-reviewer' },
+            { text: 'task-planner', link: '/curdx-flow/agents/task-planner' },
+            { text: 'spec-executor', link: '/curdx-flow/agents/spec-executor' },
+          ],
+        },
+        {
+          text: 'Help',
+          items: [
+            { text: 'Troubleshooting', link: '/curdx-flow/troubleshooting' },
           ],
         },
       ],
