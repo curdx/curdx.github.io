@@ -9,6 +9,18 @@ export const shared = defineConfig({
 
   head: [
     ['link', { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
+    [
+      'script',
+      {},
+      `(function(){try{
+        var p=location.pathname;
+        if(p!=='/'&&p!=='/index.html')return;
+        if(localStorage.getItem('curdx-auto-lang-done'))return;
+        var lang=(navigator.language||navigator.userLanguage||'').toLowerCase();
+        localStorage.setItem('curdx-auto-lang-done','1');
+        if(lang.indexOf('zh')===0)location.replace('/zh/'+location.search+location.hash);
+      }catch(e){}})();`,
+    ],
   ],
 
   themeConfig: {
