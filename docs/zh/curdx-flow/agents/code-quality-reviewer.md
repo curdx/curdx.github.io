@@ -19,4 +19,4 @@
 
 ## Review 隔离
 
-协调器把代码质量发现单独保存到 `verificationBlocks.<phase>.reviews.codeQuality`。这里的 `FAIL` 不能被 spec 合规通过静默抵消。
+协调器会把代码质量发现和 spec 合规发现分开保存。代码质量失败不能被 spec 合规通过静默抵消。

@@ -56,7 +56,8 @@ export const en: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
-          text: 'Subagents',
+          text: 'Agents',
+          collapsed: true,
           items: [
             { text: 'Overview', link: '/curdx-flow/agents/' },
             { text: 'research-analyst', link: '/curdx-flow/agents/research-analyst' },

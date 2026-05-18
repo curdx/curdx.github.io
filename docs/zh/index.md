@@ -4,7 +4,7 @@ layout: home
 hero:
   name: CurdX
   text: 多 AI 开发工具
-  tagline: 面向 Claude Code 和多 Agent 开发流程的工具集。
+  tagline: 面向 Claude Code、多 Agent 流程和日常软件交付的实用工具。
   actions:
     - theme: brand
       text: CurdX Flow
@@ -16,7 +16,7 @@ hero:
 features:
   - icon: 🧭
     title: CurdX Flow
-    details: 面向 Claude Code 的插件和 npm CLI。自动路由需求、生成规格、逐任务执行，并用真实验证证据约束完成声明。
+    details: Claude Code 工作流插件。从一个目标开始，生成清楚的规格文件，按任务执行，并保留真实通过证据。
     link: /zh/curdx-flow/
     linkText: 查看文档
   - icon: 🖥️

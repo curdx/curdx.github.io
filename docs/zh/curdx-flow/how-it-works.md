@@ -1,104 +1,76 @@
 # 工作原理
 
-CurdX Flow 是一个 Claude Code 插件，外面包了一层很小的 npm 安装器。插件负责编排 skills、agents、hooks、runtime scripts 和状态文件；安装器负责保持环境一致。
+这页给想理解内部机制的人看。新手可以先跳过。
 
-## 插件布局
+## 一个简单比喻
 
-源码仓库里的插件位于 `plugins/curdx-flow/`：
+直接让 Claude Code 做复杂任务，像是边想边写。CurdX Flow 会先把事情写成计划，再按计划执行。
+
+流程是：
 
 ```text
-plugins/curdx-flow/
-  .claude-plugin/plugin.json
-  skills/
-  agents/
-  hooks/
-  schemas/
-  templates/
-  references/
-  bin/curdx-flow
+目标 -> 规格文件 -> 任务列表 -> 执行 -> 验证证据
 ```
 
-这符合当前 Claude Code 插件结构：manifest 在 `.claude-plugin/` 下，skills、agents、hooks 和 runtime 资产位于插件根目录。
+## 第 1 步：先判断任务大小
 
-## 智能路由
+`/curdx-flow:start` 会先判断：
 
-`/curdx-flow:start` 不会盲目启动长流程。它会让 runtime router 根据以下信息选择路线：
+- 这是小改动，还是复杂功能？
+- 项目是前端、后端、CLI、插件，还是 monorepo？
+- 有没有旧 spec 可以继续？
+- 是否需要浏览器、测试、发布证据？
 
-- 当前仓库形态；
-- active spec 和会话绑定；
-- 用户目标和参数；
-- 技术栈画像；
-- 可用能力；
-- 风险和验证需求。
+所以同一个 `/curdx-flow:start` 可以处理不同任务，而不是每次都强制完整流程。
 
-路线可能是 direct-change、lite-spec、full-spec、triage、resume 或 blocked-ask-user。所以同一个命令既能处理一个 README 小改，也能处理前端应用、Claude Code 插件发布或多 spec epic。
+## 第 2 步：生成规格文件
 
-## 阶段产物
+复杂任务通常会生成四个文件：
 
-常规完整 spec 会生成四份可审查 Markdown：
-
-| 产物 | 负责人 |
+| 文件 | 回答的问题 |
 | --- | --- |
-| `research.md` | `research-analyst` |
-| `requirements.md` | `product-manager` |
-| `design.md` | `architect-reviewer` |
-| `tasks.md` | `task-planner` |
+| `research.md` | 项目现状是什么？风险在哪里？ |
+| `requirements.md` | 到底要做什么？怎样算完成？ |
+| `design.md` | 技术上怎么做？改哪些地方？ |
+| `tasks.md` | 分几步做？每步怎么验证？ |
 
-每个阶段都可以使用访谈、代码库事实、当前官方文档、历史记忆和能力检查。Review agents 可以在阶段边界运行。Quick mode 会减少交互，但仍保留产物和验证契约。
+这些文件让任务可以暂停、审查、继续。
 
-## 执行
+## 第 3 步：按任务执行
 
-`/curdx-flow:implement` 是协调器。它验证 `tasks.md`、初始化状态、编译 goal 条件，然后把有边界的工作委派给专用 agents。
+`/curdx-flow:implement` 会读取 `tasks.md`。每次只处理一个有边界的任务。
 
-默认 driver 是 Claude Code 原生 `/goal`，前提是 readiness 检查通过。如果原生 goal 不可用，`--manual` 会走一次可恢复的单回合协调路径。
+实现任务通常由 `spec-executor` 做；验证任务由 `qa-engineer` 做。这样可以减少“自己写完自己说通过”的问题。
 
-关键执行规则：
+## 第 4 步：必须有证据
 
-- `spec-executor` 实现隔离任务。
-- `qa-engineer` 负责 `[VERIFY]` 任务和证据检查。
-- `spec-reviewer` 与 `code-quality-reviewer` 审查不同轴线，不能混成一个意见。
-- 状态写入通过 runtime merge helper。
-- 完成 marker 会被解析，然后用产物和证据核验。
+CurdX Flow 不把“我完成了”当证据。它更关心：
 
-## 验证
+- 命令是否跑过？
+- 退出码是不是 0？
+- 浏览器页面是否真的可用？
+- console 或 network 有没有错误？
+- 发布 tag、npm 包、CI 状态是否真实存在？
 
-CurdX Flow 把验证当数据，不当口头说明。`verificationBlocks` 保存证据，例如：
+这些证据会写进 Flow 的状态文件，后续可以检查。
 
-```json
-{
-  "execution": {
-    "command": "npm test",
-    "exitCode": 0,
-    "timestamp": "2026-05-18T00:00:00.000Z",
-    "srcMtime": "2026-05-18T00:00:00.000Z"
-  }
-}
+## 第 5 步：中途停了也能恢复
+
+如果你关闭 Claude Code，之后可以运行：
+
+```text
+/curdx-flow:status
+/curdx-flow:start
 ```
 
-Stop hook 和 `@curdx/flow check` 执行同一条规则：所需证据缺失、过期或失败时，不能声明完成。
+Flow 会读取 spec 文件和状态，告诉你下一步。
 
-## Hooks
+## 内部组件
 
-Hooks 用于流程安全和上下文恢复。它们注入压缩上下文、记录进度、验证任务完成 marker，并保护 expansion 或 stop 事件。Hook bundles 由 TypeScript 源码生成，并作为插件运行时产物提交。
-
-核心规则：除非故意阻止错误完成声明，否则 hook fail-open。诊断写 stderr；hook 协议输出写 stdout。
-
-## 能力诊断
-
-`curdx-flow doctor` 会报告插件依赖、外部 MCP readiness、原生 `/goal` readiness、浏览器验证选项、hook freshness 和 release readiness。能力缺失会显式降级：
-
-- 缺 `chrome-devtools-mcp`，浏览器证据降级；
-- 缺 `context7`，当前文档查询降级；
-- 缺 `sequential-thinking`，高风险推理证据降级；
-- 插件依赖被禁用时，会给出修复建议。
-
-## 发布模型
-
-对 curdx-flow 自身，npm 发布和 Claude Code 插件发布是两个 surface：
-
-| Surface | Tag |
+| 组件 | 作用 |
 | --- | --- |
-| npm package | `vX.Y.Z` |
-| Claude Code plugin | `curdx-flow--vX.Y.Z` |
-
-两个 tag 必须有意保持成对。测试通过不等于发布完成；还需要插件校验、插件 smoke、hook freshness、版本一致和 tag 一致。
+| skills | Claude Code 里的 `/curdx-flow:*` 命令。 |
+| agents | 研究、需求、设计、任务、实现、验证等专用角色。 |
+| hooks | 在关键时刻记录状态、阻止无证据完成声明。 |
+| runtime CLI | `curdx-flow doctor`、`curdx-flow specs list` 等内部工具。 |
+| npm CLI | 安装、更新、状态检查、分析日志。 |

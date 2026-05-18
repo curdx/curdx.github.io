@@ -56,7 +56,8 @@ export const zh: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
-          text: '子 Agent',
+          text: '内部角色',
+          collapsed: true,
           items: [
             { text: '总览', link: '/zh/curdx-flow/agents/' },
             { text: 'research-analyst', link: '/zh/curdx-flow/agents/research-analyst' },

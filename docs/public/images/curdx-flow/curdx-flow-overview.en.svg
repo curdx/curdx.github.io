@@ -1,57 +1,57 @@
-<svg width="1100" height="520" viewBox="0 0 1100 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">curdx-flow product overview</title>
-  <desc id="desc">Shows how curdx-flow routes intent into specs, tasks, execution, and verification evidence.</desc>
+<svg width="900" height="520" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">CurdX Flow beginner overview</title>
+  <desc id="desc">Shows the flow from describing a goal to writing specs, executing tasks, and verifying completion.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1100" y2="520" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#101827"/>
-      <stop offset="0.55" stop-color="#12233A"/>
-      <stop offset="1" stop-color="#172235"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="130" y1="96" x2="940" y2="430" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#22C55E"/>
-      <stop offset="0.52" stop-color="#38BDF8"/>
-      <stop offset="1" stop-color="#A78BFA"/>
-    </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#020617" flood-opacity="0.35"/>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#0F172A" flood-opacity="0.10"/>
     </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2L10 6L2 10" stroke="#2563EB" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
   </defs>
-  <rect width="1100" height="520" rx="28" fill="url(#bg)"/>
-  <path d="M87 402C231 241 365 167 489 180C612 193 694 281 812 269C901 260 967 203 1017 148" stroke="url(#accent)" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
-  <circle cx="151" cy="135" r="80" fill="#22C55E" opacity="0.08"/>
-  <circle cx="952" cy="374" r="100" fill="#38BDF8" opacity="0.08"/>
-  <text x="70" y="78" fill="#E5F0FF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="34" font-weight="800">curdx-flow</text>
-  <text x="70" y="114" fill="#94A3B8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="18">Spec-driven execution for Claude Code: from intent to verified delivery</text>
-  <g filter="url(#shadow)">
-    <rect x="70" y="165" width="210" height="132" rx="18" fill="#0F172A" stroke="#31435E"/>
-    <text x="96" y="206" fill="#38BDF8" font-family="Inter, ui-sans-serif, system-ui" font-size="20" font-weight="700">1. Smart Route</text>
-    <text x="96" y="240" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">Detect empty repos, frontend,</text>
-    <text x="96" y="264" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">backend, CLI, plugins, releases.</text>
+
+  <rect width="900" height="520" rx="24" fill="#F8FAFC"/>
+  <rect x="28" y="28" width="844" height="464" rx="22" fill="#FFFFFF" stroke="#E2E8F0"/>
+
+  <text x="56" y="78" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="30" font-weight="800">CurdX Flow</text>
+  <text x="56" y="110" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="16">Turn one request into a tracked, verified delivery flow.</text>
+
+  <g filter="url(#shadow)" font-family="Inter, ui-sans-serif, system-ui">
+    <rect x="56" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="78" y="176" width="36" height="36" rx="10" fill="#DBEAFE"/>
+    <text x="91" y="200" fill="#1D4ED8" font-size="19" font-weight="800">1</text>
+    <text x="78" y="232" fill="#0F172A" font-size="20" font-weight="800">Goal</text>
+    <text x="78" y="254" fill="#64748B" font-size="13">start</text>
+
+    <rect x="270" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="292" y="176" width="36" height="36" rx="10" fill="#DCFCE7"/>
+    <text x="305" y="200" fill="#047857" font-size="19" font-weight="800">2</text>
+    <text x="292" y="232" fill="#0F172A" font-size="20" font-weight="800">Specs</text>
+    <text x="292" y="254" fill="#64748B" font-size="13">plan in files</text>
+
+    <rect x="484" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="506" y="176" width="36" height="36" rx="10" fill="#FEF3C7"/>
+    <text x="519" y="200" fill="#B45309" font-size="19" font-weight="800">3</text>
+    <text x="506" y="232" fill="#0F172A" font-size="20" font-weight="800">Tasks</text>
+    <text x="506" y="254" fill="#64748B" font-size="13">small steps</text>
+
+    <rect x="698" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="720" y="176" width="36" height="36" rx="10" fill="#FCE7F3"/>
+    <text x="733" y="200" fill="#BE185D" font-size="19" font-weight="800">4</text>
+    <text x="720" y="232" fill="#0F172A" font-size="20" font-weight="800">Verify</text>
+    <text x="720" y="254" fill="#64748B" font-size="13">real proof</text>
   </g>
-  <g filter="url(#shadow)">
-    <rect x="325" y="165" width="210" height="132" rx="18" fill="#0F172A" stroke="#31435E"/>
-    <text x="351" y="206" fill="#22C55E" font-family="Inter, ui-sans-serif, system-ui" font-size="20" font-weight="700">2. Spec Memory</text>
-    <text x="351" y="240" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">Research, requirements, design,</text>
-    <text x="351" y="264" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">and tasks are written to disk.</text>
-  </g>
-  <g filter="url(#shadow)">
-    <rect x="580" y="165" width="210" height="132" rx="18" fill="#0F172A" stroke="#31435E"/>
-    <text x="606" y="206" fill="#A78BFA" font-family="Inter, ui-sans-serif, system-ui" font-size="20" font-weight="700">3. Execution</text>
-    <text x="606" y="240" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">Native /goal plus specialist</text>
-    <text x="606" y="264" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">agents execute task by task.</text>
-  </g>
-  <g filter="url(#shadow)">
-    <rect x="835" y="165" width="210" height="132" rx="18" fill="#0F172A" stroke="#31435E"/>
-    <text x="861" y="206" fill="#F59E0B" font-family="Inter, ui-sans-serif, system-ui" font-size="20" font-weight="700">4. Evidence</text>
-    <text x="861" y="240" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">Commands, browser proof, and</text>
-    <text x="861" y="264" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui" font-size="15">release results become gates.</text>
-  </g>
-  <path d="M286 231H317" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
-  <path d="M541 231H572" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
-  <path d="M796 231H827" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
-  <g>
-    <rect x="150" y="355" width="800" height="86" rx="20" fill="#09111F" stroke="#1E3A55"/>
-    <text x="190" y="388" fill="#E2E8F0" font-family="Inter, ui-sans-serif, system-ui" font-size="17" font-weight="700">Core principle</text>
-    <text x="190" y="420" fill="#AFC1D8" font-family="Inter, ui-sans-serif, system-ui" font-size="15">Do not accept "done" as truth. Require reproducible command, browser, and release evidence.</text>
-  </g>
+
+  <path d="M216 210H258" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M430 210H472" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M644 210H686" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="56" y="330" width="370" height="92" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="84" y="365" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="18" font-weight="800">You type</text>
+  <rect x="84" y="382" width="300" height="32" rx="8" fill="#0F172A"/>
+  <text x="101" y="403" fill="#E2E8F0" font-family="SFMono-Regular, ui-monospace, monospace" font-size="12">/curdx-flow:start todo-app Build Todo</text>
+
+  <rect x="474" y="330" width="374" height="92" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="502" y="365" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="18" font-weight="800">You get</text>
+  <text x="502" y="394" fill="#334155" font-family="Inter, ui-sans-serif, system-ui" font-size="15">Spec files, focused tasks, and proof.</text>
 </svg>

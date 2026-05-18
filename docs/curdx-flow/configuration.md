@@ -1,140 +1,109 @@
 # Configuration
 
-CurdX Flow keeps configuration small. Most behavior is inferred from the current repository, active spec, installed Claude Code capabilities, and command flags.
+Beginners usually do not need to change configuration. Learn `/curdx-flow:start` and `/curdx-flow:status` first.
 
-## Installer Options
+This page only covers settings you are likely to touch.
 
-The npm CLI accepts these global options:
-
-| Option | Meaning |
-| --- | --- |
-| `--lang zh|en` | Override display language. |
-| `--no-claude-md` | Do not update the managed `@curdx/flow` block in `~/.claude/CLAUDE.md`. |
-
-Install command options:
-
-| Option | Meaning |
-| --- | --- |
-| `--all` | Install all known items. |
-| `--yes` | Skip reinstall confirmation. |
-| `--no-refresh` | Skip marketplace cache refresh. |
-
-Examples:
+## Install Options
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
-npm exec -- @curdx/flow@latest install --all --yes
-npm exec -- @curdx/flow@latest install --lang zh --no-claude-md
 ```
 
-## Workflow Flags
+| Option | What it does |
+| --- | --- |
+| `--yes` | Skip confirmation and install or reinstall directly. |
+| `--all` | Install all known companion capabilities. |
+| `--lang en` | Use English in the installer. |
+| `--no-claude-md` | Do not update the managed block in `~/.claude/CLAUDE.md`. |
+| `--no-refresh` | Skip plugin cache refresh. Usually only for troubleshooting. |
 
-The most important workflow flags are on `/curdx-flow:start`:
+## Task Granularity
 
-| Flag | Default | Meaning |
-| --- | --- | --- |
-| `--mode auto|fast|deep` | `auto` | Routing depth and context budget. |
-| `--task-granularity auto|coarse|standard|fine` | `auto` | Size of generated value-slice tasks. |
-| `--review minimal|standard|strict` | route-dependent | Review cadence stored in `autoPolicy.reviewCadence`. |
-| `--quick` | off | Reduce prompts for low-risk or pre-approved work. |
-| `--fresh` | off | Create a new spec instead of resuming. |
-| `--commit-spec` / `--no-commit-spec` | route-dependent | Whether phase artifacts should be committed. |
-| `--specs-dir <path>` | default specs dir | Select an allowed spec root. |
+The option you are most likely to use:
 
-`--task-granularity` replaces the old `--tasks-size` wording. Use `standard` for normal production work, `fine` when each task needs a smaller reviewable diff, and `coarse` for prototypes or spikes.
-
-## Spec Roots
-
-CurdX Flow supports multiple spec roots. The shipped template uses:
-
-```yaml
-specs_dirs: ["./specs"]
+```text
+/curdx-flow:start todo-app Build a Todo app --task-granularity standard
 ```
 
-In monorepos, add explicit roots such as:
+| Value | Use it when |
+| --- | --- |
+| `auto` | Let Flow decide. |
+| `standard` | Most product work. |
+| `fine` | You want smaller tasks and easier review. |
+| `coarse` | You are prototyping and accept larger tasks. |
+
+## Where Specs Live
+
+By default:
+
+```text
+specs/
+```
+
+For monorepos, you can split specs by package:
 
 ```yaml
 specs_dirs:
   - "./specs"
-  - "./packages/frontend/specs"
+  - "./packages/web/specs"
   - "./packages/api/specs"
 ```
 
-Then create in a specific root:
+Choose the location when starting:
 
 ```text
-/curdx-flow:start checkout-ui "Build checkout UI" --specs-dir ./packages/frontend/specs
+/curdx-flow:start checkout-ui Build checkout UI --specs-dir ./packages/web/specs
 ```
 
-## State Files
+## Which Files To Commit
 
-| File | Purpose |
+Usually commit:
+
+- `research.md`
+- `requirements.md`
+- `design.md`
+- `tasks.md`
+
+Commit with care:
+
+- `.curdx-state.json`
+- `.progress.md`
+
+The last two are runtime state. Commit them if your team wants execution history; skip them for ordinary feature work.
+
+## Companion Capabilities
+
+CurdX Flow checks these capabilities:
+
+| Capability | Why it matters |
 | --- | --- |
-| `research.md` | Facts, existing patterns, current docs, constraints, risks. |
-| `requirements.md` | User stories, acceptance criteria, boundaries. |
-| `design.md` | Architecture, decisions, file scope, verification strategy. |
-| `tasks.md` | Ordered value-slice tasks and `[VERIFY]` checkpoints. |
-| `.curdx-state.json` | Phase, active task, policy, `verificationBlocks`, recovery state. |
-| `.progress.md` | Runtime progress, learning, failed attempts, continuation notes. |
+| `chrome-devtools-mcp` | Real browser evidence for frontend work. |
+| `claude-mem` | Historical context and prior decisions. |
+| `pua` | Recovery and advanced workflow assistance. |
+| `ui-ux-pro-max` | Frontend UI/UX quality checks. |
+| `context7` | Current library/framework documentation. |
+| `sequential-thinking` | Explicit reasoning for high-risk tasks. |
 
-Only update `.curdx-state.json` through runtime helpers when working inside the plugin:
+Check them with:
 
 ```bash
-curdx-flow state merge <state-file> <json-patch>
+curdx-flow doctor
 ```
 
-## Verification Blocks
+## Release Versioning
 
-`verificationBlocks` are the completion contract. A completion claim is not trusted unless the relevant block contains fresh evidence.
-
-Typical evidence sources:
-
-| Evidence | Examples |
-| --- | --- |
-| Command | `npm test`, `npm run build`, `npm run verify`, exit code and timestamp. |
-| Browser | DOM state, console/network status, screenshot, Chrome DevTools MCP evidence. |
-| Review | `spec-reviewer`, `code-quality-reviewer`, or `qa-engineer` verdicts. |
-| Release | tag parity, plugin validation, npm package, GitHub release. |
-
-Validate the active spec:
-
-```bash
-npm exec -- @curdx/flow@latest check
-```
-
-## Dependencies
-
-The plugin manifest declares these Claude Code plugin dependencies:
-
-| Dependency | Marketplace |
-| --- | --- |
-| `pua` | `pua-skills` |
-| `claude-mem` | `thedotmack` |
-| `chrome-devtools-mcp` | `chrome-devtools-plugins` |
-| `ui-ux-pro-max` | `ui-ux-pro-max-skill` |
-
-Expected external MCP servers:
-
-| MCP | Ownership |
-| --- | --- |
-| `context7` | External setup, used for current docs. |
-| `sequential-thinking` | External setup, used for explicit high-risk reasoning. |
-
-CurdX Flow should diagnose these capabilities, not duplicate or vendor them.
-
-## Release Configuration
-
-For the `@curdx/flow` project itself, version fields must stay aligned across the npm package, package lock, plugin manifest, and marketplace metadata. Use the version script:
+If you maintain the `@curdx/flow` project itself, bump with:
 
 ```bash
 node scripts/bump-version.mjs patch
 ```
 
-Release requires both tag surfaces:
+Releases need two tags:
 
-```bash
+```text
 vX.Y.Z
 curdx-flow--vX.Y.Z
 ```
 
-The npm tag publishes the package. The plugin tag is required for Claude Code plugin resolution.
+Regular users do not need this section.

@@ -1,46 +1,73 @@
 # 故障排除
 
-先拿事实：
+先别猜。按下面顺序查。
+
+## 先跑这两个命令
+
+终端里：
 
 ```bash
 npm exec -- @curdx/flow@latest status
 claude plugin list
 ```
 
-Claude Code 内：
+Claude Code 里：
 
 ```text
 /curdx-flow:status
 ```
 
-插件运行时健康检查：
+如果还看不出问题，再跑：
 
 ```bash
 curdx-flow doctor
 ```
 
-## 斜杠命令不出现
+## 看不到 `/curdx-flow:*`
 
-检查插件是否已安装并启用：
+最常见原因：Claude Code 当前会话还没加载插件。
 
-```bash
-claude plugin list
-```
-
-通过 npm 安装器重装：
+处理：
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-然后重启 Claude Code。需要调试 marketplace 时：
+然后完全退出并重新打开 Claude Code。
+
+再检查：
 
 ```bash
-claude plugin marketplace add curdx/curdx-flow
-claude plugin install curdx-flow@curdx
+claude plugin list
 ```
 
-## 伴随插件缺失或被禁用
+## 安装状态不对
+
+检查：
+
+```bash
+npm exec -- @curdx/flow@latest status
+```
+
+如果显示缺插件或版本不对，重装：
+
+```bash
+npm exec -- @curdx/flow@latest install curdx-flow --yes
+```
+
+如果你想一次补齐全部配套能力：
+
+```bash
+npm exec -- @curdx/flow@latest install --all --yes
+```
+
+## 前端浏览器验证失败
+
+检查三件事：
+
+1. 本机有 Chrome。
+2. `chrome-devtools-mcp` 已安装并启用。
+3. 项目的 dev server 能正常启动。
 
 运行：
 
@@ -48,135 +75,76 @@ claude plugin install curdx-flow@curdx
 curdx-flow doctor
 ```
 
-manifest 预期：
+如果项目本来有 Playwright，也可以先跑项目自己的 e2e 命令。
 
-| 插件 | Marketplace |
-| --- | --- |
-| `pua` | `pua-skills` |
-| `claude-mem` | `thedotmack` |
-| `chrome-devtools-mcp` | `chrome-devtools-plugins` |
-| `ui-ux-pro-max` | `ui-ux-pro-max-skill` |
+## 不知道现在做到哪一步
 
-如果依赖缺失、禁用或 scope 不对，重跑：
-
-```bash
-npm exec -- @curdx/flow@latest install curdx-flow --yes
-```
-
-然后再次检查 `claude plugin list`。
-
-## 外部 MCP 未就绪
-
-`context7` 和 `sequential-thinking` 是预期外部 MCP，不由 curdx-flow 内置。
-
-表现：
-
-- 当前文档查询不可用；
-- 高风险推理证据降级；
-- `curdx-flow doctor` 报 external MCP readiness 为 `unknown` 或 `missing`。
-
-修复用户自己的 Claude MCP 配置后重跑：
-
-```bash
-curdx-flow doctor
-```
-
-只有工作流明确接受降级证据时，才用官方文档或人工确认作为 fallback。
-
-## 浏览器验证失败
-
-CurdX Flow 对 UI 工作优先要求真实浏览器证据。
-
-检查：
-
-```bash
-curdx-flow doctor
-```
-
-预期条件：
-
-- `chrome-devtools-mcp` 已安装并启用；
-- 本机装有 Chrome；
-- 项目 dev server 能启动；
-- console 和 network 输出能满足任务验证。
-
-如果项目已有 Playwright，优先跑项目 Playwright 脚本。否则 Chrome DevTools MCP 可提供 DOM、截图、console、network 证据。
-
-## 原生 `/goal` 不可用
-
-`/curdx-flow:implement` 会在 `curdx-flow doctor` 判断 ready 时使用 Claude Code 原生 `/goal`。
-
-如果原生 goal 被阻塞：
+Claude Code 里运行：
 
 ```text
-/curdx-flow:implement --manual
+/curdx-flow:status
 ```
 
-Manual mode 会执行一次可恢复协调回合。修复环境后重跑：
+如果 active spec 不对：
 
-```bash
-curdx-flow doctor
+```text
+/curdx-flow:switch <spec-name-or-path>
 ```
 
-## Active Spec 不对
-
-列出和解析 specs：
+终端里也可以看：
 
 ```bash
 curdx-flow specs list
 curdx-flow specs resolve
 ```
 
-Claude Code 内：
+## 验证失败
 
-```text
-/curdx-flow:status
-/curdx-flow:switch <spec-name-or-path>
-```
+不要把验证失败的任务标成完成。先看失败命令。
 
-如果配置了多个 spec root，传精确路径；新建时使用 `--specs-dir`。
-
-## Verification Blocks 缺失或过期
-
-运行：
+常见处理：
 
 ```bash
-npm exec -- @curdx/flow@latest check
+npm test
+npm run build
 ```
 
-退出码 `2` 表示至少一个必要 block 缺失、过期或失败。重跑真实验证命令，并通过 curdx-flow 记录证据：
+修好后重新让 Flow 记录验证：
 
 ```bash
 curdx-flow verify run --phase execution --command "npm test"
 ```
 
-CI 或发布工作不要绕过该门禁。`CURDX_VERIFY_SKIP_BLOCKS=1` 只作为人工逃生口。
-
-## 发布检查失败
-
-对 curdx-flow 仓库自身，运行：
+再检查：
 
 ```bash
-npm run check-versions
+npm exec -- @curdx/flow@latest check
+```
+
+## 外部 MCP 缺失
+
+`context7` 和 `sequential-thinking` 是外部 MCP，不是 curdx-flow 自己内置的。
+
+如果 `curdx-flow doctor` 显示它们缺失：
+
+- 当前文档查询可能降级；
+- 高风险推理能力可能降级；
+- 需要修复你自己的 Claude MCP 配置。
+
+修完后重跑：
+
+```bash
+curdx-flow doctor
+```
+
+## 发布前检查
+
+如果你维护的是 `@curdx/flow` 本身，发布前跑：
+
+```bash
 npm run verify
 claude plugin validate ./plugins/curdx-flow
 CURDX_FLOW_CLAUDE_BIN=claude npm run test:claudecc
 ```
 
-发布前确认两个 tag：
-
-```bash
-git ls-remote --tags origin "vX.Y.Z" "curdx-flow--vX.Y.Z"
-```
-
-`vX.Y.Z` 是 npm package tag。`curdx-flow--vX.Y.Z` 是 Claude Code 插件 tag。
-
-## 分析会话
-
-从 Claude Code session 日志生成报告：
-
-```bash
-npm exec -- @curdx/flow@latest analyze --out flow-report.md
-```
-
-`--include-prompts` 只用于本地调试，表示有意关闭 prompt redact。
+普通项目不需要这一节。

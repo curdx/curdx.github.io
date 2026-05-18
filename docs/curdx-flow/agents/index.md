@@ -1,36 +1,40 @@
 # Agents
 
-CurdX Flow v7.3.3 ships 10 specialist Claude Code agents. They are not a chat roster; each one owns a bounded workflow role and returns protocol markers that the coordinator verifies before state changes.
+Beginners do not need to learn these first. You can start with `/curdx-flow:start`.
 
-## Agent Map
+This page explains why Flow uses different agents: each role owns one part of the workflow, so one model is not writing requirements, writing code, and approving its own work all at once.
 
-| Agent | Primary role | Success marker |
-| --- | --- | --- |
-| [research-analyst](/curdx-flow/agents/research-analyst) | Discover repository facts, current docs, patterns, risks. | `RESEARCH_COMPLETE` |
-| [product-manager](/curdx-flow/agents/product-manager) | Turn facts into user stories and acceptance criteria. | `REQUIREMENTS_COMPLETE` |
-| [architect-reviewer](/curdx-flow/agents/architect-reviewer) | Produce technical design, file scope, risk decisions. | `DESIGN_COMPLETE` |
-| [task-planner](/curdx-flow/agents/task-planner) | Convert design into value-slice tasks and verification gates. | `TASKS_READY` |
-| [spec-executor](/curdx-flow/agents/spec-executor) | Implement one isolated task and report concrete evidence. | `TASK_COMPLETE` |
-| [qa-engineer](/curdx-flow/agents/qa-engineer) | Execute `[VERIFY]` gates and evidence checks. | `VERIFICATION_PASS` |
-| [spec-reviewer](/curdx-flow/agents/spec-reviewer) | Review artifacts for spec compliance. | `REVIEW_PASS` |
-| [code-quality-reviewer](/curdx-flow/agents/code-quality-reviewer) | Review implementation/code-quality risks. | `REVIEW_PASS` |
-| [refactor-specialist](/curdx-flow/agents/refactor-specialist) | Update spec files after implementation learning. | `REFACTOR_COMPLETE` |
-| [triage-analyst](/curdx-flow/agents/triage-analyst) | Split large work into dependency-aware specs. | `EPIC_READY` |
+## One-Line Map
 
-## Coordination Rules
-
-- Phase commands coordinate; they do not silently replace the specialist.
-- Agent outputs must end with exact markers.
-- The coordinator verifies claimed artifacts, commands, and evidence before merging state.
-- `spec-reviewer` and `code-quality-reviewer` review separate axes and should not receive each other's findings as prompt context.
-- `qa-engineer` verifies; `spec-executor` implements. `[VERIFY]` tasks should not be implemented by the executor.
-
-## Where Agents Run
-
-| Workflow moment | Agents |
+| Agent | What it does |
 | --- | --- |
-| Discovery | `research-analyst`, plus bounded explorer-style codebase inspection when needed. |
-| Planning | `product-manager`, `architect-reviewer`, `task-planner`. |
-| Review gates | `spec-reviewer`, `code-quality-reviewer`, `qa-engineer`. |
-| Execution | `spec-executor`, with `qa-engineer` for verification. |
-| Recovery/change | `refactor-specialist`, `triage-analyst`. |
+| `research-analyst` | Checks facts and risks first. |
+| `product-manager` | Writes requirements and acceptance criteria. |
+| `architect-reviewer` | Writes the technical plan. |
+| `task-planner` | Turns the plan into tasks. |
+| `spec-executor` | Implements one concrete task. |
+| `qa-engineer` | Verifies that the task really passed. |
+| `spec-reviewer` | Checks whether spec artifacts are complete. |
+| `code-quality-reviewer` | Checks code-quality risk. |
+| `refactor-specialist` | Updates specs after implementation learning. |
+| `triage-analyst` | Splits large goals into multiple specs. |
+
+## Why Split Roles
+
+Complex tasks usually fail in three ways:
+
+- coding starts before facts are checked;
+- the original goal is forgotten midway;
+- the implementer says it passed without real evidence.
+
+Separate roles help Flow keep requirements, design, tasks, implementation, and verification distinct.
+
+## When To Read Individual Agent Pages
+
+Usually only when:
+
+- you are debugging Flow internals;
+- you want to understand why a phase failed;
+- you maintain the `@curdx/flow` plugin itself.
+
+Regular users can go back to [Getting Started](/curdx-flow/getting-started).

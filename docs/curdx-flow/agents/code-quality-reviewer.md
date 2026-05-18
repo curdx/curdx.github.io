@@ -19,4 +19,4 @@ Read-only reviewer for code-quality, maintainability, and implementation risk.
 
 ## Review Isolation
 
-The coordinator stores code-quality findings separately under `verificationBlocks.<phase>.reviews.codeQuality`. A `FAIL` here cannot be silently rationalized away by a spec-compliance pass.
+The coordinator stores code-quality findings separately from spec-compliance findings. A code-quality failure cannot be silently canceled by a spec-compliance pass.

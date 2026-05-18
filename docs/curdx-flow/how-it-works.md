@@ -1,104 +1,76 @@
 # How It Works
 
-CurdX Flow is a Claude Code plugin with a small npm installer around it. The plugin coordinates skills, agents, hooks, runtime scripts, and state files; the installer keeps the environment aligned.
+This page is for people who want the internals. Beginners can skip it at first.
 
-## Plugin Layout
+## A Simple Mental Model
 
-The shipped plugin lives at `plugins/curdx-flow/` in the source repository:
+Asking Claude Code to do a complex task directly is like planning while coding. CurdX Flow writes the plan first, then executes the plan.
+
+The flow is:
 
 ```text
-plugins/curdx-flow/
-  .claude-plugin/plugin.json
-  skills/
-  agents/
-  hooks/
-  schemas/
-  templates/
-  references/
-  bin/curdx-flow
+goal -> spec files -> task list -> execution -> verification evidence
 ```
 
-This matches the current Claude Code plugin structure: the manifest lives under `.claude-plugin/`, while skills, agents, hooks, and runtime assets live at plugin root.
+## Step 1: Decide How Big The Task Is
 
-## Smart Routing
+`/curdx-flow:start` first checks:
 
-`/curdx-flow:start` does not blindly start a long workflow. It asks the runtime router for a route based on:
+- Is this a tiny edit or a complex feature?
+- Is the project frontend, backend, CLI, plugin, or monorepo?
+- Is there an old spec to resume?
+- Does this need browser, test, release, or CI evidence?
 
-- current repository shape;
-- active spec and session binding;
-- user goal and flags;
-- stack profile;
-- available capabilities;
-- risk and verification needs.
+That is why one `/curdx-flow:start` command can handle different jobs instead of always forcing a full workflow.
 
-The route can be direct-change, lite-spec, full-spec, triage, resume, or blocked-ask-user. This is why the same command can handle a small README edit, a frontend app, a Claude Code plugin release, or a multi-spec epic.
+## Step 2: Write Spec Files
 
-## Phase Artifacts
+Complex tasks usually create four files:
 
-The normal full-spec path produces four reviewable Markdown files:
-
-| Artifact | Owner |
+| File | Question it answers |
 | --- | --- |
-| `research.md` | `research-analyst` |
-| `requirements.md` | `product-manager` |
-| `design.md` | `architect-reviewer` |
-| `tasks.md` | `task-planner` |
+| `research.md` | What is true in this project? Where are the risks? |
+| `requirements.md` | What exactly should be built? What counts as done? |
+| `design.md` | How should it be built? Which files are in scope? |
+| `tasks.md` | What are the steps? How is each step verified? |
 
-Each phase can use interviews, codebase facts, current official docs, memory, and capability checks. Review agents can run at phase boundaries. Quick mode reduces interaction but still keeps the artifacts and verification contract.
+These files make the work reviewable, resumable, and less dependent on chat memory.
 
-## Execution
+## Step 3: Execute By Task
 
-`/curdx-flow:implement` is a coordinator. It validates `tasks.md`, initializes state, compiles the goal condition, and then delegates bounded work to specialist agents.
+`/curdx-flow:implement` reads `tasks.md`. It works on one bounded task at a time.
 
-The default driver is Claude Code native `/goal` when readiness checks pass. If native goal support is not available, `--manual` performs a resumable one-turn coordinator path.
+Implementation tasks usually go to `spec-executor`. Verification tasks go to `qa-engineer`. This reduces the chance of "I wrote it, therefore I say it passed."
 
-Key execution rules:
+## Step 4: Require Evidence
 
-- `spec-executor` implements isolated tasks.
-- `qa-engineer` owns `[VERIFY]` tasks and evidence checks.
-- `spec-reviewer` and `code-quality-reviewer` review different axes and must not collapse into one opinion.
-- state writes go through runtime merge helpers.
-- completion markers are parsed, then checked against artifacts and evidence.
+CurdX Flow does not treat "done" as proof. It looks for:
 
-## Verification
+- Did the command run?
+- Was the exit code 0?
+- Did the browser page actually work?
+- Were console and network clean enough?
+- Do release tags, npm packages, or CI results really exist?
 
-CurdX Flow treats verification as data, not prose. `verificationBlocks` store evidence such as:
+Flow stores this evidence in its state file so it can be checked later.
 
-```json
-{
-  "execution": {
-    "command": "npm test",
-    "exitCode": 0,
-    "timestamp": "2026-05-18T00:00:00.000Z",
-    "srcMtime": "2026-05-18T00:00:00.000Z"
-  }
-}
+## Step 5: Resume Later
+
+If you close Claude Code, come back and run:
+
+```text
+/curdx-flow:status
+/curdx-flow:start
 ```
 
-The Stop hook and `@curdx/flow check` enforce the same rule: do not claim completion when required evidence is missing, stale, or failed.
+Flow reads the spec files and state, then recommends the next step.
 
-## Hooks
+## Internal Pieces
 
-Hooks are used for workflow safety and context recovery. They inject compact context, record progress, verify task completion markers, and guard expansion or stop events. Hook bundles are generated from TypeScript sources and committed as plugin runtime artifacts.
-
-The key rule is fail-open unless a curdx-flow gate deliberately blocks a false completion claim. Diagnostics belong on stderr; hook protocol output belongs on stdout.
-
-## Capability Diagnosis
-
-`curdx-flow doctor` reports plugin dependencies, external MCP readiness, native `/goal` readiness, browser verification options, hook freshness, and release readiness. Missing capabilities degrade explicitly:
-
-- missing `chrome-devtools-mcp` means browser evidence is degraded;
-- missing `context7` means current documentation lookup is degraded;
-- missing `sequential-thinking` means high-risk reasoning evidence is degraded;
-- disabled plugin dependencies are surfaced with remediation.
-
-## Release Model
-
-For curdx-flow itself, npm and Claude Code plugin releases are separate surfaces:
-
-| Surface | Tag |
+| Piece | What it does |
 | --- | --- |
-| npm package | `vX.Y.Z` |
-| Claude Code plugin | `curdx-flow--vX.Y.Z` |
-
-Both tags must exist intentionally. A release is not complete just because tests pass; it also needs plugin validation, plugin smoke, hook freshness, version parity, and tag parity.
+| skills | The `/curdx-flow:*` commands inside Claude Code. |
+| agents | Specialist roles for research, requirements, design, tasks, execution, and verification. |
+| hooks | Record state and block completion claims without evidence. |
+| runtime CLI | Internal tools such as `curdx-flow doctor` and `curdx-flow specs list`. |
+| npm CLI | Install, update, status, and log analysis. |

@@ -1,6 +1,10 @@
 # Troubleshooting
 
-Start with facts:
+Do not guess first. Check in this order.
+
+## Run These First
+
+In your terminal:
 
 ```bash
 npm exec -- @curdx/flow@latest status
@@ -13,34 +17,57 @@ Inside Claude Code:
 /curdx-flow:status
 ```
 
-For plugin runtime health:
+If the issue is still unclear:
 
 ```bash
 curdx-flow doctor
 ```
 
-## Slash Commands Do Not Appear
+## `/curdx-flow:*` Does Not Appear
 
-Check whether the plugin is installed and enabled:
+Most common cause: the current Claude Code session has not loaded the plugin.
 
-```bash
-claude plugin list
-```
-
-Reinstall through the npm installer:
+Fix:
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-Then restart Claude Code. If manual marketplace debugging is needed:
+Then fully quit and reopen Claude Code.
+
+Check again:
 
 ```bash
-claude plugin marketplace add curdx/curdx-flow
-claude plugin install curdx-flow@curdx
+claude plugin list
 ```
 
-## Companion Plugin Missing Or Disabled
+## Install State Looks Wrong
+
+Check:
+
+```bash
+npm exec -- @curdx/flow@latest status
+```
+
+If a plugin is missing or the version looks wrong, reinstall:
+
+```bash
+npm exec -- @curdx/flow@latest install curdx-flow --yes
+```
+
+To install all companion capabilities:
+
+```bash
+npm exec -- @curdx/flow@latest install --all --yes
+```
+
+## Browser Verification Fails
+
+Check three things:
+
+1. Chrome is installed.
+2. `chrome-devtools-mcp` is installed and enabled.
+3. The project's dev server starts successfully.
 
 Run:
 
@@ -48,135 +75,76 @@ Run:
 curdx-flow doctor
 ```
 
-The manifest expects:
+If the project already has Playwright, run the project's e2e command too.
 
-| Plugin | Marketplace |
-| --- | --- |
-| `pua` | `pua-skills` |
-| `claude-mem` | `thedotmack` |
-| `chrome-devtools-mcp` | `chrome-devtools-plugins` |
-| `ui-ux-pro-max` | `ui-ux-pro-max-skill` |
+## You Do Not Know The Current Step
 
-If a dependency is missing, disabled, or in the wrong scope, rerun:
-
-```bash
-npm exec -- @curdx/flow@latest install curdx-flow --yes
-```
-
-Then check `claude plugin list` again.
-
-## External MCP Not Ready
-
-`context7` and `sequential-thinking` are expected external MCPs. They are not vendored by curdx-flow.
-
-Symptoms:
-
-- current documentation lookup is unavailable;
-- high-risk reasoning evidence is degraded;
-- `curdx-flow doctor` reports external MCP readiness as `unknown` or `missing`.
-
-Fix the user's Claude MCP setup, then rerun:
-
-```bash
-curdx-flow doctor
-```
-
-Use official docs or manual confirmation as a fallback only when the workflow explicitly accepts degraded evidence.
-
-## Browser Verification Fails
-
-CurdX Flow prefers real browser evidence for UI work.
-
-Check:
-
-```bash
-curdx-flow doctor
-```
-
-Expected pieces:
-
-- `chrome-devtools-mcp` installed and enabled;
-- Chrome installed locally;
-- a project dev server can start;
-- console and network output are clean enough to satisfy the task.
-
-If Playwright exists in the project, use the project Playwright script. If not, Chrome DevTools MCP can provide DOM, screenshot, console, and network evidence.
-
-## Native `/goal` Is Not Available
-
-`/curdx-flow:implement` uses Claude Code native `/goal` when `curdx-flow doctor` reports it ready.
-
-If native goal is blocked:
+Inside Claude Code:
 
 ```text
-/curdx-flow:implement --manual
+/curdx-flow:status
 ```
 
-Manual mode performs a resumable coordinator pass. After fixing the environment, rerun:
+If the active spec is wrong:
 
-```bash
-curdx-flow doctor
+```text
+/curdx-flow:switch <spec-name-or-path>
 ```
 
-## Active Spec Is Wrong
-
-List and resolve specs:
+You can also inspect from the terminal:
 
 ```bash
 curdx-flow specs list
 curdx-flow specs resolve
 ```
 
-Inside Claude Code:
+## Verification Fails
 
-```text
-/curdx-flow:status
-/curdx-flow:switch <spec-name-or-path>
-```
+Do not mark a failed verification as done. Start with the failing command.
 
-If multiple spec roots are configured, pass the exact path or use `--specs-dir` when creating a new spec.
-
-## Verification Blocks Are Missing Or Stale
-
-Run:
+Common checks:
 
 ```bash
-npm exec -- @curdx/flow@latest check
+npm test
+npm run build
 ```
 
-Exit code `2` means at least one required block is missing, stale, or failed. Rerun the real verification command and record evidence through curdx-flow:
+After fixing it, record verification through Flow:
 
 ```bash
 curdx-flow verify run --phase execution --command "npm test"
 ```
 
-Do not bypass this in CI or release work. `CURDX_VERIFY_SKIP_BLOCKS=1` exists only as a human escape hatch.
-
-## Release Checks Fail
-
-For the curdx-flow repository itself, run:
+Then check:
 
 ```bash
-npm run check-versions
+npm exec -- @curdx/flow@latest check
+```
+
+## External MCP Is Missing
+
+`context7` and `sequential-thinking` are external MCP servers. CurdX Flow does not bundle them.
+
+If `curdx-flow doctor` says they are missing:
+
+- current documentation lookup may be degraded;
+- high-risk reasoning may be degraded;
+- you need to fix your Claude MCP setup.
+
+After fixing it:
+
+```bash
+curdx-flow doctor
+```
+
+## Before Releasing CurdX Flow Itself
+
+If you maintain `@curdx/flow`, run:
+
+```bash
 npm run verify
 claude plugin validate ./plugins/curdx-flow
 CURDX_FLOW_CLAUDE_BIN=claude npm run test:claudecc
 ```
 
-Before publishing, verify both release tags:
-
-```bash
-git ls-remote --tags origin "vX.Y.Z" "curdx-flow--vX.Y.Z"
-```
-
-`vX.Y.Z` is the npm package tag. `curdx-flow--vX.Y.Z` is the Claude Code plugin tag.
-
-## Analyze A Session
-
-Generate a report from Claude Code session logs:
-
-```bash
-npm exec -- @curdx/flow@latest analyze --out flow-report.md
-```
-
-Use `--include-prompts` only for local debugging where prompt redaction is intentionally disabled.
+Regular projects do not need this section.

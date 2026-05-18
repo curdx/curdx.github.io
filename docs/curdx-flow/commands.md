@@ -1,117 +1,91 @@
 # Commands
 
-CurdX Flow has three command surfaces:
+Beginners only need four commands at first.
 
-| Surface | Where it runs | Purpose |
-| --- | --- | --- |
-| Slash skills | Inside Claude Code | Spec workflow and task execution. |
-| npm CLI `@curdx/flow` | Shell | Install, update, status, analyze, evidence check. |
-| Runtime CLI `curdx-flow` | Plugin runtime | Internal routing, state, doctor, dev runtime, verification helpers. |
+## Most Used Commands
 
-## Slash Skills
-
-| Command | Use |
+| Command | When to use it |
 | --- | --- |
-| `/curdx-flow:help` | Show current commands and recommended next action. |
-| `/curdx-flow:start [name] [goal]` | Smart route, create, or resume. Prefer this when unsure. |
-| `/curdx-flow:new <name> [goal]` | Explicitly create a new spec. |
-| `/curdx-flow:research [spec]` | Run or rerun discovery research for the active spec. |
-| `/curdx-flow:requirements [spec]` | Generate requirements and acceptance criteria. |
-| `/curdx-flow:design [spec]` | Generate technical design. |
-| `/curdx-flow:tasks [spec]` | Generate implementation tasks from design. |
-| `/curdx-flow:implement` | Execute ready tasks with native `/goal` when available. |
-| `/curdx-flow:status` | Inspect specs, active state, progress, and health. |
-| `/curdx-flow:switch <spec>` | Change the active spec. |
-| `/curdx-flow:triage [epic] [goal]` | Split oversized work into dependency-aware specs. |
-| `/curdx-flow:refactor [spec]` | Update spec files after implementation learnings. |
-| `/curdx-flow:prompt-optimize [draft]` | Improve a prompt and recommend routing without executing. |
-| `/curdx-flow:index` | Generate component specs in `specs/.index/`. |
-| `/curdx-flow:cancel [spec]` | Stop execution or remove spec state after confirmation. |
-| `/curdx-flow:feedback [message]` | Submit feedback or bug reports. |
+| `/curdx-flow:start <name> <goal>` | Start a task. This is the recommended entry point. |
+| `/curdx-flow:status` | Check where you are and what to do next. |
+| `/curdx-flow:implement` | Execute after `tasks.md` is ready. |
+| `npm exec -- @curdx/flow@latest status` | Check installation state from the terminal. |
 
-### Start Flags
+Example:
 
 ```text
-/curdx-flow:start [name] [goal] [--fresh] [--quick] [--mode auto|fast|deep] [--task-granularity auto|coarse|standard|fine] [--review minimal|standard|strict] [--commit-spec] [--no-commit-spec] [--specs-dir <path>]
+/curdx-flow:start todo-app Build a Todo app
+/curdx-flow:status
+/curdx-flow:implement
 ```
 
-| Flag | Meaning |
-| --- | --- |
-| `--fresh` | Create a new spec instead of resuming a matching unfinished one. |
-| `--quick` | Reduce approval prompts where the route still needs a spec. |
-| `--mode auto|fast|deep` | Override routing depth. |
-| `--task-granularity auto|coarse|standard|fine` | Override value-slice task granularity. |
-| `--review minimal|standard|strict` | Override review cadence. |
-| `--commit-spec` / `--no-commit-spec` | Control spec artifact commits. |
-| `--specs-dir <path>` | Create or resolve specs from an allowed spec root. |
-
-### Implement Flags
-
-```text
-/curdx-flow:implement [--max-task-iterations 5] [--max-global-iterations 30] [--goal-turns 30] [--manual] [--quick] [--recovery-mode]
-```
-
-| Flag | Meaning |
-| --- | --- |
-| `--max-task-iterations` | Retry cap for the current task. |
-| `--max-global-iterations` | Overall execution loop cap. |
-| `--goal-turns` | Native `/goal` turn cap. |
-| `--manual` | Do one resumable coordinator pass without native goal continuation. |
-| `--quick` | Skip prompts where the stored policy allows it. |
-| `--recovery-mode` | Generate fix tasks on execution failure instead of stopping immediately. |
-
-## npm CLI
-
-```bash
-npm exec -- @curdx/flow@latest --help
-```
-
-Current commands:
+## Commands Inside Claude Code
 
 | Command | Purpose |
 | --- | --- |
-| `install [IDS]` | Install or reinstall plugins / MCP entries. |
-| `uninstall [IDS]` | Remove installed plugins / MCP entries. |
-| `update [IDS]` | Update installed plugins. |
-| `status` | Show install state. |
-| `analyze` | Analyze Claude Code session jsonl and curdx-flow errors. |
-| `check` | Verify active spec `verificationBlocks`. |
+| `/curdx-flow:help` | Show help and recommended next step. |
+| `/curdx-flow:start [name] [goal]` | Smart start, create, or resume. |
+| `/curdx-flow:new <name> [goal]` | Explicitly create a new spec. |
+| `/curdx-flow:research` | Re-run project fact and risk discovery. |
+| `/curdx-flow:requirements` | Generate requirements and acceptance criteria. |
+| `/curdx-flow:design` | Generate technical design. |
+| `/curdx-flow:tasks` | Generate implementation tasks. |
+| `/curdx-flow:implement` | Execute tasks. |
+| `/curdx-flow:status` | Show state and next step. |
+| `/curdx-flow:switch <spec>` | Change the active spec. |
+| `/curdx-flow:triage <goal>` | Split a large task into multiple specs. |
+| `/curdx-flow:refactor` | Update spec files after implementation learning. |
+| `/curdx-flow:cancel` | Stop or remove spec state after confirmation. |
 
-Common examples:
+## Useful `/curdx-flow:start` Flags
 
-```bash
-npm exec -- @curdx/flow@latest install curdx-flow --yes
-npm exec -- @curdx/flow@latest install --all --yes
-npm exec -- @curdx/flow@latest status --json
-npm exec -- @curdx/flow@latest analyze --out flow-report.md
-npm exec -- @curdx/flow@latest check
+```text
+/curdx-flow:start [name] [goal] [--quick] [--task-granularity standard]
 ```
 
-Global options:
-
-| Option | Purpose |
+| Flag | Beginner meaning |
 | --- | --- |
-| `--lang zh|en` | Override installer language. |
-| `--no-claude-md` | Skip syncing the managed `@curdx/flow` block in `~/.claude/CLAUDE.md`. |
+| `--quick` | Ask fewer questions. Best for low-risk work. |
+| `--fresh` | Do not resume an old spec. Create a new one. |
+| `--task-granularity coarse` | Larger tasks, useful for prototypes. |
+| `--task-granularity standard` | Recommended default for most work. |
+| `--task-granularity fine` | Smaller tasks, useful when reviews need small diffs. |
+| `--specs-dir <path>` | Choose where spec files are stored. |
 
-## Runtime CLI
+## Useful `/curdx-flow:implement` Flags
 
-The plugin ships a runtime executable used by skills and hooks:
+```text
+/curdx-flow:implement --manual
+/curdx-flow:implement --max-task-iterations 5
+```
+
+| Flag | Beginner meaning |
+| --- | --- |
+| `--manual` | Do one resumable pass without native `/goal` continuation. |
+| `--max-task-iterations 5` | Retry one task at most 5 times. |
+| `--max-global-iterations 30` | Advance the whole run at most 30 turns. |
+| `--recovery-mode` | Try to create fix tasks when execution fails. |
+
+## npm CLI In The Terminal
+
+| Command | Purpose |
+| --- | --- |
+| `npm exec -- @curdx/flow@latest install curdx-flow --yes` | Install curdx-flow. |
+| `npm exec -- @curdx/flow@latest install --all --yes` | Install all known companion capabilities. |
+| `npm exec -- @curdx/flow@latest status` | Show install state. |
+| `npm exec -- @curdx/flow@latest update` | Update installed plugins. |
+| `npm exec -- @curdx/flow@latest analyze --out report.md` | Analyze Claude Code session logs. |
+| `npm exec -- @curdx/flow@latest check` | Check active spec verification evidence. |
+
+## Runtime CLI For Debugging
+
+These are mostly for plugin internals or troubleshooting:
 
 ```bash
 curdx-flow doctor
-curdx-flow route --compile --goal "ship a Claude Code plugin release"
-curdx-flow snapshot
 curdx-flow specs list
 curdx-flow specs resolve
-curdx-flow state merge <state-file> <json-patch>
-curdx-flow verify run --phase execution --command "npm test"
 curdx-flow verify-blocks
-curdx-flow dev detect
-curdx-flow dev up
-curdx-flow dev health
-curdx-flow dev verify
-curdx-flow dev down
 ```
 
-Use this surface inside curdx-flow skills or when debugging an installed plugin. Prefer the npm CLI for normal user installation and status checks.
+For beginners, start with `curdx-flow doctor`. It tells you which plugin, MCP, or browser capability is missing.

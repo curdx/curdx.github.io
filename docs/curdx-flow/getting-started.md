@@ -1,141 +1,119 @@
 # Getting Started
 
-This page uses the current `@curdx/flow` v7.3.3 command surface.
+This page does one job: get you through your first CurdX Flow task.
 
-## Prerequisites
+![CurdX Flow beginner path](/images/curdx-flow/curdx-flow-loop.en.svg)
 
-- Claude Code installed and logged in.
-- Node.js 20.12 or newer.
-- A project directory where you want to run Claude Code.
-- Chrome installed if you expect browser evidence through `chrome-devtools-mcp`.
+## What You Need
 
-Run this once to confirm Claude Code is callable:
+Make sure you have:
+
+- Claude Code
+- Node.js 20.12 or newer
+- A project directory
+- Chrome installed if you want browser verification for frontend work
+
+Check Claude Code first:
 
 ```bash
 claude --version
 ```
 
-## 1. Install CurdX Flow
+If you see a version number, continue.
 
-Recommended:
+## Step 1: Install The Plugin
+
+Run:
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-Install every known companion item if you want the full environment in one pass:
-
-```bash
-npm exec -- @curdx/flow@latest install --all --yes
-```
-
-Check status:
+Check the result:
 
 ```bash
 npm exec -- @curdx/flow@latest status
-npm exec -- @curdx/flow@latest status --json
 claude plugin list
 ```
 
-## 2. Start Claude Code In Your Project
+You should see `curdx-flow`.
+
+## Step 2: Open Your Project
 
 ```bash
-cd /path/to/project
+cd /path/to/your/project
 claude
 ```
+
+Inside Claude Code, type:
+
+```text
+/curdx-flow:help
+```
+
+If the command does not autocomplete, restart Claude Code. If it still does not appear, reinstall:
+
+```bash
+npm exec -- @curdx/flow@latest install curdx-flow --yes
+```
+
+## Step 3: Run A Todo Example
 
 Inside Claude Code:
 
 ```text
-/curdx-flow:help
-/curdx-flow:status
+/curdx-flow:start todo-app Build a todo app with create, edit, complete, delete, and browser verification
 ```
 
-If the slash commands do not autocomplete, restart Claude Code and re-run:
-
-```bash
-npm exec -- @curdx/flow@latest install curdx-flow --yes
-```
-
-## 3. Run A First Spec
-
-Use `/curdx-flow:start`; it decides whether the work needs direct handling, a lite spec, a full spec, or epic triage.
+Flow decides how much process the task needs. It may create or update:
 
 ```text
-/curdx-flow:start todo-app Build a todo app with create, edit, complete, delete, local persistence, and browser verification
+specs/todo-app/research.md
+specs/todo-app/requirements.md
+specs/todo-app/design.md
+specs/todo-app/tasks.md
 ```
 
-For low-risk work where you want fewer prompts:
+Follow the prompts. If you are unsure, review `requirements.md` and `tasks.md` first and check that the goal is still correct.
 
-```text
-/curdx-flow:start todo-app Build the todo app --quick --task-granularity standard
-```
+## Step 4: Execute
 
-For a large feature:
-
-```text
-/curdx-flow:triage customer-portal Build the customer portal with auth, billing, dashboard, and admin workflows
-```
-
-## 4. Review The Artifacts
-
-Most specs create these files:
-
-```text
-specs/<name>/
-  research.md
-  requirements.md
-  design.md
-  tasks.md
-  .curdx-state.json
-  .progress.md
-```
-
-Treat the Markdown files as project context worth committing. Treat `.curdx-state.json` and `.progress.md` as runtime state unless your team has chosen to track them.
-
-## 5. Execute
-
-After tasks are ready:
+When `tasks.md` is ready:
 
 ```text
 /curdx-flow:implement
 ```
 
-The default execution path uses Claude Code native `/goal` when `curdx-flow doctor` reports it as ready. Use manual mode when the environment cannot support native goal continuation:
+If native `/goal` is unavailable in your Claude Code environment, use manual mode:
 
 ```text
 /curdx-flow:implement --manual
 ```
 
-Useful caps:
+## Step 5: Check The Result
+
+After execution, start with:
 
 ```text
-/curdx-flow:implement --max-task-iterations 5 --max-global-iterations 30 --goal-turns 30
+/curdx-flow:status
 ```
 
-## 6. Verify
-
-Run the checks that match your project. For the curdx-flow repository itself, release-quality verification is:
+Then run your project's normal checks, for example:
 
 ```bash
-npm run verify
-claude plugin validate ./plugins/curdx-flow
-CURDX_FLOW_CLAUDE_BIN=claude npm run test:claudecc
+npm test
+npm run build
 ```
 
-For any project using curdx-flow, the plugin-side gate is:
+For frontend work, also check browser evidence. Flow tries to use `chrome-devtools-mcp` for DOM, console, network, and screenshot proof.
 
-```bash
-npm exec -- @curdx/flow@latest check
-```
+## Common First-Time Problems
 
-`check` validates active spec `verificationBlocks` and exits `2` when required evidence is missing, stale, or failed.
+| Problem | Fix |
+| --- | --- |
+| `/curdx-flow:*` is missing | Restart Claude Code and run `claude plugin list`. |
+| You do not know the next step | Run `/curdx-flow:status`. |
+| The task is too large | Use `/curdx-flow:triage <goal>` first. |
+| Verification fails | Fix the failure, then verify again. Do not mark it done. |
 
-## 7. Keep It Updated
-
-```bash
-npm exec -- @curdx/flow@latest update
-npm exec -- @curdx/flow@latest status
-```
-
-If a Claude Code update changes plugin, hook, or MCP behavior, rerun install and status before trusting an old session.
+Next: [Commands](/curdx-flow/commands).

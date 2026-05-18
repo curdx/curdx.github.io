@@ -1,141 +1,119 @@
 # 快速开始
 
-本页使用当前 `@curdx/flow` v7.3.3 命令面。
+这一页只做一件事：让你从零跑通第一个任务。
 
-## 前置条件
+![CurdX Flow 新手路径](/images/curdx-flow/curdx-flow-loop.zh-CN.svg)
 
-- 已安装并登录 Claude Code。
-- Node.js 20.12 或更新版本。
-- 一个准备用 Claude Code 工作的项目目录。
-- 如果要通过 `chrome-devtools-mcp` 采集浏览器证据，本机需要 Chrome。
+## 你需要准备什么
 
-先确认 Claude Code 可调用：
+确认你已经有：
+
+- Claude Code
+- Node.js 20.12 或更高
+- 一个要开发的项目目录
+- 如果要测前端页面，本机安装 Chrome
+
+先检查 Claude Code：
 
 ```bash
 claude --version
 ```
 
-## 1. 安装 CurdX Flow
+能看到版本号就继续。
 
-推荐安装方式：
+## 第一步：安装插件
+
+在终端运行：
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-如果想一次装完整伴随环境：
-
-```bash
-npm exec -- @curdx/flow@latest install --all --yes
-```
-
-检查状态：
+安装后检查：
 
 ```bash
 npm exec -- @curdx/flow@latest status
-npm exec -- @curdx/flow@latest status --json
 claude plugin list
 ```
 
-## 2. 在项目里启动 Claude Code
+你应该能看到 `curdx-flow`。
+
+## 第二步：进入你的项目
 
 ```bash
-cd /path/to/project
+cd /path/to/your/project
 claude
 ```
 
-Claude Code 内运行：
+进入 Claude Code 后输入：
 
 ```text
 /curdx-flow:help
-/curdx-flow:status
 ```
 
-如果斜杠命令没有补全，重启 Claude Code，并重新同步：
+如果命令没有补全，先重启 Claude Code。还不行就重装：
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-## 3. 跑第一个 Spec
+## 第三步：跑一个 Todo 例子
 
-使用 `/curdx-flow:start`；它会判断是直接处理、轻量 spec、完整 spec，还是 epic 拆分。
-
-```text
-/curdx-flow:start todo-app 做一个可新增、编辑、完成、删除、本地持久化，并用浏览器验证的 Todo 应用
-```
-
-低风险任务可以减少交互：
+在 Claude Code 里输入：
 
 ```text
-/curdx-flow:start todo-app 做 Todo 应用 --quick --task-granularity standard
+/curdx-flow:start todo-app 做一个可以新增、编辑、完成、删除的 Todo 应用，并用浏览器验证
 ```
 
-大功能先拆：
+Flow 会先判断这个任务应该怎么做。你可能会看到它生成或更新这些文件：
 
 ```text
-/curdx-flow:triage customer-portal 做客户门户，包含登录、计费、仪表盘和后台工作流
+specs/todo-app/research.md
+specs/todo-app/requirements.md
+specs/todo-app/design.md
+specs/todo-app/tasks.md
 ```
 
-## 4. 审查产物
+你只需要按它提示审查。如果不确定，就先看 `requirements.md` 和 `tasks.md`，确认需求没有跑偏。
 
-多数 spec 会生成：
+## 第四步：开始执行
 
-```text
-specs/<name>/
-  research.md
-  requirements.md
-  design.md
-  tasks.md
-  .curdx-state.json
-  .progress.md
-```
-
-Markdown 文件是值得提交的项目上下文。`.curdx-state.json` 和 `.progress.md` 是运行期状态，是否提交由团队策略决定。
-
-## 5. 执行
-
-任务准备好后：
+当 `tasks.md` 准备好后：
 
 ```text
 /curdx-flow:implement
 ```
 
-默认路径会在 `curdx-flow doctor` 判断可用时使用 Claude Code 原生 `/goal`。环境不支持原生 goal 续跑时，用手动模式：
+如果 Claude Code 的原生 `/goal` 不可用，改用手动模式：
 
 ```text
 /curdx-flow:implement --manual
 ```
 
-常用上限：
+## 第五步：看结果
+
+执行结束后做三件事：
 
 ```text
-/curdx-flow:implement --max-task-iterations 5 --max-global-iterations 30 --goal-turns 30
+/curdx-flow:status
 ```
 
-## 6. 验证
-
-运行与你项目匹配的检查。对 curdx-flow 仓库自身，发布级验证是：
+然后在终端跑项目自己的检查，比如：
 
 ```bash
-npm run verify
-claude plugin validate ./plugins/curdx-flow
-CURDX_FLOW_CLAUDE_BIN=claude npm run test:claudecc
+npm test
+npm run build
 ```
 
-任何使用 curdx-flow 的项目都可以跑插件侧证据门禁：
+如果这是前端项目，还要看浏览器验证结果。Flow 会尽量用 `chrome-devtools-mcp` 记录 DOM、console、network 或截图证据。
 
-```bash
-npm exec -- @curdx/flow@latest check
-```
+## 常见新手问题
 
-`check` 会验证 active spec 的 `verificationBlocks`；证据缺失、过期或失败时退出码为 `2`。
+| 问题 | 处理 |
+| --- | --- |
+| 看不到 `/curdx-flow:*` | 重启 Claude Code，运行 `claude plugin list`。 |
+| 不知道下一步 | 输入 `/curdx-flow:status`。 |
+| 任务太大 | 用 `/curdx-flow:triage <目标>` 先拆分。 |
+| 验证失败 | 不要硬说完成，先修失败，再重新验证。 |
 
-## 7. 更新
-
-```bash
-npm exec -- @curdx/flow@latest update
-npm exec -- @curdx/flow@latest status
-```
-
-Claude Code 升级后，如果涉及插件、hook 或 MCP 行为，先重新 install/status，再继续信任旧会话。
+下一页建议看：[命令参考](/zh/curdx-flow/commands)。
