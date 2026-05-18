@@ -64,6 +64,11 @@ export const zh: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'architect-reviewer', link: '/zh/curdx-flow/agents/architect-reviewer' },
             { text: 'task-planner', link: '/zh/curdx-flow/agents/task-planner' },
             { text: 'spec-executor', link: '/zh/curdx-flow/agents/spec-executor' },
+            { text: 'qa-engineer', link: '/zh/curdx-flow/agents/qa-engineer' },
+            { text: 'spec-reviewer', link: '/zh/curdx-flow/agents/spec-reviewer' },
+            { text: 'code-quality-reviewer', link: '/zh/curdx-flow/agents/code-quality-reviewer' },
+            { text: 'refactor-specialist', link: '/zh/curdx-flow/agents/refactor-specialist' },
+            { text: 'triage-analyst', link: '/zh/curdx-flow/agents/triage-analyst' },
           ],
         },
         {

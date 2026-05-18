@@ -1,0 +1,47 @@
+<svg width="1100" height="420" viewBox="0 0 1100 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">curdx-flow 工作流闭环</title>
+  <desc id="desc">从 start 到 research、requirements、design、tasks、implement、verification 的闭环流程图。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1100" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#ECFDF5"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2L10 6L2 10" fill="none" stroke="#0F766E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="420" rx="26" fill="url(#bg)"/>
+  <text x="58" y="62" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="28" font-weight="800">从想法到交付，不丢上下文</text>
+  <text x="58" y="96" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="16">每个阶段都有文件、代理、检查点和验证证据。</text>
+  <g font-family="Inter, ui-sans-serif, system-ui">
+    <rect x="58" y="150" width="132" height="78" rx="16" fill="#0F172A"/>
+    <text x="88" y="182" fill="#FFFFFF" font-size="18" font-weight="700">start</text>
+    <text x="84" y="207" fill="#CBD5E1" font-size="13">路由 / 恢复</text>
+    <rect x="238" y="150" width="132" height="78" rx="16" fill="#E0F2FE" stroke="#38BDF8"/>
+    <text x="263" y="182" fill="#075985" font-size="18" font-weight="700">research</text>
+    <text x="266" y="207" fill="#0369A1" font-size="13">发现事实</text>
+    <rect x="418" y="150" width="132" height="78" rx="16" fill="#DCFCE7" stroke="#22C55E"/>
+    <text x="436" y="182" fill="#166534" font-size="18" font-weight="700">requirements</text>
+    <text x="452" y="207" fill="#15803D" font-size="13">验收边界</text>
+    <rect x="598" y="150" width="132" height="78" rx="16" fill="#F5F3FF" stroke="#A78BFA"/>
+    <text x="636" y="182" fill="#5B21B6" font-size="18" font-weight="700">design</text>
+    <text x="638" y="207" fill="#6D28D9" font-size="13">技术方案</text>
+    <rect x="778" y="150" width="132" height="78" rx="16" fill="#FEF3C7" stroke="#F59E0B"/>
+    <text x="817" y="182" fill="#92400E" font-size="18" font-weight="700">tasks</text>
+    <text x="812" y="207" fill="#B45309" font-size="13">价值切片</text>
+    <rect x="958" y="150" width="132" height="78" rx="16" fill="#FEE2E2" stroke="#FB7185"/>
+    <text x="987" y="182" fill="#9F1239" font-size="18" font-weight="700">implement</text>
+    <text x="996" y="207" fill="#BE123C" font-size="13">逐项执行</text>
+  </g>
+  <path d="M198 189H230" stroke="#0F766E" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M378 189H410" stroke="#0F766E" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M558 189H590" stroke="#0F766E" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M738 189H770" stroke="#0F766E" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M918 189H950" stroke="#0F766E" stroke-width="3" marker-end="url(#arrow)"/>
+  <g>
+    <rect x="200" y="294" width="700" height="72" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="236" y="325" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="17" font-weight="800">verificationBlocks</text>
+    <text x="420" y="325" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="15">命令退出码、浏览器截图/DOM、网络/控制台、CI、release、npm 都可成为证据。</text>
+    <text x="236" y="350" fill="#64748B" font-family="Inter, ui-sans-serif, system-ui" font-size="14">Stop hook 和 `curdx-flow check` 会阻止没有证据的完成声明。</text>
+  </g>
+</svg>

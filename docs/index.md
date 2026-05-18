@@ -4,24 +4,24 @@ layout: home
 hero:
   name: CurdX
   text: Multi-AI Developer Tools
-  tagline: Build better software with multiple AI agents working together.
+  tagline: Tools for Claude Code and multi-agent development workflows.
   actions:
     - theme: brand
-      text: Get Started
-      link: /curdx-bridge/getting-started
+      text: CurdX Flow
+      link: /curdx-flow/
     - theme: alt
-      text: GitHub
-      link: https://github.com/curdx
+      text: CurdX Bridge
+      link: /curdx-bridge/
 
 features:
+  - icon: 🧭
+    title: CurdX Flow
+    details: Claude Code plugin and npm CLI for spec-driven delivery. Routes intent, writes specs, runs task-by-task implementation, and requires verification evidence.
+    link: /curdx-flow/
+    linkText: Documentation
   - icon: 🖥️
     title: CurdX Bridge
     details: Multi-AI split-pane terminal. Claude, Codex, Gemini, and OpenCode collaborate in one terminal session.
     link: /curdx-bridge/
-    linkText: Documentation
-  - icon: 🧭
-    title: CurdX Flow
-    details: Spec-driven development for Claude Code, with autonomous task execution. Research, requirements, design, tasks, and an autonomous implement loop.
-    link: /curdx-flow/
     linkText: Documentation
 ---
