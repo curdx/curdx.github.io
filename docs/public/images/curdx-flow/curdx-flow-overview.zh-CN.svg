@@ -1,57 +1,68 @@
-<svg width="900" height="520" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">CurdX Flow 新手概览</title>
-  <desc id="desc">展示从描述目标到生成规格、执行任务和验证完成的流程。</desc>
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">CurdX Flow 产品概览</title>
+  <desc id="desc">展示从输入开发目标，到生成规格文件、执行任务、留下验证证据的完整流程。</desc>
   <defs>
-    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#0F172A" flood-opacity="0.10"/>
+    <filter id="cardShadow" x="-8%" y="-10%" width="116%" height="124%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.10"/>
     </filter>
     <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
       <path d="M2 2L10 6L2 10" stroke="#2563EB" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
     </marker>
   </defs>
 
-  <rect width="900" height="520" rx="24" fill="#F8FAFC"/>
-  <rect x="28" y="28" width="844" height="464" rx="22" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect width="960" height="540" rx="28" fill="#F7FAFC"/>
+  <rect x="28" y="28" width="904" height="484" rx="24" fill="#FFFFFF" stroke="#E2E8F0"/>
 
-  <text x="56" y="78" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="30" font-weight="800">CurdX Flow</text>
-  <text x="56" y="110" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="16">把一句需求变成可追踪、可验证的交付流程。</text>
+  <text x="56" y="76" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="31" font-weight="800">CurdX Flow</text>
+  <text x="56" y="108" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="16">给 Claude Code 加上一条可审查、可恢复、可验证的开发流程。</text>
+  <rect x="716" y="62" width="172" height="34" rx="17" fill="#EEF2FF"/>
+  <text x="742" y="84" fill="#3730A3" font-family="Inter, ui-sans-serif, system-ui" font-size="13" font-weight="700">面向真实功能交付</text>
 
-  <g filter="url(#shadow)" font-family="Inter, ui-sans-serif, system-ui">
-    <rect x="56" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
-    <rect x="78" y="176" width="36" height="36" rx="10" fill="#DBEAFE"/>
-    <text x="91" y="200" fill="#1D4ED8" font-size="19" font-weight="800">1</text>
-    <text x="78" y="232" fill="#0F172A" font-size="20" font-weight="800">描述目标</text>
-    <text x="78" y="254" fill="#64748B" font-size="13">start</text>
+  <g filter="url(#cardShadow)" font-family="Inter, ui-sans-serif, system-ui">
+    <rect x="56" y="138" width="252" height="210" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="56" y="138" width="252" height="48" rx="18" fill="#EFF6FF"/>
+    <text x="80" y="169" fill="#1D4ED8" font-size="18" font-weight="800">1. 输入目标</text>
+    <text x="80" y="216" fill="#334155" font-size="14">一句话描述要做什么。</text>
+    <rect x="80" y="236" width="204" height="72" rx="12" fill="#0F172A"/>
+    <text x="96" y="260" fill="#BFDBFE" font-family="SFMono-Regular, ui-monospace, monospace" font-size="12">/curdx-flow:start</text>
+    <text x="96" y="282" fill="#E2E8F0" font-family="SFMono-Regular, ui-monospace, monospace" font-size="12">todo-app 做 Todo</text>
 
-    <rect x="270" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
-    <rect x="292" y="176" width="36" height="36" rx="10" fill="#DCFCE7"/>
-    <text x="305" y="200" fill="#047857" font-size="19" font-weight="800">2</text>
-    <text x="292" y="232" fill="#0F172A" font-size="20" font-weight="800">生成规格</text>
-    <text x="292" y="254" fill="#64748B" font-size="13">计划写到文件</text>
+    <rect x="354" y="138" width="252" height="210" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="354" y="138" width="252" height="48" rx="18" fill="#ECFDF5"/>
+    <text x="378" y="169" fill="#047857" font-size="18" font-weight="800">2. 写成规格</text>
+    <text x="378" y="216" fill="#334155" font-size="14">先把目标固定到项目文件。</text>
+    <rect x="378" y="236" width="204" height="30" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="392" y="256" fill="#0F172A" font-size="13" font-weight="700">requirements.md</text>
+    <rect x="378" y="276" width="204" height="30" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="392" y="296" fill="#0F172A" font-size="13" font-weight="700">design.md</text>
+    <rect x="378" y="316" width="204" height="30" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="392" y="336" fill="#0F172A" font-size="13" font-weight="700">tasks.md</text>
 
-    <rect x="484" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
-    <rect x="506" y="176" width="36" height="36" rx="10" fill="#FEF3C7"/>
-    <text x="519" y="200" fill="#B45309" font-size="19" font-weight="800">3</text>
-    <text x="506" y="232" fill="#0F172A" font-size="20" font-weight="800">执行任务</text>
-    <text x="506" y="254" fill="#64748B" font-size="13">小步推进</text>
-
-    <rect x="698" y="154" width="150" height="112" rx="15" fill="#FFFFFF" stroke="#CBD5E1"/>
-    <rect x="720" y="176" width="36" height="36" rx="10" fill="#FCE7F3"/>
-    <text x="733" y="200" fill="#BE185D" font-size="19" font-weight="800">4</text>
-    <text x="720" y="232" fill="#0F172A" font-size="20" font-weight="800">验证完成</text>
-    <text x="720" y="254" fill="#64748B" font-size="13">留下证据</text>
+    <rect x="652" y="138" width="252" height="210" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <rect x="652" y="138" width="252" height="48" rx="18" fill="#FFF7ED"/>
+    <text x="676" y="169" fill="#C2410C" font-size="18" font-weight="800">3. 执行并验证</text>
+    <text x="676" y="216" fill="#334155" font-size="14">按任务推进，完成要有证据。</text>
+    <circle cx="688" cy="251" r="9" fill="#10B981"/>
+    <path d="M684 251L687 254L693 247" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="706" y="256" fill="#0F172A" font-size="14" font-weight="700">测试或构建通过</text>
+    <circle cx="688" cy="287" r="9" fill="#2563EB"/>
+    <path d="M684 287L687 290L693 283" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="706" y="292" fill="#0F172A" font-size="14" font-weight="700">浏览器验证成功</text>
+    <circle cx="688" cy="323" r="9" fill="#DB2777"/>
+    <path d="M684 323L687 326L693 319" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="706" y="328" fill="#0F172A" font-size="14" font-weight="700">PR 可审查</text>
   </g>
 
-  <path d="M216 210H258" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M430 210H472" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M644 210H686" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M318 244H342" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M616 244H640" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"/>
 
-  <rect x="56" y="330" width="370" height="92" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
-  <text x="84" y="365" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="18" font-weight="800">你输入</text>
-  <rect x="84" y="382" width="300" height="32" rx="8" fill="#0F172A"/>
-  <text x="101" y="403" fill="#E2E8F0" font-family="SFMono-Regular, ui-monospace, monospace" font-size="12">/curdx-flow:start todo-app 做 Todo</text>
-
-  <rect x="474" y="330" width="374" height="92" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
-  <text x="502" y="365" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="18" font-weight="800">你得到</text>
-  <text x="502" y="394" fill="#334155" font-family="Inter, ui-sans-serif, system-ui" font-size="15">规格文件、实现任务、验证证据</text>
+  <rect x="56" y="390" width="848" height="78" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="82" y="423" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="17" font-weight="800">最后交付的不是一句“做完了”</text>
+  <text x="82" y="449" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="14">而是代码变更、规格文件和验证证据，别人可以继续、复查和接手。</text>
+  <rect x="660" y="410" width="78" height="30" rx="15" fill="#DBEAFE"/>
+  <text x="683" y="430" fill="#1D4ED8" font-family="Inter, ui-sans-serif, system-ui" font-size="13" font-weight="800">代码</text>
+  <rect x="750" y="410" width="78" height="30" rx="15" fill="#DCFCE7"/>
+  <text x="773" y="430" fill="#047857" font-family="Inter, ui-sans-serif, system-ui" font-size="13" font-weight="800">规格</text>
+  <rect x="840" y="410" width="42" height="30" rx="15" fill="#FCE7F3"/>
+  <text x="854" y="430" fill="#BE185D" font-family="Inter, ui-sans-serif, system-ui" font-size="13" font-weight="800">证据</text>
 </svg>

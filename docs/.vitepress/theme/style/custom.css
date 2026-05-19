@@ -14,3 +14,30 @@
   --vp-c-brand-3: #7c3aed;
   --vp-c-brand-soft: rgba(167, 139, 250, 0.14);
 }
+
+.vp-doc[class*='curdx-flow'] {
+  overflow-wrap: break-word;
+}
+
+.vp-doc[class*='curdx-flow'] .curdx-flow-figure {
+  display: block;
+  width: min(100%, calc(100vw - 48px));
+  max-width: 960px;
+  height: auto;
+}
+
+@media (max-width: 700px) {
+  .vp-doc[class*='curdx-flow'] .curdx-flow-figure {
+    width: calc(100vw - 64px);
+  }
+}
+
+.vp-doc[class*='curdx-flow'] :not(pre) > code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.vp-doc[class*='curdx-flow'] div[class*='language-'],
+.vp-doc[class*='curdx-flow'] table {
+  max-width: 100%;
+}

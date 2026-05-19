@@ -1,27 +1,54 @@
 # 快速开始
 
-这一页只做一件事：让你从零跑通第一个任务。
+这一页带你跑通第一个 CurdX Flow 任务。目标不是学完所有概念，而是在一个真实项目里完成这条路径：
 
-![CurdX Flow 新手路径](/images/curdx-flow/curdx-flow-loop.zh-CN.svg)
+```text
+安装插件 -> 描述目标 -> 生成规格 -> 执行任务 -> 留下验证证据
+```
 
-## 你需要准备什么
+<picture>
+  <source media="(max-width: 700px)" srcset="/images/curdx-flow/curdx-flow-loop-mobile.zh-CN.svg" />
+  <img class="curdx-flow-figure" src="/images/curdx-flow/curdx-flow-loop.zh-CN.svg" alt="CurdX Flow 新手路径" />
+</picture>
 
-确认你已经有：
+## 成功标准
 
-- Claude Code
-- Node.js 20.12 或更高
-- 一个要开发的项目目录
-- 如果要测前端页面，本机安装 Chrome
+我们用一个 Todo 应用作为例子。跑通后，你要看到：
 
-先检查 Claude Code：
+- Claude Code 里可以使用 `/curdx-flow:*` 命令。
+- 项目里出现 `specs/todo-app/` 目录。
+- 里面有 `requirements.md`、`design.md`、`tasks.md`。
+- `/curdx-flow:status` 能告诉你当前阶段和下一步。
+- 进入执行阶段后，有测试、构建或浏览器验证证据。
+
+## 0. 准备环境
+
+确认你已经安装：
+
+| 依赖 | 用途 |
+| --- | --- |
+| Claude Code | 运行插件和斜杠命令。 |
+| Node.js 20.12+ | 运行 npm 安装器。 |
+| Chrome | 前端项目需要浏览器验证时使用。 |
+
+先检查：
 
 ```bash
 claude --version
+node --version
 ```
 
-能看到版本号就继续。
+如果这两个命令都能输出版本号，可以继续。
 
-## 第一步：安装插件
+如果你没有合适的测试项目，可以先新建一个干净的 Vite 项目：
+
+```bash
+npm create vite@latest curdx-flow-todo -- --template react-ts
+cd curdx-flow-todo
+npm install
+```
+
+## 1. 安装 CurdX Flow
 
 在终端运行：
 
@@ -29,16 +56,23 @@ claude --version
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-安装后检查：
+然后检查安装状态：
 
 ```bash
 npm exec -- @curdx/flow@latest status
 claude plugin list
 ```
 
-你应该能看到 `curdx-flow`。
+你要确认两件事：
 
-## 第二步：进入你的项目
+- `claude plugin list` 里能看到 `curdx-flow`。
+- `status` 没有提示 curdx-flow 缺失。
+
+如果命令失败，先看 [故障排除](/zh/curdx-flow/troubleshooting)。
+
+## 2. 进入一个项目
+
+进入你要测试的项目目录：
 
 ```bash
 cd /path/to/your/project
@@ -51,13 +85,9 @@ claude
 /curdx-flow:help
 ```
 
-如果命令没有补全，先重启 Claude Code。还不行就重装：
+如果没有补全 `/curdx-flow:*`，完全退出 Claude Code 后重新打开。Claude Code 插件通常需要新会话才能加载。
 
-```bash
-npm exec -- @curdx/flow@latest install curdx-flow --yes
-```
-
-## 第三步：跑一个 Todo 例子
+## 3. 创建第一个任务
 
 在 Claude Code 里输入：
 
@@ -65,55 +95,88 @@ npm exec -- @curdx/flow@latest install curdx-flow --yes
 /curdx-flow:start todo-app 做一个可以新增、编辑、完成、删除的 Todo 应用，并用浏览器验证
 ```
 
-Flow 会先判断这个任务应该怎么做。你可能会看到它生成或更新这些文件：
+这个命令里有两部分：
+
+| 部分 | 含义 |
+| --- | --- |
+| `todo-app` | 这个任务的名字，也会影响 spec 目录名。 |
+| 后面的中文 | 你真正想让它完成的目标。 |
+
+Flow 会先判断任务复杂度。对 Todo 这种功能，它会先生成规格文件，再进入执行阶段。
+
+## 4. 审查 Flow 生成的文件
+
+你会看到类似这样的目录：
 
 ```text
-specs/todo-app/research.md
-specs/todo-app/requirements.md
-specs/todo-app/design.md
-specs/todo-app/tasks.md
+specs/todo-app/
+  research.md
+  requirements.md
+  design.md
+  tasks.md
 ```
 
-你只需要按它提示审查。如果不确定，就先看 `requirements.md` 和 `tasks.md`，确认需求没有跑偏。
+第一次用时，重点看两个文件：
 
-## 第四步：开始执行
+| 文件 | 你要检查什么 |
+| --- | --- |
+| `requirements.md` | 是否真的包含新增、编辑、完成、删除、浏览器验证。 |
+| `tasks.md` | 任务是否小到可以一步步完成，是否有验证方式。 |
 
-当 `tasks.md` 准备好后：
+如果需求不对，先让 Flow 修改规格，不要急着执行。这个检查很重要：规格错了，后面的实现也会跟着错。
+
+## 5. 开始执行
+
+当 `tasks.md` 准备好后，在 Claude Code 里运行：
 
 ```text
 /curdx-flow:implement
 ```
 
-如果 Claude Code 的原生 `/goal` 不可用，改用手动模式：
+如果环境提示不能使用原生续跑能力，就用：
 
 ```text
 /curdx-flow:implement --manual
 ```
 
-## 第五步：看结果
-
-执行结束后做三件事：
+执行过程中，Flow 会按任务推进。你可以随时查看状态：
 
 ```text
 /curdx-flow:status
 ```
 
-然后在终端跑项目自己的检查，比如：
+## 6. 判断是否真的完成
+
+不要只看最后一句话。完成时必须看到至少一种证据：
+
+| 项目类型 | 常见证据 |
+| --- | --- |
+| 前端页面 | 浏览器打开成功，DOM/截图/console/network 检查通过。 |
+| Node/CLI | `npm test`、`npm run build` 或实际 CLI 输出。 |
+| 插件/发布 | 插件校验、测试、tag 或 npm 发布结果。 |
+
+你也可以在终端跑：
 
 ```bash
-npm test
-npm run build
+npm exec -- @curdx/flow@latest check
 ```
 
-如果这是前端项目，还要看浏览器验证结果。Flow 会尽量用 `chrome-devtools-mcp` 记录 DOM、console、network 或截图证据。
+如果检查失败，就按未完成处理：补齐证据、修复失败命令，再重新检查。
 
-## 常见新手问题
+## 7. 给团队看什么
 
-| 问题 | 处理 |
-| --- | --- |
-| 看不到 `/curdx-flow:*` | 重启 Claude Code，运行 `claude plugin list`。 |
-| 不知道下一步 | 输入 `/curdx-flow:status`。 |
-| 任务太大 | 用 `/curdx-flow:triage <目标>` 先拆分。 |
-| 验证失败 | 不要硬说完成，先修失败，再重新验证。 |
+如果你想把这次结果介绍给同事，不要只发“AI 写好了”。更好的方式是发：
 
-下一页建议看：[命令参考](/zh/curdx-flow/commands)。
+- 代码 diff；
+- `requirements.md`；
+- `design.md`；
+- `tasks.md`；
+- 测试或浏览器验证结果。
+
+这样别人能很快判断：目标是什么、怎么实现、有没有真的跑过。
+
+## 下一步
+
+- 想知道命令怎么选，看 [命令参考](/zh/curdx-flow/commands)。
+- 命令不出现或验证失败，看 [故障排除](/zh/curdx-flow/troubleshooting)。
+- 想理解内部机制，看 [工作原理](/zh/curdx-flow/how-it-works)。

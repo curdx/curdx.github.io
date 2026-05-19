@@ -1,92 +1,136 @@
 # CurdX Flow
 
-CurdX Flow 是给 Claude Code 用的开发流程插件。你告诉它“我要做什么”，它会帮你把任务拆清楚、写成规格文件、一步步执行，并要求每一步留下验证证据。
+CurdX Flow 是给 Claude Code 用的开发流程插件。它把一句“帮我做这个功能”，变成一套可审查、可恢复、可验证的交付记录。
 
-![CurdX Flow 产品概览](/images/curdx-flow/curdx-flow-overview.zh-CN.svg)
+你不用先理解代理、Hooks 或 MCP。第一次只记住三件事：
 
-## 你什么时候需要它
+1. 用一条命令安装插件。
+2. 用 `/curdx-flow:start` 说明目标。
+3. 用 `/curdx-flow:status` 看下一步。
+4. 用 `/curdx-flow:implement` 执行。
 
-适合：
+<picture>
+  <source media="(max-width: 700px)" srcset="/images/curdx-flow/curdx-flow-overview-mobile.zh-CN.svg" />
+  <img class="curdx-flow-figure" src="/images/curdx-flow/curdx-flow-overview.zh-CN.svg" alt="CurdX Flow 产品概览" />
+</picture>
 
-- 做一个功能，而不是只改一行代码。
-- 任务需要先想清楚需求、设计、验证方式。
-- 做前端页面，需要真实浏览器检查。
-- 做发布、插件、CLI、跨文件改动，需要有测试或命令证据。
-- 中途可能暂停，之后还要继续。
+## 30 秒看懂
 
-不适合：
+没有 CurdX Flow 时，你可能会直接对 Claude Code 说：
 
-- 只是问一段代码是什么意思。
-- 很小的临时脚本。
-- 你明确只想让 Claude Code 直接回答，不想改文件。
+```text
+帮我做一个 Todo 应用，要能新增、编辑、完成、删除。
+```
 
-## 第一次只记这三步
+这对小改动够用。但真实功能经常会遇到四个问题：需求越聊越散、上下文中途丢失、做到一半不好恢复、最后没有证据说明真的跑过。
 
-### 1. 安装
+用 CurdX Flow 时，你从这条命令开始：
+
+```text
+/curdx-flow:start todo-app 做一个可以新增、编辑、完成、删除的 Todo 应用，并用浏览器验证
+```
+
+Flow 会先把目标写成文件，再按文件推进：
+
+| 产物 | 用途 |
+| --- | --- |
+| `requirements.md` | 写清楚要做什么，怎样算完成。 |
+| `design.md` | 写清楚怎么实现，哪些文件在范围内。 |
+| `tasks.md` | 拆成一步步可以执行和检查的小任务。 |
+| 验证证据 | 留下测试、构建、浏览器、CI 或发布结果。 |
+
+## 为什么你会愿意用
+
+CurdX Flow 的价值不是“让 AI 多写一点”，而是让 AI 写出来的东西能被别人接手和审查。
+
+| 你在意的事 | Flow 带来的结果 |
+| --- | --- |
+| 不想每次重新解释上下文 | 规格文件保存在项目里，之后可以继续。 |
+| 不想模型写着写着跑偏 | 需求、设计、任务先落文件，执行时按文件走。 |
+| 不想靠一句“完成了”判断结果 | 完成需要命令、浏览器、CI 或发布证据。 |
+| 想让团队也看得懂 AI 做了什么 | 产物是 Markdown，能进 PR，能被 review。 |
+| 任务太大不知道怎么拆 | 可以先 triage 成多个 spec。 |
+
+## 3 分钟试用
+
+1. 安装：
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-### 2. 在项目里打开 Claude Code
+2. 进入项目：
 
 ```bash
 cd /path/to/your/project
 claude
 ```
 
-### 3. 让 Flow 开始
+3. 在 Claude Code 里运行：
 
 ```text
 /curdx-flow:start todo-app 做一个可以新增、编辑、完成、删除的 Todo 应用，并用浏览器验证
 ```
 
-如果你不知道下一步该干什么，就运行：
+4. 看下一步：
 
 ```text
 /curdx-flow:status
 ```
 
-## 它会生成什么
-
-通常会在项目里生成：
+5. 规格准备好后执行：
 
 ```text
-specs/todo-app/
-  research.md       # 先看项目现状和风险
-  requirements.md   # 写清楚需求和验收标准
-  design.md         # 写技术方案
-  tasks.md          # 拆成可执行任务
+/curdx-flow:implement
 ```
 
-这些文件的作用很简单：让 Claude Code 不靠“记忆”和“感觉”做复杂任务，而是按文件里的计划继续推进。
+## 完成时你要看到什么
 
-## 它为什么更稳
+一次正常的功能开发，完成时要留下这些东西：
 
-CurdX Flow 做了四件事：
+- `specs/<name>/requirements.md`：需求和验收标准。
+- `specs/<name>/design.md`：实现方案和文件范围。
+- `specs/<name>/tasks.md`：任务清单和验证方式。
+- 项目代码变更。
+- 测试、构建、浏览器或发布证据。
 
-| 做法 | 解决的问题 |
-| --- | --- |
-| 先路由 | 小任务不走重流程，大任务先拆清楚。 |
-| 写规格 | 中途断了也能继续，不用重新解释。 |
-| 分任务 | 每次只做一小块，减少跑偏。 |
-| 要证据 | 不是说“完成了”就算完成，必须有命令、浏览器或发布证据。 |
+如果缺少规格文件或验证证据，就不要按“完成”处理。CurdX Flow 的核心就是把“AI 说做完了”变成“文件、代码和证据都在这里”。
 
-## 你需要知道的组件
+## 什么时候最值得用
 
-| 名称 | 新手理解 |
-| --- | --- |
-| `/curdx-flow:start` | 最常用入口。帮你判断该怎么做。 |
-| `/curdx-flow:status` | 查看现在做到哪一步。 |
-| `/curdx-flow:implement` | 按 `tasks.md` 开始执行。 |
-| `chrome-devtools-mcp` | 用真实浏览器验证前端页面。 |
-| `claude-mem` | 帮 Claude Code 记住历史上下文。 |
+适合：
 
-其他命令可以等用到再看。
+- 前端页面、CLI、插件、后端接口、跨模块功能。
+- 需要先讨论需求，再实现的任务。
+- 需要浏览器、测试、CI、发布证据的任务。
+- 会跨多轮对话，或者你可能中途暂停的任务。
+- 你希望 PR 里有规格、设计和验证依据。
+
+不适合：
+
+- 只问一段代码是什么意思。
+- 临时写一个很小的脚本。
+- 你明确只想让 Claude Code 回答问题，不想改文件。
+
+## 怎么介绍给同事
+
+短版：
+
+> CurdX Flow 是 Claude Code 的开发流程插件。它会把一个目标拆成需求、设计、任务和验证证据，让 AI 做真实功能时更容易 review 和继续。
+
+稍完整一点可以这样说：
+
+> 我们可以用 CurdX Flow 管 Claude Code 的开发流程。它不是让模型直接一口气改完，而是先生成 `requirements.md`、`design.md`、`tasks.md`，再按任务执行，并要求测试或浏览器证据。这样 PR 里不只有代码 diff，还有目标、方案和验证记录。
+
+安装命令也只有一条：
+
+```bash
+npm exec -- @curdx/flow@latest install curdx-flow --yes
+```
 
 ## 下一步
 
-- [快速开始](/zh/curdx-flow/getting-started)：从安装到第一个 Todo 例子
-- [命令参考](/zh/curdx-flow/commands)：常用命令怎么用
-- [故障排除](/zh/curdx-flow/troubleshooting)：装不上、命令不出现、验证失败怎么办
-- [工作原理](/zh/curdx-flow/how-it-works)：想了解内部机制再看
+1. [快速开始](/zh/curdx-flow/getting-started)：照着跑通第一个 Todo 示例。
+2. [命令参考](/zh/curdx-flow/commands)：了解常用命令和参数怎么选。
+3. [故障排除](/zh/curdx-flow/troubleshooting)：命令不出现、验证失败、浏览器不可用时看这里。
+4. [工作原理](/zh/curdx-flow/how-it-works)：需要理解内部机制时再读。

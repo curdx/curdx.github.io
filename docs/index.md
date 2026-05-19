@@ -4,10 +4,10 @@ layout: home
 hero:
   name: CurdX
   text: Multi-AI Developer Tools
-  tagline: Practical tools for Claude Code, multi-agent workflows, and daily software delivery.
+  tagline: "Tools that make Claude Code and multi-agent workflows more useful for real software delivery: process, context, and proof."
   actions:
     - theme: brand
-      text: CurdX Flow
+      text: Try CurdX Flow
       link: /curdx-flow/
     - theme: alt
       text: CurdX Bridge
@@ -16,7 +16,7 @@ hero:
 features:
   - icon: 🧭
     title: CurdX Flow
-    details: Claude Code workflow plugin. Start with one goal, get clear spec files, execute tasks, and keep proof that the work really passed.
+    details: Claude Code workflow plugin. Turn one development goal into requirements, design, tasks, and verification evidence for real features, frontend work, and PR review.
     link: /curdx-flow/
     linkText: Documentation
   - icon: 🖥️

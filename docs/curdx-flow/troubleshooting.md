@@ -1,8 +1,19 @@
 # Troubleshooting
 
-Do not guess first. Check in this order.
+This page helps you get back to a working state quickly. Do not guess first. Check in order.
 
-## Run These First
+## Identify The Problem
+
+| Symptom | Start here |
+| --- | --- |
+| `/curdx-flow:*` does not appear | [Commands do not appear](#commands-do-not-appear) |
+| Install state looks wrong | [Install state looks wrong](#install-state-looks-wrong) |
+| You do not know the next step | [You do not know the next step](#you-do-not-know-the-next-step) |
+| Frontend browser verification fails | [Browser verification fails](#browser-verification-fails) |
+| Flow says verification failed | [Verification fails](#verification-fails) |
+| context7 or sequential-thinking is missing | [External MCP is missing](#external-mcp-is-missing) |
+
+## Run Health Checks First
 
 In your terminal:
 
@@ -23,33 +34,39 @@ If the issue is still unclear:
 curdx-flow doctor
 ```
 
-## `/curdx-flow:*` Does Not Appear
+`doctor` tells you whether a plugin, MCP, browser capability, or continuation feature is missing.
 
-Most common cause: the current Claude Code session has not loaded the plugin.
+## Commands Do Not Appear
 
-Fix:
+Most common cause: the current Claude Code session has not reloaded the plugin.
+
+Fix in this order:
+
+1. Reinstall:
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-Then fully quit and reopen Claude Code.
+2. Fully quit Claude Code.
+3. Open Claude Code again.
+4. Type:
 
-Check again:
+```text
+/curdx-flow:help
+```
+
+If it still does not appear, check:
 
 ```bash
 claude plugin list
 ```
 
+Confirm `curdx-flow` is listed and enabled.
+
 ## Install State Looks Wrong
 
-Check:
-
-```bash
-npm exec -- @curdx/flow@latest status
-```
-
-If a plugin is missing or the version looks wrong, reinstall:
+If `status` reports a missing plugin, wrong version, or disabled dependency, reinstall curdx-flow first:
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
@@ -61,29 +78,22 @@ To install all companion capabilities:
 npm exec -- @curdx/flow@latest install --all --yes
 ```
 
-## Browser Verification Fails
-
-Check three things:
-
-1. Chrome is installed.
-2. `chrome-devtools-mcp` is installed and enabled.
-3. The project's dev server starts successfully.
-
-Run:
+Then check again:
 
 ```bash
-curdx-flow doctor
+npm exec -- @curdx/flow@latest status
+claude plugin list
 ```
 
-If the project already has Playwright, run the project's e2e command too.
-
-## You Do Not Know The Current Step
+## You Do Not Know The Next Step
 
 Inside Claude Code:
 
 ```text
 /curdx-flow:status
 ```
+
+It shows the active spec, current phase, and recommended next command.
 
 If the active spec is wrong:
 
@@ -98,24 +108,46 @@ curdx-flow specs list
 curdx-flow specs resolve
 ```
 
+## Browser Verification Fails
+
+For frontend work, check three things:
+
+| Check | How |
+| --- | --- |
+| Chrome is installed | Open Chrome locally. |
+| `chrome-devtools-mcp` is enabled | Check `claude plugin list`. |
+| The project starts | For example, `npm run dev` opens the app. |
+
+Then run:
+
+```bash
+curdx-flow doctor
+```
+
+If the project has Playwright, run the project's e2e command too. Do not replace browser evidence with "looks fine."
+
 ## Verification Fails
 
-Do not mark a failed verification as done. Start with the failing command.
+A failed verification is useful: it means Flow did not silently pass a broken task.
 
-Common checks:
+Process:
+
+1. Find the failed command or evidence.
+2. Reproduce it in the terminal, for example:
 
 ```bash
 npm test
 npm run build
 ```
 
-After fixing it, record verification through Flow:
+3. Fix the issue.
+4. Record verification again:
 
 ```bash
 curdx-flow verify run --phase execution --command "npm test"
 ```
 
-Then check:
+5. Check again:
 
 ```bash
 npm exec -- @curdx/flow@latest check
@@ -125,26 +157,32 @@ npm exec -- @curdx/flow@latest check
 
 `context7` and `sequential-thinking` are external MCP servers. CurdX Flow does not bundle them.
 
-If `curdx-flow doctor` says they are missing:
+Missing them affects:
 
-- current documentation lookup may be degraded;
-- high-risk reasoning may be degraded;
-- you need to fix your Claude MCP setup.
+| Capability | Impact |
+| --- | --- |
+| `context7` | Current library/framework documentation lookup is degraded. |
+| `sequential-thinking` | Explicit reasoning for high-risk work is degraded. |
 
-After fixing it:
+After fixing your Claude MCP setup:
 
 ```bash
 curdx-flow doctor
 ```
 
-## Before Releasing CurdX Flow Itself
+## Still Stuck?
 
-If you maintain `@curdx/flow`, run:
+Collect these before reporting the issue:
 
 ```bash
-npm run verify
-claude plugin validate ./plugins/curdx-flow
-CURDX_FLOW_CLAUDE_BIN=claude npm run test:claudecc
+npm exec -- @curdx/flow@latest status
+claude plugin list
+curdx-flow doctor
 ```
 
-Regular projects do not need this section.
+If a task failed, also include:
+
+- the spec name;
+- the failed command;
+- the relevant parts of `requirements.md` and `tasks.md`;
+- test or browser verification output.
