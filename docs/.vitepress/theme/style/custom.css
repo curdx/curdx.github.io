@@ -16,9 +16,6 @@
   --vp-c-brand-3: #1D4ED8;
   --vp-c-brand-soft: rgba(59, 130, 246, 0.14);
 
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(135deg, #BFDBFE 10%, #3B82F6 50%, #2563EB 100%);
-
   --vp-font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
@@ -29,15 +26,90 @@
   --vp-c-brand-soft: rgba(96, 165, 250, 0.16);
 }
 
+/* Hero: terminal typewriter — no gradient */
+.VPHero .heading {
+  font-family: var(--vp-font-family-mono);
+  letter-spacing: -0.02em;
+}
+
 .VPHero .name,
 .VPHero .text {
   font-family: var(--vp-font-family-mono);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+}
+
+.VPHero .name.clip {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: var(--cx-blue) !important;
+  color: var(--cx-blue) !important;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  width: 5ch;
+  border-right: 0.08em solid var(--cx-blue);
+  animation:
+    cx-type-name 0.9s steps(5) 0.25s both,
+    cx-blink 1.05s steps(1) 1.15s infinite;
+}
+
+.VPHero .name.clip::before {
+  content: '> ';
+  color: var(--cx-blue);
+  opacity: 0.55;
+  letter-spacing: 0;
+}
+
+.VPHero .text {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: cx-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.45s both;
 }
 
 .VPHero .tagline {
   font-family: var(--vp-font-family-mono);
   color: var(--cx-mute);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: cx-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.75s both;
+}
+
+.VPHero .actions {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: cx-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.05s both;
+}
+
+@keyframes cx-type-name {
+  from { width: 0; }
+  to   { width: 5ch; }
+}
+
+@keyframes cx-blink {
+  50% { border-right-color: transparent; }
+}
+
+@keyframes cx-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .VPHero .name.clip,
+  .VPHero .text,
+  .VPHero .tagline,
+  .VPHero .actions {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    width: auto;
+    border-right: none;
+  }
 }
 
 .VPFeature .icon {

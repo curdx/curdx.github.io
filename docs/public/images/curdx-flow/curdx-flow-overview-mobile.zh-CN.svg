@@ -6,10 +6,6 @@
       <stop offset="0" stop-color="#0B1020"/>
       <stop offset="1" stop-color="#050817"/>
     </linearGradient>
-    <linearGradient id="omGZh" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#BFDBFE"/>
-      <stop offset="1" stop-color="#3B82F6"/>
-    </linearGradient>
     <marker id="omArrZh" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
       <path d="M0 0 L7 4.5 L0 9 Z" fill="#3B82F6"/>
     </marker>
@@ -25,56 +21,56 @@
   <text x="195" y="22" font-size="10" fill="#64748B" text-anchor="middle">curdx-flow · 概览</text>
   <line x1="0" y1="36" x2="390" y2="36" stroke="#1F2937"/>
 
-  <text x="24" y="66" font-size="14" fill="#E5E7EB" font-weight="700">从「帮我做这个」</text>
-  <text x="24" y="86" font-size="14" fill="url(#omGZh)" font-weight="700">到有证据的「做完了」</text>
-  <text x="24" y="106" font-size="10" fill="#94A3B8">规格进仓库 · PR 带证据 · 可恢复</text>
+  <text x="24" y="66" font-size="16" fill="#E5E7EB" font-weight="700">把 <tspan fill="#FBBF24">「帮我做这个」</tspan></text>
+  <text x="24" y="88" font-size="16" fill="#60A5FA" font-weight="700">变成「有证据的完成」</text>
+  <text x="24" y="108" font-size="11" fill="#94A3B8">规格进仓库 · PR 带证据 · 可恢复</text>
 
   <g>
-    <rect x="20" y="120" width="350" height="148" rx="12" fill="#111827" stroke="#1F2937"/>
-    <text x="36" y="142" font-size="9" fill="#64748B">01 · 目标</text>
-    <circle cx="354" cy="138" r="3" fill="#FBBF24"/>
-    <text x="36" y="166" font-size="13" fill="#E5E7EB" font-weight="700">先说清楚“完成”是什么</text>
-    <rect x="36" y="180" width="318" height="74" rx="8" fill="#020617" stroke="#1F2937"/>
-    <text x="48" y="200" font-size="10" fill="#64748B">$</text>
-    <text x="60" y="200" font-size="10" fill="#60A5FA">/curdx-flow:start todo-app</text>
-    <text x="48" y="218" font-size="10" fill="#94A3B8">  "新增/编辑/完成/删除,</text>
-    <text x="48" y="234" font-size="10" fill="#94A3B8">   并用浏览器验证"</text>
-    <text x="48" y="248" font-size="10" fill="#64748B">$</text>
-    <rect x="60" y="240" width="8" height="11" fill="#60A5FA">
+    <rect x="20" y="122" width="350" height="148" rx="12" fill="#111827" stroke="#1F2937"/>
+    <text x="36" y="144" font-size="9" fill="#64748B">01 · 目标</text>
+    <circle cx="354" cy="140" r="3" fill="#FBBF24"/>
+    <text x="36" y="170" font-size="14" fill="#E5E7EB" font-weight="700">把目标说清楚</text>
+    <rect x="36" y="184" width="318" height="74" rx="8" fill="#020617" stroke="#1F2937"/>
+    <text x="48" y="204" font-size="10" fill="#64748B">$</text>
+    <text x="60" y="204" font-size="10" fill="#60A5FA">/curdx-flow:start todo-app</text>
+    <text x="48" y="222" font-size="10" fill="#94A3B8">  "新增/编辑/完成/删除,</text>
+    <text x="48" y="238" font-size="10" fill="#94A3B8">   并用浏览器验证"</text>
+    <text x="48" y="254" font-size="10" fill="#64748B">$</text>
+    <rect x="60" y="244" width="8" height="11" fill="#60A5FA">
       <animate attributeName="opacity" values="1;0.15;1" dur="1.1s" repeatCount="indefinite"/>
     </rect>
   </g>
 
-  <path d="M195 274 L195 290" stroke="#3B82F6" stroke-width="2" marker-end="url(#omArrZh)"/>
+  <path d="M195 276 L195 292" stroke="#3B82F6" stroke-width="2" marker-end="url(#omArrZh)"/>
 
   <g>
-    <rect x="20" y="296" width="350" height="148" rx="12" fill="#111827" stroke="#1F2937"/>
-    <text x="36" y="318" font-size="9" fill="#64748B">02 · spec/</text>
-    <circle cx="354" cy="314" r="3" fill="#A78BFA"/>
-    <text x="36" y="342" font-size="13" fill="#E5E7EB" font-weight="700">把方案钉进项目文件</text>
-    <rect x="36" y="356" width="318" height="74" rx="8" fill="#020617" stroke="#1F2937"/>
-    <text x="48" y="376" font-size="10" fill="#64748B">specs/todo-app/</text>
-    <text x="60" y="394" font-size="10" fill="#E5E7EB">├── requirements.md</text>
-    <text x="60" y="410" font-size="10" fill="#E5E7EB">├── design.md  ├── tasks.md</text>
-    <text x="60" y="426" font-size="10" fill="#94A3B8">└── .curdx-state.json</text>
+    <rect x="20" y="298" width="350" height="148" rx="12" fill="#111827" stroke="#1F2937"/>
+    <text x="36" y="320" font-size="9" fill="#64748B">02 · spec/</text>
+    <circle cx="354" cy="316" r="3" fill="#A78BFA"/>
+    <text x="36" y="346" font-size="14" fill="#E5E7EB" font-weight="700">把方案钉进文件</text>
+    <rect x="36" y="360" width="318" height="74" rx="8" fill="#020617" stroke="#1F2937"/>
+    <text x="48" y="380" font-size="10" fill="#64748B">specs/todo-app/</text>
+    <text x="60" y="398" font-size="10" fill="#E5E7EB">├── requirements.md</text>
+    <text x="60" y="414" font-size="10" fill="#E5E7EB">├── design.md  ├── tasks.md</text>
+    <text x="60" y="430" font-size="10" fill="#94A3B8">└── .curdx-state.json</text>
   </g>
 
-  <path d="M195 450 L195 466" stroke="#3B82F6" stroke-width="2" marker-end="url(#omArrZh)"/>
+  <path d="M195 452 L195 468" stroke="#3B82F6" stroke-width="2" marker-end="url(#omArrZh)"/>
 
   <g>
-    <rect x="20" y="472" width="350" height="120" rx="12" fill="#0B1F3A" stroke="#60A5FA"/>
-    <text x="36" y="494" font-size="9" fill="#60A5FA">03 · 证据</text>
-    <text x="36" y="518" font-size="13" fill="#E5E7EB" font-weight="700">完成 = 证据</text>
-    <g font-size="10" fill="#E5E7EB">
-      <text x="36" y="540">✓ 测试通过</text>
-      <text x="140" y="540">✓ 构建干净</text>
-      <text x="246" y="540">✓ 浏览器</text>
-      <text x="36" y="558">✓ CI 绿灯</text>
-      <text x="140" y="558">✓ 发布 tag</text>
-      <text x="246" y="558" fill="#60A5FA">→ state.json</text>
+    <rect x="20" y="474" width="350" height="120" rx="12" fill="#0B1F3A" stroke="#60A5FA"/>
+    <text x="36" y="496" font-size="9" fill="#60A5FA">03 · 证据</text>
+    <text x="36" y="522" font-size="14" fill="#E5E7EB" font-weight="700">完成 = 证据</text>
+    <g font-size="11" fill="#E5E7EB">
+      <text x="36" y="544">✓ 测试</text>
+      <text x="118" y="544">✓ 构建</text>
+      <text x="200" y="544">✓ 浏览器</text>
+      <text x="36" y="564">✓ CI 通过</text>
+      <text x="118" y="564">✓ 发布 tag</text>
+      <text x="220" y="564" fill="#60A5FA">→ state.json</text>
     </g>
   </g>
 
-  <rect x="20" y="604" width="350" height="22" rx="11" fill="#0F172A" stroke="#1F2937"/>
-  <text x="195" y="619" font-size="10" fill="#94A3B8" text-anchor="middle">git diff + <tspan fill="#60A5FA">specs/</tspan> + verificationBlocks</text>
+  <rect x="20" y="606" width="350" height="22" rx="11" fill="#0F172A" stroke="#1F2937"/>
+  <text x="195" y="621" font-size="10" fill="#94A3B8" text-anchor="middle">git diff + <tspan fill="#60A5FA">specs/</tspan> + verificationBlocks</text>
 </svg>

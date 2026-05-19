@@ -24,18 +24,18 @@
   <text x="195" y="22" font-size="10" fill="#64748B" text-anchor="middle">curdx-flow · 闭环</text>
   <line x1="0" y1="36" x2="390" y2="36" stroke="#1F2937"/>
 
-  <text x="24" y="62" font-size="13" fill="#E5E7EB" font-weight="700">一个可暂停 · 可重放的循环</text>
-  <text x="24" y="80" font-size="10" fill="#94A3B8">每一步都留下文件</text>
+  <text x="24" y="64" font-size="15" fill="#E5E7EB" font-weight="700">能暂停 · 能恢复 · 能重放</text>
+  <text x="24" y="82" font-size="11" fill="#94A3B8">每一步都留下文件</text>
 
   <path d="M340 110 Q40 60 56 102" stroke="#A78BFA" stroke-width="1.4" stroke-dasharray="4 4" fill="none" marker-end="url(#lmArrDimZh)"/>
-  <rect x="138" y="92" width="114" height="20" rx="10" fill="#1E1B4B" stroke="#A78BFA"/>
-  <text x="195" y="106" font-size="10" fill="#A78BFA" text-anchor="middle" font-weight="700">/refactor · 恢复</text>
+  <rect x="132" y="92" width="126" height="20" rx="10" fill="#1E1B4B" stroke="#A78BFA"/>
+  <text x="195" y="106" font-size="10" fill="#A78BFA" text-anchor="middle" font-weight="700">/refactor · 回头修正</text>
 
   <g>
     <rect x="20" y="128" width="350" height="62" rx="10" fill="#111827" stroke="#1F2937"/>
-    <text x="36" y="148" font-size="9" fill="#FBBF24">01 · 目标</text>
-    <text x="36" y="170" font-size="13" fill="#E5E7EB" font-weight="700">/start</text>
-    <text x="116" y="170" font-size="10" fill="#94A3B8">识别 · 路由 · 恢复 · 拆分</text>
+    <text x="36" y="148" font-size="10" fill="#FBBF24">01 · 目标</text>
+    <text x="36" y="170" font-size="14" fill="#E5E7EB" font-weight="700">/start</text>
+    <text x="116" y="170" font-size="11" fill="#94A3B8">识别 · 路由 · 恢复 · 拆分</text>
     <text x="36" y="184" font-size="9" fill="#60A5FA">$ /curdx-flow:start todo-app …</text>
   </g>
 
@@ -43,8 +43,8 @@
 
   <g>
     <rect x="20" y="214" width="350" height="62" rx="10" fill="#111827" stroke="#1F2937"/>
-    <text x="36" y="234" font-size="9" fill="#A78BFA">02 · 规格</text>
-    <text x="36" y="256" font-size="13" fill="#E5E7EB" font-weight="700">/research · /design</text>
+    <text x="36" y="234" font-size="10" fill="#A78BFA">02 · 规格</text>
+    <text x="36" y="256" font-size="14" fill="#E5E7EB" font-weight="700">/research · /design</text>
     <text x="36" y="270" font-size="9" fill="#A78BFA">research.md · requirements.md · design.md</text>
   </g>
 
@@ -52,9 +52,9 @@
 
   <g>
     <rect x="20" y="300" width="350" height="62" rx="10" fill="#111827" stroke="#1F2937"/>
-    <text x="36" y="320" font-size="9" fill="#22D3EE">03 · 任务</text>
-    <text x="36" y="342" font-size="13" fill="#E5E7EB" font-weight="700">/tasks</text>
-    <text x="116" y="342" font-size="10" fill="#94A3B8">价值切片，每个都带验证</text>
+    <text x="36" y="320" font-size="10" fill="#22D3EE">03 · 任务</text>
+    <text x="36" y="342" font-size="14" fill="#E5E7EB" font-weight="700">/tasks</text>
+    <text x="116" y="342" font-size="11" fill="#94A3B8">价值切片 · 每个可验证</text>
     <text x="36" y="356" font-size="9" fill="#22D3EE">tasks.md</text>
   </g>
 
@@ -62,9 +62,9 @@
 
   <g>
     <rect x="20" y="386" width="350" height="62" rx="10" fill="#111827" stroke="#1F2937"/>
-    <text x="36" y="406" font-size="9" fill="#60A5FA">04 · 执行</text>
-    <text x="36" y="428" font-size="13" fill="#E5E7EB" font-weight="700">/implement</text>
-    <text x="116" y="428" font-size="10" fill="#94A3B8">spec-executor + qa-engineer</text>
+    <text x="36" y="406" font-size="10" fill="#60A5FA">04 · 执行</text>
+    <text x="36" y="428" font-size="14" fill="#E5E7EB" font-weight="700">/implement</text>
+    <text x="116" y="428" font-size="11" fill="#94A3B8">spec-executor + qa-engineer</text>
     <text x="36" y="442" font-size="9" fill="#60A5FA">$ npm test ✓  · 浏览器 ✓</text>
   </g>
 
@@ -72,10 +72,10 @@
 
   <g>
     <rect x="20" y="472" width="350" height="62" rx="10" fill="#0B1F3A" stroke="#60A5FA"/>
-    <text x="36" y="492" font-size="9" fill="#60A5FA">05 · 证据</text>
-    <text x="36" y="514" font-size="13" fill="#E5E7EB" font-weight="700">完成 = 证据</text>
+    <text x="36" y="492" font-size="10" fill="#60A5FA">05 · 证据</text>
+    <text x="36" y="514" font-size="14" fill="#E5E7EB" font-weight="700">完成 = 证据</text>
     <circle cx="338" cy="504" r="11" fill="none" stroke="#60A5FA" stroke-width="1.6"/>
     <path d="M332 504 L337 510 L344 498" stroke="#60A5FA" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="36" y="528" font-size="9" fill="#60A5FA">写入 .curdx-state.json</text>
+    <text x="36" y="528" font-size="9" fill="#60A5FA">写进 .curdx-state.json</text>
   </g>
 </svg>
