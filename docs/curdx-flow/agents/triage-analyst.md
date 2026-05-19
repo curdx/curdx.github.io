@@ -1,6 +1,6 @@
 # triage-analyst
 
-Splits large work into dependency-aware specs.
+**For goals too big for one spec.** Decomposes by user-visible value, dependency order, and interface contract — produces an epic that child specs can execute independently.
 
 | Field | Value |
 | --- | --- |
@@ -12,11 +12,11 @@ Splits large work into dependency-aware specs.
 
 ## Responsibilities
 
-- Decide when one request is too large for a single spec.
-- Decompose by user-visible value, dependency order, and interface contracts.
+- Decide when a request is too large for a single spec.
+- Decompose by visible value, dependency order, and interface contracts.
 - Identify blocking decisions, shared migrations, and cross-spec risks.
-- Produce an epic plan that child specs can execute independently.
+- Hand back an epic plan that each child spec can run on its own.
 
 ## Boundaries
 
-`triage-analyst` plans decomposition. It does not implement child specs and does not treat vague epics as ready until dependencies and acceptance boundaries are explicit.
+`triage-analyst` plans decomposition; it doesn't implement child specs. Vague epics stay blocked until dependencies and acceptance boundaries are explicit.

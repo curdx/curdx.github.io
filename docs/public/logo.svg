@@ -1,4 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <rect width="128" height="128" rx="16" fill="#7c3aed"/>
-  <text x="64" y="82" font-family="Arial, sans-serif" font-size="56" font-weight="bold" fill="white" text-anchor="middle">CX</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="CurdX">
+  <defs>
+    <linearGradient id="cxInk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="cxGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A7F3D0"/>
+      <stop offset="0.55" stop-color="#4ADE80"/>
+      <stop offset="1" stop-color="#16A34A"/>
+    </linearGradient>
+    <filter id="cxGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#cxInk)" stroke="#1F2937" stroke-width="1.5"/>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="12.5" fill="none" stroke="#4ADE80" stroke-opacity="0.08"/>
+
+  <g filter="url(#cxGlow)">
+    <path d="M16 18 L34 32 L16 46" fill="none" stroke="url(#cxGreen)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="40" y="24" width="10" height="16" rx="1.5" fill="url(#cxGreen)">
+      <animate attributeName="opacity" values="1;0.18;1" dur="1.1s" repeatCount="indefinite"/>
+    </rect>
+  </g>
 </svg>

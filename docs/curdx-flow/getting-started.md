@@ -1,182 +1,133 @@
 # Getting Started
 
-This page gets you through your first CurdX Flow task. The goal is not to learn every concept. The goal is to complete this path in a real project:
+Your first run, in about five minutes. The goal isn't to learn every concept — it's to land in this state:
 
 ```text
-Install plugin -> Describe goal -> Generate specs -> Execute tasks -> Keep verification evidence
+install ─► /curdx-flow:start ─► review specs ─► /curdx-flow:implement ─► evidence in repo
 ```
 
 <picture>
   <source media="(max-width: 700px)" srcset="/images/curdx-flow/curdx-flow-loop-mobile.en.svg" />
-  <img class="curdx-flow-figure" src="/images/curdx-flow/curdx-flow-loop.en.svg" alt="CurdX Flow beginner path" />
+  <img class="curdx-flow-figure" src="/images/curdx-flow/curdx-flow-loop.en.svg" alt="CurdX Flow workflow loop" />
 </picture>
 
-## Success Criteria
+## You'll know it worked when…
 
-We will use a Todo app as the example. By the end, you need to see:
+- `/curdx-flow:*` autocompletes inside Claude Code.
+- A `specs/todo-app/` directory appears with `requirements.md`, `design.md`, `tasks.md`.
+- `/curdx-flow:status` reports a current phase and a next command.
+- Execution leaves test/build/browser evidence behind.
 
-- `/curdx-flow:*` commands available in Claude Code.
-- A `specs/todo-app/` directory in your project.
-- `requirements.md`, `design.md`, and `tasks.md` inside that directory.
-- `/curdx-flow:status` reporting the current stage and next step.
-- Test, build, or browser verification evidence once execution starts.
-
-## 0. Prepare The Environment
-
-Make sure you have:
-
-| Dependency | Purpose |
-| --- | --- |
-| Claude Code | Runs the plugin and slash commands. |
-| Node.js 20.12+ | Runs the npm installer. |
-| Chrome | Used for browser verification on frontend work. |
-
-Check:
+## 0 · Check the environment
 
 ```bash
-claude --version
-node --version
+claude --version    # Claude Code
+node --version      # ≥ 20.12
 ```
 
-If both commands print versions, continue.
-
-If you do not have a project ready for testing, create a clean Vite project:
+If both print versions, you're good. Need a sandbox project?
 
 ```bash
 npm create vite@latest curdx-flow-todo -- --template react-ts
-cd curdx-flow-todo
-npm install
+cd curdx-flow-todo && npm install
 ```
 
-## 1. Install CurdX Flow
-
-Run:
+## 1 · Install
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-Then check installation state:
+The installer wires up the plugin, its companion plugins, the marketplace entry, and a managed block in `~/.claude/CLAUDE.md`.
+
+Verify:
 
 ```bash
-npm exec -- @curdx/flow@latest status
-claude plugin list
+npm exec -- @curdx/flow@latest status   # should not say "missing"
+claude plugin list                       # should include curdx-flow
 ```
 
-Confirm:
+Stuck? Jump to [Troubleshooting → Commands do not appear](/curdx-flow/troubleshooting#commands-do-not-appear).
 
-- `claude plugin list` shows `curdx-flow`.
-- `status` does not say curdx-flow is missing.
+## 2 · Describe the goal
 
-If the command fails, see [Troubleshooting](/curdx-flow/troubleshooting).
-
-## 2. Open A Project
-
-Open the project you want to test in:
-
-```bash
-cd /path/to/your/project
-claude
-```
-
-Inside Claude Code, type:
+Open Claude Code in your project and run:
 
 ```text
-/curdx-flow:help
+/curdx-flow:start todo-app build a todo app with create/edit/complete/delete, browser-verified
 ```
 
-If `/curdx-flow:*` does not autocomplete, fully quit Claude Code and reopen it. Plugin changes usually require a new Claude Code session.
+Two parts: a **task name** (`todo-app` → directory name) and the **actual goal** (the prose after it). Flow routes the work: tiny edit → direct execution; real feature → spec files first.
 
-## 3. Create The First Task
+> If `/curdx-flow:*` doesn't autocomplete, fully quit and reopen Claude Code. Plugin changes need a fresh session.
 
-Inside Claude Code:
+## 3 · Read what Flow wrote
 
-```text
-/curdx-flow:start todo-app Build a todo app with create, edit, complete, delete, and browser verification
-```
-
-The command has two parts:
-
-| Part | Meaning |
-| --- | --- |
-| `todo-app` | The task name. It also affects the spec directory name. |
-| The text after it | The actual goal. |
-
-Flow first decides how much process the task needs. For a Todo feature, it writes spec files before execution.
-
-## 4. Review The Files Flow Creates
-
-You will see a directory like this:
+You'll see something like:
 
 ```text
 specs/todo-app/
-  research.md
-  requirements.md
-  design.md
-  tasks.md
+├── research.md
+├── requirements.md
+├── design.md
+└── tasks.md
 ```
 
-For your first run, focus on two files:
+For the first run, check just two files — fixing them now saves you an entire wrong implementation later:
 
-| File | What to check |
+| File | Look for |
 | --- | --- |
-| `requirements.md` | Does it include create, edit, complete, delete, and browser verification? |
-| `tasks.md` | Are tasks small enough to run step by step? Do they include verification? |
+| `requirements.md` | Does it actually include create / edit / complete / delete and the browser-verify step? |
+| `tasks.md` | Are tasks small enough? Does each one have a verify command? |
 
-If the requirements are wrong, fix the spec before executing. This matters: a wrong spec will produce the wrong implementation.
-
-## 5. Execute
-
-When `tasks.md` is ready, run:
+## 4 · Execute
 
 ```text
 /curdx-flow:implement
 ```
 
-If your environment cannot use native continuation, run:
+If your environment can't continue automatically, pass `--manual`:
 
 ```text
 /curdx-flow:implement --manual
 ```
 
-You can check progress at any time:
+Peek progress anytime:
 
 ```text
 /curdx-flow:status
 ```
 
-## 6. Decide Whether It Is Really Done
+## 5 · Decide if it's *actually* done
 
-Do not trust the final sentence alone. Done requires at least one kind of evidence:
+Don't trust the final sentence. Match the evidence to the project type:
 
-| Project type | Common evidence |
+| Project | Evidence that counts |
 | --- | --- |
-| Frontend page | Browser opens, DOM/screenshot/console/network checks pass. |
-| Node/CLI | `npm test`, `npm run build`, or real CLI output. |
-| Plugin/release | Plugin validation, tests, tags, or npm release result. |
+| Frontend page | Browser opens, DOM/screenshot/console/network checks pass |
+| Node / CLI | `npm test`, `npm run build`, or real CLI output |
+| Plugin / release | Plugin validation, tests pass, tag pushed, npm release confirmed |
 
-You can also run:
+Quick gate:
 
 ```bash
 npm exec -- @curdx/flow@latest check
 ```
 
-If this fails, treat the work as incomplete: add evidence, fix the failed command, then check again.
+If `check` fails, treat the task as incomplete. Add evidence, re-run, check again.
 
-## 7. What To Share With Your Team
+## 6 · Share it like a pro
 
-If you want to show the result to teammates, do not only say "AI built it." Share:
+Don't say "AI built it." Share **goal + plan + proof**:
 
-- the code diff;
-- `requirements.md`;
-- `design.md`;
-- `tasks.md`;
-- test or browser verification output.
+- the code diff
+- `requirements.md` · `design.md` · `tasks.md`
+- the verification output
 
-That gives reviewers the goal, the plan, and proof that it ran.
+That's what makes the work reviewable.
 
 ## Next
 
-- For command choices, read [Commands](/curdx-flow/commands).
-- For missing commands or failed verification, read [Troubleshooting](/curdx-flow/troubleshooting).
-- For internals, read [How It Works](/curdx-flow/how-it-works).
+- [Commands](/curdx-flow/commands) — pick the right command for the situation.
+- [How It Works](/curdx-flow/how-it-works) — the model behind `/start` routing and `verificationBlocks`.
+- [Troubleshooting](/curdx-flow/troubleshooting) — when commands vanish or evidence fails.

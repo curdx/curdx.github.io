@@ -1,6 +1,6 @@
 # spec-executor
 
-Implements one bounded task from `tasks.md`.
+**Implements one bounded task — and only one.** Lives in its own worktree so it can't widen scope by accident.
 
 | Field | Value |
 | --- | --- |
@@ -14,10 +14,9 @@ Implements one bounded task from `tasks.md`.
 
 - Read only the task, relevant spec context, and assigned files.
 - Make the requested code change without widening scope.
-- Run the task's verify command.
-- Report changed files, commit evidence when applicable, and verify exit code.
-- Request task modification when the task is unsafe, underspecified, or needs splitting.
+- Run the task's verify command and surface exit code + changed files.
+- Request task modification when a task is unsafe, underspecified, or needs splitting.
 
 ## Boundaries
 
-`spec-executor` does not own `[VERIFY]` tasks; those go to `qa-engineer`. It also does not rewrite the spec by itself; changes to requirements, design, or tasks go through `/curdx-flow:refactor`.
+`spec-executor` does not own `[VERIFY]` gates — those belong to `qa-engineer`. It also doesn't edit specs by itself; that goes through `/curdx-flow:refactor`.

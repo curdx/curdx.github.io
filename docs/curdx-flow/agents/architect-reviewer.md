@@ -1,6 +1,6 @@
 # architect-reviewer
 
-Creates the technical design that implementation tasks must follow.
+**Kills the "wishlist files, fuzzy contracts" failure mode.** Produces a design specific enough that tasks can be bounded.
 
 | Field | Value |
 | --- | --- |
@@ -15,9 +15,8 @@ Creates the technical design that implementation tasks must follow.
 - Translate requirements into architecture decisions.
 - Define file scope, component boundaries, interfaces, and data flow.
 - Identify risk, rollback, migration, and verification strategy.
-- Keep design specific enough for `task-planner` to produce bounded tasks.
-- Avoid wishlist file changes; file scope becomes an execution contract.
+- Make file scope an execution contract — not a wishlist.
 
-## Review Boundary
+## Boundaries
 
-At design boundaries, `spec-reviewer` checks spec compliance and `code-quality-reviewer` checks code-quality risk. Their findings should remain independent.
+`spec-reviewer` checks spec compliance; `code-quality-reviewer` checks code-quality risk. Their findings stay independent — design failures shouldn't be silently overwritten by either.

@@ -1,47 +1,45 @@
 # Configuration
 
-Beginners usually do not need to change configuration. Learn `/curdx-flow:start` and `/curdx-flow:status` first.
+Most people only ever touch two things: install flags and task granularity. Everything else is opt-in.
 
-This page only covers settings you are likely to touch.
-
-## Install Options
+## Install flags
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-| Option | What it does |
+| Flag | Effect |
 | --- | --- |
-| `--yes` | Skip confirmation and install or reinstall directly. |
-| `--all` | Install all known companion capabilities. |
-| `--lang en` | Use English in the installer. |
-| `--no-claude-md` | Do not update the managed block in `~/.claude/CLAUDE.md`. |
-| `--no-refresh` | Skip plugin cache refresh. Usually only for troubleshooting. |
+| `--yes` | Skip confirmation, install or reinstall directly. |
+| `--all` | Install every known companion capability. |
+| `--lang en` / `--lang zh` | Installer language. |
+| `--no-claude-md` | Don't update the managed block in `~/.claude/CLAUDE.md`. |
+| `--no-refresh` | Skip plugin cache refresh (usually only for debugging). |
 
-## Task Granularity
+## Task granularity
 
-The option you are most likely to use:
+The lever you'll actually want to tune:
 
 ```text
-/curdx-flow:start todo-app Build a Todo app --task-granularity standard
+/curdx-flow:start todo-app build a Todo app --task-granularity standard
 ```
 
-| Value | Use it when |
+| Value | Use it for |
 | --- | --- |
 | `auto` | Let Flow decide. |
 | `standard` | Most product work. |
-| `fine` | You want smaller tasks and easier review. |
-| `coarse` | You are prototyping and accept larger tasks. |
+| `fine` | Smaller tasks; easier review and rollback. |
+| `coarse` | Prototyping; you accept larger tasks. |
 
-## Where Specs Live
+## Where specs live
 
-By default:
+Default:
 
 ```text
 specs/
 ```
 
-For monorepos, you can split specs by package:
+Monorepo? Split by package and pick the location at start time:
 
 ```yaml
 specs_dirs:
@@ -50,60 +48,51 @@ specs_dirs:
   - "./packages/api/specs"
 ```
 
-Choose the location when starting:
-
 ```text
-/curdx-flow:start checkout-ui Build checkout UI --specs-dir ./packages/web/specs
+/curdx-flow:start checkout-ui build checkout UI --specs-dir ./packages/web/specs
 ```
 
-## Which Files To Commit
+## What to commit
 
-Usually commit:
-
-- `research.md`
-- `requirements.md`
-- `design.md`
-- `tasks.md`
-
-Commit with care:
-
-- `.curdx-state.json`
-- `.progress.md`
-
-The last two are runtime state. Commit them if your team wants execution history; skip them for ordinary feature work.
-
-## Companion Capabilities
-
-CurdX Flow checks these capabilities:
-
-| Capability | Why it matters |
+| Usually commit | Commit with care |
 | --- | --- |
-| `chrome-devtools-mcp` | Real browser evidence for frontend work. |
-| `claude-mem` | Historical context and prior decisions. |
-| `pua` | Recovery and advanced workflow assistance. |
-| `ui-ux-pro-max` | Frontend UI/UX quality checks. |
-| `context7` | Current library/framework documentation. |
-| `sequential-thinking` | Explicit reasoning for high-risk tasks. |
+| `research.md` | `.curdx-state.json` (runtime state — useful for audit, noisy in PRs) |
+| `requirements.md` | `.progress.md` (runtime breadcrumbs — usually `.gitignore`) |
+| `design.md` | |
+| `tasks.md` | |
 
-Check them with:
+Rule of thumb: **commit context, gitignore runtime**.
+
+## Companion capabilities
 
 ```bash
 curdx-flow doctor
 ```
 
-## Release Versioning
+| Capability | Why it matters |
+| --- | --- |
+| `chrome-devtools-mcp` | Real browser evidence for frontend work. |
+| `claude-mem` | History of prior decisions and failures. |
+| `pua` | Recovery and advanced workflow assistance. |
+| `ui-ux-pro-max` | UI/UX quality checks. |
+| `context7` *(external MCP)* | Current library / framework documentation. |
+| `sequential-thinking` *(external MCP)* | Explicit reasoning for high-risk tasks. |
 
-If you maintain the `@curdx/flow` project itself, bump with:
+Missing one degrades a specific signal — `doctor` will tell you which.
+
+## Release versioning *(maintainers only)*
+
+If you're maintaining the `@curdx/flow` project itself:
 
 ```bash
 node scripts/bump-version.mjs patch
 ```
 
-Releases need two tags:
+Releases need both tags pushed together:
 
 ```text
-vX.Y.Z
-curdx-flow--vX.Y.Z
+vX.Y.Z                  # triggers npm publish
+curdx-flow--vX.Y.Z      # Claude Code plugin marketplace tag
 ```
 
-Regular users do not need this section.
+Regular users can ignore this section.

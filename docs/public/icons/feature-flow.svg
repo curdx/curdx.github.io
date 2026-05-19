@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Flow">
+  <defs>
+    <linearGradient id="flInk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="flGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A7F3D0"/>
+      <stop offset="1" stop-color="#22C55E"/>
+    </linearGradient>
+    <filter id="flGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="0.9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#flInk)" stroke="#1F2937" stroke-width="1.5"/>
+
+  <!-- vertical pipeline: 3 nodes connected, last one is the verified check -->
+  <g filter="url(#flGlow)">
+    <!-- connector line -->
+    <path d="M22 16 L22 48" stroke="#1F2937" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- node 1 (spec): hollow ring -->
+    <circle cx="22" cy="16" r="4.5" fill="#0F172A" stroke="#A78BFA" stroke-width="2"/>
+
+    <!-- node 2 (tasks): hollow ring -->
+    <circle cx="22" cy="32" r="4.5" fill="#0F172A" stroke="#22D3EE" stroke-width="2"/>
+
+    <!-- node 3 (proof): filled green with check -->
+    <circle cx="22" cy="48" r="6" fill="url(#flGreen)"/>
+    <path d="M18.6 48 L21.2 50.6 L25.6 45.6" stroke="#022C22" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- labels -->
+    <g font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700">
+      <text x="34" y="20" font-size="9" fill="#A78BFA">spec</text>
+      <text x="34" y="36" font-size="9" fill="#22D3EE">tasks</text>
+      <text x="34" y="52" font-size="9" fill="#4ADE80">proof ✓</text>
+    </g>
+  </g>
+</svg>

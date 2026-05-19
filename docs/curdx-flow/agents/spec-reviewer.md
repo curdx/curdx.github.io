@@ -1,6 +1,6 @@
 # spec-reviewer
 
-Read-only reviewer for spec compliance.
+**Read-only reviewer for spec compliance.** Catches missing acceptance criteria, unsupported claims, scope drift, and broken phase handoffs.
 
 | Field | Value |
 | --- | --- |
@@ -13,10 +13,10 @@ Read-only reviewer for spec compliance.
 ## Responsibilities
 
 - Check whether research, requirements, design, tasks, or execution evidence satisfy the relevant spec contract.
-- Find missing acceptance criteria, unsupported claims, scope drift, stale evidence, and broken phase handoffs.
+- Surface stale evidence and broken handoffs between phases.
 - Report only actionable findings.
 - Stay out of code-quality territory owned by `code-quality-reviewer`.
 
-## Review Isolation
+## Boundaries
 
-Two-stage review depends on separation. `spec-reviewer` should not receive `code-quality-reviewer` findings as context, and its own findings should not be used to steer the code-quality review prompt.
+Two-stage review depends on separation. `spec-reviewer` doesn't receive `code-quality-reviewer` findings as context, and its findings don't steer the code-quality prompt.

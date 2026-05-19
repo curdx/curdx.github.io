@@ -1,38 +1,84 @@
-<svg width="390" height="640" viewBox="0 0 390 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">CurdX Flow mobile overview</title>
-  <desc id="desc">A vertical overview of goal input, spec writing, task execution, and verification evidence.</desc>
-  <rect width="390" height="640" rx="22" fill="#F8FAFC"/>
-  <rect x="16" y="16" width="358" height="608" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 640" width="390" height="640" role="img" aria-labelledby="omTitle omDesc" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <title id="omTitle">CurdX Flow mobile overview</title>
+  <desc id="omDesc">Goal becomes specs and verified proof — vertical layout.</desc>
+  <defs>
+    <linearGradient id="omBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#050817"/>
+    </linearGradient>
+    <linearGradient id="omG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#86EFAC"/>
+      <stop offset="1" stop-color="#22C55E"/>
+    </linearGradient>
+    <marker id="omArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0 L7 4.5 L0 9 Z" fill="#22C55E"/>
+    </marker>
+  </defs>
 
-  <text x="34" y="54" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="24" font-weight="800">CurdX Flow</text>
-  <text x="34" y="82" fill="#475569" font-family="Inter, ui-sans-serif, system-ui" font-size="13">Write the goal to files, execute tasks, keep proof.</text>
+  <rect width="390" height="640" rx="18" fill="url(#omBg)"/>
+  <rect x="0.5" y="0.5" width="389" height="639" rx="17.5" fill="none" stroke="#1F2937"/>
 
-  <rect x="34" y="112" width="322" height="118" rx="16" fill="#EFF6FF" stroke="#BFDBFE"/>
-  <text x="54" y="145" fill="#1D4ED8" font-family="Inter, ui-sans-serif, system-ui" font-size="17" font-weight="800">1. Describe the goal</text>
-  <text x="54" y="171" fill="#334155" font-family="Inter, ui-sans-serif, system-ui" font-size="13">Tell Claude Code what to build.</text>
-  <rect x="54" y="187" width="282" height="28" rx="8" fill="#0F172A"/>
-  <text x="70" y="206" fill="#E2E8F0" font-family="SFMono-Regular, ui-monospace, monospace" font-size="11">/curdx-flow:start todo-app</text>
+  <path d="M0 18 Q0 0 18 0 L372 0 Q390 0 390 18 L390 36 L0 36 Z" fill="#0F172A"/>
+  <circle cx="18" cy="18" r="4" fill="#475569"/>
+  <circle cx="32" cy="18" r="4" fill="#475569"/>
+  <circle cx="46" cy="18" r="4" fill="#475569"/>
+  <text x="195" y="22" font-size="10" fill="#64748B" text-anchor="middle">curdx-flow · overview</text>
+  <line x1="0" y1="36" x2="390" y2="36" stroke="#1F2937"/>
 
-  <path d="M195 240V264" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
-  <path d="M186 256L195 265L204 256" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="24" y="66" font-size="14" fill="#E5E7EB" font-weight="700">From "build this"</text>
+  <text x="24" y="86" font-size="14" fill="url(#omG)" font-weight="700">to proof it shipped.</text>
+  <text x="24" y="106" font-size="10" fill="#94A3B8">spec in repo · evidence on PR · resumable</text>
 
-  <rect x="34" y="278" width="322" height="142" rx="16" fill="#ECFDF5" stroke="#BBF7D0"/>
-  <text x="54" y="311" fill="#047857" font-family="Inter, ui-sans-serif, system-ui" font-size="17" font-weight="800">2. Write specs</text>
-  <text x="54" y="337" fill="#334155" font-family="Inter, ui-sans-serif, system-ui" font-size="13">Pin requirements, design, and tasks.</text>
-  <rect x="54" y="354" width="282" height="24" rx="7" fill="#FFFFFF" stroke="#D1FAE5"/>
-  <text x="68" y="370" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="12" font-weight="700">requirements.md</text>
-  <rect x="54" y="384" width="282" height="24" rx="7" fill="#FFFFFF" stroke="#D1FAE5"/>
-  <text x="68" y="400" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="12" font-weight="700">design.md + tasks.md</text>
+  <!-- Card 1 -->
+  <g>
+    <rect x="20" y="120" width="350" height="148" rx="12" fill="#111827" stroke="#1F2937"/>
+    <text x="36" y="142" font-size="9" fill="#64748B">01 · goal</text>
+    <circle cx="354" cy="138" r="3" fill="#FBBF24"/>
+    <text x="36" y="166" font-size="13" fill="#E5E7EB" font-weight="700">Describe what done means.</text>
+    <rect x="36" y="180" width="318" height="74" rx="8" fill="#020617" stroke="#1F2937"/>
+    <text x="48" y="200" font-size="10" fill="#64748B">$</text>
+    <text x="60" y="200" font-size="10" fill="#4ADE80">/curdx-flow:start todo-app</text>
+    <text x="48" y="218" font-size="10" fill="#94A3B8">  "create + edit + delete,</text>
+    <text x="48" y="234" font-size="10" fill="#94A3B8">   browser-verified"</text>
+    <text x="48" y="248" font-size="10" fill="#64748B">$</text>
+    <rect x="60" y="240" width="8" height="11" fill="#4ADE80">
+      <animate attributeName="opacity" values="1;0.15;1" dur="1.1s" repeatCount="indefinite"/>
+    </rect>
+  </g>
 
-  <path d="M195 430V454" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
-  <path d="M186 446L195 455L204 446" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M195 274 L195 290" stroke="#22C55E" stroke-width="2" marker-end="url(#omArr)"/>
 
-  <rect x="34" y="468" width="322" height="116" rx="16" fill="#FFF7ED" stroke="#FED7AA"/>
-  <text x="54" y="501" fill="#C2410C" font-family="Inter, ui-sans-serif, system-ui" font-size="17" font-weight="800">3. Execute and prove</text>
-  <circle cx="62" cy="530" r="8" fill="#10B981"/>
-  <path d="M58 530L61 533L66 527" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="80" y="535" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="13" font-weight="700">Test, build, or browser evidence</text>
-  <circle cx="62" cy="559" r="8" fill="#DB2777"/>
-  <path d="M58 559L61 562L66 556" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="80" y="564" fill="#0F172A" font-family="Inter, ui-sans-serif, system-ui" font-size="13" font-weight="700">PR shows goal, plan, and result</text>
+  <!-- Card 2 -->
+  <g>
+    <rect x="20" y="296" width="350" height="148" rx="12" fill="#111827" stroke="#1F2937"/>
+    <text x="36" y="318" font-size="9" fill="#64748B">02 · spec/</text>
+    <circle cx="354" cy="314" r="3" fill="#A78BFA"/>
+    <text x="36" y="342" font-size="13" fill="#E5E7EB" font-weight="700">Pin the plan to files.</text>
+    <rect x="36" y="356" width="318" height="74" rx="8" fill="#020617" stroke="#1F2937"/>
+    <text x="48" y="376" font-size="10" fill="#64748B">specs/todo-app/</text>
+    <text x="60" y="394" font-size="10" fill="#E5E7EB">├── requirements.md</text>
+    <text x="60" y="410" font-size="10" fill="#E5E7EB">├── design.md  ├── tasks.md</text>
+    <text x="60" y="426" font-size="10" fill="#94A3B8">└── .curdx-state.json</text>
+  </g>
+
+  <path d="M195 450 L195 466" stroke="#22C55E" stroke-width="2" marker-end="url(#omArr)"/>
+
+  <!-- Card 3 -->
+  <g>
+    <rect x="20" y="472" width="350" height="120" rx="12" fill="#022C22" stroke="#4ADE80"/>
+    <text x="36" y="494" font-size="9" fill="#4ADE80">03 · proof</text>
+    <text x="36" y="518" font-size="13" fill="#E5E7EB" font-weight="700">Done = evidence.</text>
+    <g font-size="10" fill="#E5E7EB">
+      <text x="36" y="540">✓ tests pass</text>
+      <text x="140" y="540">✓ build clean</text>
+      <text x="246" y="540">✓ browser ok</text>
+      <text x="36" y="558">✓ CI green</text>
+      <text x="140" y="558">✓ release tag</text>
+      <text x="246" y="558" fill="#4ADE80">→ state.json</text>
+    </g>
+  </g>
+
+  <!-- Footer chip -->
+  <rect x="20" y="604" width="350" height="22" rx="11" fill="#0F172A" stroke="#1F2937"/>
+  <text x="195" y="619" font-size="10" fill="#94A3B8" text-anchor="middle">git diff + <tspan fill="#4ADE80">specs/</tspan> + verificationBlocks</text>
 </svg>

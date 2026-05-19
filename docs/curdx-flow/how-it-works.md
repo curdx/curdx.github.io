@@ -1,76 +1,99 @@
 # How It Works
 
-This page is for people who want the internals. Beginners can skip it at first.
+Skip on day one — `/curdx-flow:start` doesn't require any of this. Come back when you want to understand why Flow makes the choices it does.
 
-## A Simple Mental Model
+## Mental model
 
-Asking Claude Code to do a complex task directly is like planning while coding. CurdX Flow writes the plan first, then executes the plan.
-
-The flow is:
+Asking Claude Code to ship a real feature directly is like planning *while* coding. Flow writes the plan first, then executes against it:
 
 ```text
-goal -> spec files -> task list -> execution -> verification evidence
+goal ─► spec files ─► task list ─► execution ─► verified evidence
 ```
 
-## Step 1: Decide How Big The Task Is
+Three guarantees follow from that order:
 
-`/curdx-flow:start` first checks:
+1. **Reviewable.** Specs are Markdown in your repo. PRs carry the plan, not just the diff.
+2. **Resumable.** State lives on disk, not in chat. Close the window — `/status` reattaches.
+3. **Provable.** "Done" requires `verificationBlocks` — command output, browser checks, CI runs, release tags.
 
-- Is this a tiny edit or a complex feature?
-- Is the project frontend, backend, CLI, plugin, or monorepo?
-- Is there an old spec to resume?
-- Does this need browser, test, release, or CI evidence?
+## Step 1 · Route the goal
 
-That is why one `/curdx-flow:start` command can handle different jobs instead of always forcing a full workflow.
+`/curdx-flow:start` classifies before it acts:
 
-## Step 2: Write Spec Files
+- Tiny edit or real feature?
+- Frontend, backend, CLI, plugin, monorepo?
+- Is there an existing spec to resume?
+- Does completion need browser / test / release evidence?
 
-Complex tasks usually create four files:
+That's why a single command handles "rename a variable" and "ship a Claude Code plugin" without forcing the same ceremony on both.
+
+## Step 2 · Pin the plan to files
+
+Real features produce four artifacts:
 
 | File | Question it answers |
 | --- | --- |
-| `research.md` | What is true in this project? Where are the risks? |
-| `requirements.md` | What exactly should be built? What counts as done? |
-| `design.md` | How should it be built? Which files are in scope? |
-| `tasks.md` | What are the steps? How is each step verified? |
+| `research.md` | What's already true in this project? Where are the risks? |
+| `requirements.md` | What exactly is being built? What counts as done? |
+| `design.md` | How is it built? Which files are in scope? |
+| `tasks.md` | What are the bounded steps? How is each step verified? |
 
-These files make the work reviewable, resumable, and less dependent on chat memory.
+Move the plan from chat memory into the repo — and the work becomes reviewable, resumable, and far less fragile.
 
-## Step 3: Execute By Task
+## Step 3 · Execute task-by-task
 
-`/curdx-flow:implement` reads `tasks.md`. It works on one bounded task at a time.
+`/curdx-flow:implement` reads `tasks.md` and runs **one bounded task at a time**. Roles are deliberately split:
 
-Implementation tasks usually go to `spec-executor`. Verification tasks go to `qa-engineer`. This reduces the chance of "I wrote it, therefore I say it passed."
+- `spec-executor` writes the code change.
+- `qa-engineer` runs the verify step.
+- `architect-reviewer`, `code-quality-reviewer`, `spec-reviewer` weigh in at the right gates.
 
-## Step 4: Require Evidence
+Separating implementer from verifier kills the "I wrote it, therefore it passed" failure mode.
 
-CurdX Flow does not treat "done" as proof. It looks for:
+## Step 4 · Demand evidence
 
-- Did the command run?
-- Was the exit code 0?
-- Did the browser page actually work?
-- Were console and network clean enough?
-- Do release tags, npm packages, or CI results really exist?
+Flow refuses to claim "done" without:
 
-Flow stores this evidence in its state file so it can be checked later.
+- the verify command actually running,
+- exit code 0 (or its equivalent),
+- a real browser page if the work is visual,
+- clean console / network where relevant,
+- real release tags, npm packages, or CI runs — not described, observed.
 
-## Step 5: Resume Later
+All of this lands in `verificationBlocks` inside `.curdx-state.json` for later audit.
 
-If you close Claude Code, come back and run:
+## Step 5 · Resume later
+
+Close the laptop, come back tomorrow:
 
 ```text
-/curdx-flow:status
-/curdx-flow:start
+/curdx-flow:status     # show phase, missing capabilities, next command
+/curdx-flow:start      # re-attach to the existing spec
 ```
 
-Flow reads the spec files and state, then recommends the next step.
+Flow rebuilds context from the spec files and state — not from chat memory.
 
-## Internal Pieces
+## Internal pieces
 
 | Piece | What it does |
 | --- | --- |
-| skills | The `/curdx-flow:*` commands inside Claude Code. |
-| agents | Specialist roles for research, requirements, design, tasks, execution, and verification. |
-| hooks | Record state and block completion claims without evidence. |
-| runtime CLI | Internal tools such as `curdx-flow doctor` and `curdx-flow specs list`. |
-| npm CLI | Install, update, status, and log analysis. |
+| **skills** | The `/curdx-flow:*` commands Claude Code surfaces. |
+| **agents** | Specialist roles: research, PM, architect, task-planner, executor, QA, reviewer, refactor, triage. |
+| **hooks** | Record state and block completion claims without evidence. |
+| **runtime CLI** | `curdx-flow doctor`, `curdx-flow specs list`, `curdx-flow route`. |
+| **npm CLI** | `@curdx/flow` — install, status, update, analyze, check. |
+
+## Companion capabilities Flow orchestrates
+
+Flow is a Claude Code plugin, but it also detects and uses these when present:
+
+| Capability | Role |
+| --- | --- |
+| `chrome-devtools-mcp` | Real browser DOM, console, network, screenshots for frontend evidence. |
+| `claude-mem` | Historical decisions and prior failure modes. |
+| `pua` | Multi-attempt recovery, parallel planning, Chinese-language skills. |
+| `ui-ux-pro-max` | UI/UX quality judgment for visible work. |
+| `context7` (external MCP) | Current library / framework documentation. |
+| `sequential-thinking` (external MCP) | Explicit hypothesis decomposition for high-risk tasks. |
+
+Missing one? `curdx-flow doctor` reports the degraded state and the fix — it won't silently skip critical evidence.

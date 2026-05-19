@@ -1,6 +1,6 @@
 # product-manager
 
-Turns research and the user goal into testable requirements.
+**Kills the "scope drifts mid-sprint" failure mode.** Turns the goal and research into testable requirements with explicit non-goals.
 
 | Field | Value |
 | --- | --- |
@@ -13,11 +13,10 @@ Turns research and the user goal into testable requirements.
 ## Responsibilities
 
 - Write concise user stories and acceptance criteria.
-- Preserve explicit non-goals and scope boundaries.
-- Convert ambiguity into questions or assumptions that can be reviewed.
+- Preserve non-goals and scope boundaries explicitly.
+- Convert ambiguity into reviewable questions or assumptions.
 - Keep requirements testable enough for `task-planner` and `qa-engineer`.
-- Avoid implementation design; that belongs to `architect-reviewer`.
 
-## Coordinator Use
+## Boundaries
 
-`/curdx-flow:requirements` delegates to this agent after research or goal context exists. The coordinator verifies artifact existence and review status before moving to design.
+This agent does not design implementation — that's `architect-reviewer`. `/curdx-flow:requirements` delegates here once research or goal context is in place.

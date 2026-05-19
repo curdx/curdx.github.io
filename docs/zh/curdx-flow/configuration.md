@@ -1,47 +1,45 @@
 # 配置
 
-新手通常不需要改配置。先会用 `/curdx-flow:start` 和 `/curdx-flow:status` 就够了。
+绝大多数人只会动两样：安装参数和任务粒度。其余都是按需。
 
-这页只解释你真正可能遇到的配置。
-
-## 安装时的参数
+## 安装参数
 
 ```bash
 npm exec -- @curdx/flow@latest install curdx-flow --yes
 ```
 
-| 参数 | 作用 |
+| Flag | 效果 |
 | --- | --- |
-| `--yes` | 跳过确认，直接安装或重装。 |
-| `--all` | 安装所有已知配套能力。 |
-| `--lang zh` | 安装器使用中文。 |
-| `--no-claude-md` | 不更新 `~/.claude/CLAUDE.md` 中的受管说明块。 |
-| `--no-refresh` | 不刷新插件缓存，排障时才需要。 |
+| `--yes` | 跳过确认，直接装或重装。 |
+| `--all` | 把所有 companion 能力一起装。 |
+| `--lang en` / `--lang zh` | 安装器语言。 |
+| `--no-claude-md` | 不更新 `~/.claude/CLAUDE.md` 的管理块。 |
+| `--no-refresh` | 跳过插件缓存刷新（通常只为调试用）。 |
 
 ## 任务粒度
 
-你最可能用到的是：
+你最可能想调的开关：
 
 ```text
 /curdx-flow:start todo-app 做一个 Todo 应用 --task-granularity standard
 ```
 
-| 值 | 适合什么 |
+| 取值 | 适合 |
 | --- | --- |
-| `auto` | 默认，让 Flow 判断。 |
-| `standard` | 大多数功能。 |
-| `fine` | 想让每个任务更小，更方便 review。 |
-| `coarse` | 原型或探索，接受任务更大。 |
+| `auto` | 让 Flow 自己判断。 |
+| `standard` | 多数功能开发。 |
+| `fine` | 任务更小，便于 review 与回滚。 |
+| `coarse` | 原型，能接受较大任务。 |
 
-## Spec 放在哪里
+## 规格目录在哪里
 
-默认放在：
+默认：
 
 ```text
 specs/
 ```
 
-Monorepo 可以把不同包的 spec 分开放：
+Monorepo？按包拆分，并在 start 时指定：
 
 ```yaml
 specs_dirs:
@@ -50,60 +48,51 @@ specs_dirs:
   - "./packages/api/specs"
 ```
 
-创建时指定目录：
-
 ```text
-/curdx-flow:start checkout-ui 做结账页面 --specs-dir ./packages/web/specs
+/curdx-flow:start checkout-ui 做 checkout UI --specs-dir ./packages/web/specs
 ```
 
-## 哪些文件建议提交
+## 该提交哪些文件
 
-建议提交：
-
-- `research.md`
-- `requirements.md`
-- `design.md`
-- `tasks.md`
-
-谨慎提交：
-
-- `.curdx-state.json`
-- `.progress.md`
-
-后两者更像运行状态。如果团队要复盘执行过程，可以提交；如果只是普通功能开发，通常不用提交。
-
-## 配套能力
-
-CurdX Flow 会检查这些能力：
-
-| 能力 | 为什么需要 |
+| 通常要提交 | 视团队而定 |
 | --- | --- |
-| `chrome-devtools-mcp` | 前端页面需要真实浏览器证据。 |
-| `claude-mem` | 查历史上下文和旧决策。 |
-| `pua` | 恢复和高级流程辅助。 |
-| `ui-ux-pro-max` | 前端 UI/UX 质量检查。 |
-| `context7` | 查当前库/框架文档。 |
-| `sequential-thinking` | 高风险任务的显式推理。 |
+| `research.md` | `.curdx-state.json`（运行期状态，审计有用，PR 噪音大） |
+| `requirements.md` | `.progress.md`（运行期记录，通常 `.gitignore`） |
+| `design.md` | |
+| `tasks.md` | |
 
-检查它们：
+经验法则：**上下文进 git，运行期状态进 gitignore。**
+
+## Companion 能力
 
 ```bash
 curdx-flow doctor
 ```
 
-## 发布版本
+| 能力 | 为什么重要 |
+| --- | --- |
+| `chrome-devtools-mcp` | 前端工作的真实浏览器证据。 |
+| `claude-mem` | 历史决策和失败经验。 |
+| `pua` | 恢复与高阶工作流辅助。 |
+| `ui-ux-pro-max` | UI/UX 质量检查。 |
+| `context7` *（外部 MCP）* | 最新库 / 框架文档。 |
+| `sequential-thinking` *（外部 MCP）* | 高风险任务的显式推理。 |
 
-如果你在维护 `@curdx/flow` 项目本身，版本升级用：
+缺哪个就降级哪个信号 —— `doctor` 会告诉你到底缺什么。
+
+## 发布版本（仅维护者）
+
+如果你在维护 `@curdx/flow` 项目本身：
 
 ```bash
 node scripts/bump-version.mjs patch
 ```
 
-发布需要两个 tag：
+发布需要两个 tag 一起 push：
 
 ```text
-vX.Y.Z
-curdx-flow--vX.Y.Z
+vX.Y.Z                  # 触发 npm 发布
+curdx-flow--vX.Y.Z      # Claude Code 插件 marketplace 标签
 ```
 
-普通使用者不需要关心这一节。
+普通用户可忽略这一节。
