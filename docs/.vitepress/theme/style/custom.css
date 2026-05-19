@@ -48,11 +48,14 @@
   overflow: hidden;
   white-space: nowrap;
   vertical-align: bottom;
-  width: 5ch;
+  letter-spacing: 0;
+  padding: 0;
+  /* "> " (2ch) + "CurdX" (5ch) = 7ch */
+  width: 7ch;
   border-right: 0.08em solid var(--cx-blue);
   animation:
-    cx-type-name 0.9s steps(5) 0.25s both,
-    cx-blink 1.05s steps(1) 1.15s infinite;
+    cx-type-name 1.05s steps(7) 0.25s both,
+    cx-blink 1.05s steps(1) 1.3s infinite;
 }
 
 .VPHero .name.clip::before {
@@ -85,7 +88,7 @@
 
 @keyframes cx-type-name {
   from { width: 0; }
-  to   { width: 5ch; }
+  to   { width: 7ch; }
 }
 
 @keyframes cx-blink {
