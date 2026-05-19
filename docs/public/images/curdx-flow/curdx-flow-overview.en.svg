@@ -7,11 +7,11 @@
       <stop offset="1" stop-color="#050817"/>
     </linearGradient>
     <linearGradient id="ovGreen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#86EFAC"/>
-      <stop offset="1" stop-color="#22C55E"/>
+      <stop offset="0" stop-color="#BFDBFE"/>
+      <stop offset="1" stop-color="#3B82F6"/>
     </linearGradient>
     <marker id="ovArr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0 0 L8 5 L0 10 Z" fill="#22C55E"/>
+      <path d="M0 0 L8 5 L0 10 Z" fill="#3B82F6"/>
     </marker>
   </defs>
 
@@ -42,13 +42,13 @@
 
     <rect x="56" y="218" width="248" height="174" rx="10" fill="#020617" stroke="#1F2937"/>
     <text x="72" y="244" font-size="11" fill="#64748B">$</text>
-    <text x="88" y="244" font-size="11" fill="#4ADE80">/curdx-flow:start</text>
+    <text x="88" y="244" font-size="11" fill="#60A5FA">/curdx-flow:start</text>
     <text x="72" y="266" font-size="11" fill="#E5E7EB">  todo-app</text>
     <text x="72" y="288" font-size="11" fill="#94A3B8">  "create + edit +</text>
     <text x="72" y="306" font-size="11" fill="#94A3B8">   complete + delete,</text>
     <text x="72" y="324" font-size="11" fill="#94A3B8">   browser-verified"</text>
     <text x="72" y="362" font-size="11" fill="#64748B">$</text>
-    <rect x="86" y="352" width="9" height="13" fill="#4ADE80">
+    <rect x="86" y="352" width="9" height="13" fill="#60A5FA">
       <animate attributeName="opacity" values="1;0.15;1" dur="1.1s" repeatCount="indefinite"/>
     </rect>
 
@@ -57,7 +57,7 @@
   </g>
 
   <!-- Arrow 1 -->
-  <path d="M328 290 L360 290" stroke="#22C55E" stroke-width="2" marker-end="url(#ovArr)"/>
+  <path d="M328 290 L360 290" stroke="#3B82F6" stroke-width="2" marker-end="url(#ovArr)"/>
 
   <!-- Panel 2: Specs -->
   <g>
@@ -76,14 +76,14 @@
     <text x="412" y="306" font-size="11" fill="#E5E7EB">├── design.md</text>
     <text x="412" y="326" font-size="11" fill="#E5E7EB">├── tasks.md</text>
     <text x="412" y="346" font-size="11" fill="#94A3B8">└── .curdx-state.json</text>
-    <text x="400" y="376" font-size="10" fill="#4ADE80">↳ reviewable · resumable</text>
+    <text x="400" y="376" font-size="10" fill="#60A5FA">↳ reviewable · resumable</text>
 
     <text x="384" y="420" font-size="10" fill="#64748B">Goal, design, and tasks</text>
     <text x="384" y="434" font-size="10" fill="#64748B">land in the repo, not chat.</text>
   </g>
 
   <!-- Arrow 2 -->
-  <path d="M656 290 L688 290" stroke="#22C55E" stroke-width="2" marker-end="url(#ovArr)"/>
+  <path d="M656 290 L688 290" stroke="#3B82F6" stroke-width="2" marker-end="url(#ovArr)"/>
 
   <!-- Panel 3: Proof -->
   <g>
@@ -91,32 +91,32 @@
     <rect x="696" y="140" width="224" height="32" rx="14" fill="#0F172A"/>
     <rect x="696" y="158" width="224" height="14" fill="#0F172A"/>
     <text x="712" y="161" font-size="10" fill="#64748B">03 · proof</text>
-    <circle cx="904" cy="156" r="3" fill="#4ADE80"/>
+    <circle cx="904" cy="156" r="3" fill="#60A5FA"/>
 
     <text x="712" y="200" font-size="14" fill="#E5E7EB" font-weight="700">Done = evidence.</text>
 
     <g font-size="11" fill="#E5E7EB">
-      <rect x="712" y="220" width="14" height="14" rx="3" fill="#022C22" stroke="#4ADE80"/>
-      <path d="M715 227 L718 230 L723 224" stroke="#4ADE80" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="712" y="220" width="14" height="14" rx="3" fill="#0B1F3A" stroke="#60A5FA"/>
+      <path d="M715 227 L718 230 L723 224" stroke="#60A5FA" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <text x="734" y="231">tests pass</text>
 
-      <rect x="712" y="244" width="14" height="14" rx="3" fill="#022C22" stroke="#4ADE80"/>
-      <path d="M715 251 L718 254 L723 248" stroke="#4ADE80" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="712" y="244" width="14" height="14" rx="3" fill="#0B1F3A" stroke="#60A5FA"/>
+      <path d="M715 251 L718 254 L723 248" stroke="#60A5FA" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <text x="734" y="255">build clean</text>
 
-      <rect x="712" y="268" width="14" height="14" rx="3" fill="#022C22" stroke="#4ADE80"/>
-      <path d="M715 275 L718 278 L723 272" stroke="#4ADE80" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="712" y="268" width="14" height="14" rx="3" fill="#0B1F3A" stroke="#60A5FA"/>
+      <path d="M715 275 L718 278 L723 272" stroke="#60A5FA" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <text x="734" y="279">browser check</text>
 
-      <rect x="712" y="292" width="14" height="14" rx="3" fill="#022C22" stroke="#4ADE80"/>
-      <path d="M715 299 L718 302 L723 296" stroke="#4ADE80" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="712" y="292" width="14" height="14" rx="3" fill="#0B1F3A" stroke="#60A5FA"/>
+      <path d="M715 299 L718 302 L723 296" stroke="#60A5FA" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <text x="734" y="303">CI green</text>
 
-      <rect x="712" y="316" width="14" height="14" rx="3" fill="#022C22" stroke="#4ADE80"/>
-      <path d="M715 323 L718 326 L723 320" stroke="#4ADE80" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="712" y="316" width="14" height="14" rx="3" fill="#0B1F3A" stroke="#60A5FA"/>
+      <path d="M715 323 L718 326 L723 320" stroke="#60A5FA" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <text x="734" y="327">release / npm</text>
     </g>
-    <text x="712" y="372" font-size="10" fill="#4ADE80">stored in .curdx-state.json</text>
+    <text x="712" y="372" font-size="10" fill="#60A5FA">stored in .curdx-state.json</text>
 
     <text x="712" y="420" font-size="10" fill="#64748B">No silent passes.</text>
     <text x="712" y="434" font-size="10" fill="#64748B">No "looks fine."</text>
@@ -125,9 +125,9 @@
   <!-- Footer chip -->
   <rect x="40" y="468" width="880" height="48" rx="10" fill="#0F172A" stroke="#1F2937"/>
   <text x="56" y="497" font-size="12" fill="#94A3B8">$ git diff +</text>
-  <text x="170" y="497" font-size="12" fill="#4ADE80" font-weight="700">specs/</text>
+  <text x="170" y="497" font-size="12" fill="#60A5FA" font-weight="700">specs/</text>
   <text x="220" y="497" font-size="12" fill="#94A3B8">+ verificationBlocks  →  the only "done" you can trust.</text>
   <text x="824" y="497" font-size="11" fill="#64748B" text-anchor="end">curdx-flow</text>
-  <rect x="840" y="482" width="64" height="20" rx="10" fill="#022C22" stroke="#4ADE80"/>
-  <text x="872" y="496" font-size="11" fill="#4ADE80" text-anchor="middle" font-weight="700">v1 · ready</text>
+  <rect x="840" y="482" width="64" height="20" rx="10" fill="#0B1F3A" stroke="#60A5FA"/>
+  <text x="872" y="496" font-size="11" fill="#60A5FA" text-anchor="middle" font-weight="700">v1 · ready</text>
 </svg>

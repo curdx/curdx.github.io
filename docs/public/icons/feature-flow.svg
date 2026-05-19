@@ -5,8 +5,8 @@
       <stop offset="1" stop-color="#020617"/>
     </linearGradient>
     <linearGradient id="flGreen" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#A7F3D0"/>
-      <stop offset="1" stop-color="#22C55E"/>
+      <stop offset="0" stop-color="#DBEAFE"/>
+      <stop offset="1" stop-color="#3B82F6"/>
     </linearGradient>
     <filter id="flGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="0.9" result="b"/>
@@ -29,13 +29,13 @@
 
     <!-- node 3 (proof): filled green with check -->
     <circle cx="22" cy="48" r="6" fill="url(#flGreen)"/>
-    <path d="M18.6 48 L21.2 50.6 L25.6 45.6" stroke="#022C22" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18.6 48 L21.2 50.6 L25.6 45.6" stroke="#0B1F3A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
     <!-- labels -->
     <g font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700">
       <text x="34" y="20" font-size="9" fill="#A78BFA">spec</text>
       <text x="34" y="36" font-size="9" fill="#22D3EE">tasks</text>
-      <text x="34" y="52" font-size="9" fill="#4ADE80">proof ✓</text>
+      <text x="34" y="52" font-size="9" fill="#60A5FA">proof ✓</text>
     </g>
   </g>
 </svg>
